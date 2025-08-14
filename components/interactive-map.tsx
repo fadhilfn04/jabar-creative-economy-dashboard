@@ -41,7 +41,7 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({ regionData }) => {
     if (!mapRef.current || mapInstanceRef.current) return
 
     // Initialize map centered on West Java
-    const map = L.map(mapRef.current).setView([-6.9175, 107.6191], 9)
+    const map = L.map(mapRef.current).setView([-6.9175, 107.6191], 8)
 
     // Add OpenStreetMap tiles
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -122,37 +122,6 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({ regionData }) => {
       }
     })
 
-    // Add a legend
-    const legend = L.control({ position: 'bottomright' })
-    legend.onAdd = function() {
-      const div = L.DomUtil.create('div', 'legend')
-      div.innerHTML = `
-        <div style="
-          background: white;
-          padding: 10px;
-          border-radius: 8px;
-          box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-          font-size: 12px;
-        ">
-          <div style="font-weight: bold; margin-bottom: 5px;">Jumlah Perusahaan</div>
-          <div style="display: flex; align-items: center; margin-bottom: 3px;">
-            <div style="width: 20px; height: 20px; background: #3b82f6; border-radius: 50%; margin-right: 8px;"></div>
-            <span>< 500</span>
-          </div>
-          <div style="display: flex; align-items: center; margin-bottom: 3px;">
-            <div style="width: 30px; height: 30px; background: #3b82f6; border-radius: 50%; margin-right: 8px;"></div>
-            <span>500 - 800</span>
-          </div>
-          <div style="display: flex; align-items: center;">
-            <div style="width: 40px; height: 40px; background: #3b82f6; border-radius: 50%; margin-right: 8px;"></div>
-            <span>> 800</span>
-          </div>
-        </div>
-      `
-      return div
-    }
-    legend.addTo(map)
-
     mapInstanceRef.current = map
 
     // Cleanup function
@@ -167,8 +136,7 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({ regionData }) => {
   return (
     <div 
       ref={mapRef} 
-      className="w-full h-[300px] rounded-lg"
-      style={{ minHeight: '300px' }}
+      className="w-full h-full"
     />
   )
 }
