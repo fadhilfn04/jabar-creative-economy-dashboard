@@ -1,0 +1,130 @@
+"use client";
+
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+  LineChart,
+  Line,
+} from "recharts"
+
+const subsectorData = [
+  { name: "Kuliner", value: 487, investment: 8.2 },
+  { name: "Fashion", value: 342, investment: 6.8 },
+  { name: "Kriya", value: 298, investment: 4.5 },
+  { name: "Desain Komunikasi", value: 256, investment: 7.1 },
+  { name: "Aplikasi & Game", value: 234, investment: 12.3 },
+  { name: "Film & Video", value: 189, investment: 5.9 },
+  { name: "Musik", value: 167, investment: 3.2 },
+]
+
+const cityData = [
+  { name: "Bandung", companies: 892, workers: 45678 },
+  { name: "Bekasi", companies: 567, workers: 28934 },
+  { name: "Bogor", companies: 445, workers: 22156 },
+  { name: "Cirebon", companies: 298, workers: 15432 },
+  { name: "Depok", companies: 234, workers: 12890 },
+]
+
+const investmentTrend = [
+  { quarter: "Q1 2023", pma: 12.5, pmdn: 8.3 },
+  { quarter: "Q2 2023", pma: 14.2, pmdn: 9.1 },
+  { quarter: "Q3 2023", pma: 16.8, pmdn: 10.5 },
+  { quarter: "Q4 2023", pma: 18.9, pmdn: 11.2 },
+  { quarter: "Q1 2024", pma: 21.3, pmdn: 12.8 },
+  { quarter: "Q2 2024", pma: 23.7, pmdn: 14.1 },
+  { quarter: "Q3 2024", pma: 26.4, pmdn: 15.9 },
+  { quarter: "Q4 2024", pma: 28.8, pmdn: 16.4 },
+]
+
+const COLORS = ["#3b82f6", "#10b981", "#f59e0b", "#ef4444", "#8b5cf6", "#06b6d4", "#f97316"]
+const CITY_COLORS = ["#3b82f6", "#10b981", "#f59e0b", "#ef4444", "#8b5cf6"]
+
+export function ChartsSection() {
+  return (
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="minimal-card p-6">
+        <h3 className="text-lg font-medium text-gray-900 mb-6">Perusahaan per Subsektor</h3>
+        <ResponsiveContainer width="100%" height={280}>
+          <BarChart data={subsectorData}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" />
+            <XAxis dataKey="name" angle={-45} textAnchor="end" height={80} fontSize={12} stroke="#6b7280" />
+            <YAxis stroke="#6b7280" />
+            <Tooltip />
+            <Bar dataKey="value" fill="#3b82f6" radius={[4, 4, 0, 0]} />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+
+      <div className="minimal-card p-6">
+        <h3 className="text-lg font-medium text-gray-900 mb-6">Distribusi Investasi (Triliun Rp)</h3>
+        <ResponsiveContainer width="100%" height={280}>
+          <PieChart>
+            <Pie
+              data={subsectorData}
+              cx="50%"
+              cy="50%"
+              outerRadius={90}
+              fill="#8884d8"
+              dataKey="investment"
+              label={({ name, value }) => `${name}: ${value}T`}
+            >
+              {subsectorData.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+              ))}
+            </Pie>
+            <Tooltip />
+          </PieChart>
+        </ResponsiveContainer>
+      </div>
+
+      <div className="minimal-card p-6">
+        <h3 className="text-lg font-medium text-gray-900 mb-6">Distribusi Geografis</h3>
+        <ResponsiveContainer width="100%" height={280}>
+          <BarChart data={cityData}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" />
+            <XAxis dataKey="name" stroke="#6b7280" />
+            <YAxis stroke="#6b7280" />
+            <Tooltip />
+            <Bar dataKey="companies" fill="#10b981" name="Perusahaan" radius={[4, 4, 0, 0]} />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+
+      <div className="minimal-card p-6">
+        <h3 className="text-lg font-medium text-gray-900 mb-6">Tren Investasi (PMA vs PMDN)</h3>
+        <ResponsiveContainer width="100%" height={280}>
+          <LineChart data={investmentTrend}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" />
+            <XAxis dataKey="quarter" stroke="#6b7280" />
+            <YAxis stroke="#6b7280" />
+            <Tooltip />
+            <Line
+              type="monotone"
+              dataKey="pma"
+              stroke="#8b5cf6"
+              strokeWidth={3}
+              name="PMA (Triliun Rp)"
+              dot={{ fill: "#8b5cf6", strokeWidth: 2, r: 5 }}
+            />
+            <Line
+              type="monotone"
+              dataKey="pmdn"
+              stroke="#f59e0b"
+              strokeWidth={3}
+              name="PMDN (Triliun Rp)"
+              dot={{ fill: "#f59e0b", strokeWidth: 2, r: 5 }}
+            />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
+    </div>
+  )
+}
