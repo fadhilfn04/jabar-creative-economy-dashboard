@@ -1,22 +1,5 @@
-'use client'
-
-import dynamic from 'next/dynamic'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { MapPin, Building2, TrendingUp, Users } from "lucide-react"
-
-const InteractiveMap = dynamic(() => import('./interactive-map'), {
-  ssr: false,
-  loading: () => (
-    <div className="w-full h-full">
-      <div className="bg-gradient-to-br from-blue-50 to-indigo-100 rounded-lg h-full w-full flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600 text-sm">Memuat peta...</p>
-        </div>
-      </div>
-    </div>
-  )
-})
 
 export function MapsSection() {
   const regionData = [
@@ -41,9 +24,14 @@ export function MapsSection() {
         <CardContent>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Map Visualization */}
-            <div className="rounded-lg overflow-hidden h-[450px] w-full">
-            {/* <div className="rounded-lg overflow-hidden min-h-[300px]"> */}
-              <InteractiveMap regionData={regionData} />
+            <div className="rounded-lg overflow-hidden min-h-[300px]">
+              <div className="bg-gradient-to-br from-blue-50 to-indigo-100 rounded-lg h-full w-full flex items-center justify-center">
+                <div className="text-center">
+                  <MapPin className="h-12 w-12 text-blue-600 mx-auto mb-4" />
+                  <p className="text-gray-600 font-medium">Peta Interaktif</p>
+                  <p className="text-gray-500 text-sm mt-1">Sebaran geografis ekonomi kreatif</p>
+                </div>
+              </div>
             </div>
 
             {/* Regional Data */}
