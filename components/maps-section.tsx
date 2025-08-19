@@ -34,7 +34,6 @@ export function MapsSection() {
               </div>
             </div>
 
-            {/* Regional Data */}
             <div className="space-y-3">
               <h4 className="font-semibold text-gray-900 mb-4">Data per Kota/Kabupaten</h4>
               {regionData.map((region, index) => (
