@@ -75,7 +75,7 @@ export function DataTable() {
   return (
     <div className="minimal-card">
       <div className="flex items-center justify-between p-6 border-b border-gray-100">
-        <h3 className="text-lg font-medium text-gray-900">Data Perusahaan Ekonomi Kreatif</h3>
+        <h3 className="text-lg font-medium text-gray-900">Data Pelaku Ekonomi Kreatif</h3>
         <Button variant="outline" size="sm" className="text-gray-600 border-gray-200 bg-transparent">
           <Download className="w-4 h-4 mr-2" />
           Export
@@ -86,7 +86,7 @@ export function DataTable() {
         <Table>
           <TableHeader>
             <TableRow className="border-gray-100">
-              <TableHead className="font-medium text-gray-700">Nama Perusahaan</TableHead>
+              <TableHead className="font-medium text-gray-700">Nama Pelaku Ekonomi Kreatif</TableHead>
               <TableHead className="font-medium text-gray-700">NIB</TableHead>
               <TableHead className="font-medium text-gray-700">Kode KBLI</TableHead>
               <TableHead className="font-medium text-gray-700">Judul KBLI</TableHead>
@@ -133,7 +133,7 @@ export function DataTable() {
       </div>
 
       <div className="flex items-center justify-between p-6 border-t border-gray-100">
-        <p className="text-sm text-gray-500">Menampilkan 1-5 dari 2,847 perusahaan</p>
+        <p className="text-sm text-gray-500">Menampilkan 1-5 dari 2,847 pelaku ekonomi kreatif</p>
         <div className="flex items-center gap-2">
           <Button variant="outline" size="sm" disabled className="text-gray-400 border-gray-200 bg-transparent">
             <ChevronLeft className="w-4 h-4" />

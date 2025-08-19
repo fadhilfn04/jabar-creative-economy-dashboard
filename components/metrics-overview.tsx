@@ -1,6 +1,6 @@
 const metrics = [
   {
-    title: "Total Perusahaan",
+    title: "Total Pelaku Ekonomi Kreatif",
     value: "2,847",
     change: "+12.5%",
     bgColor: "bg-blue-50",

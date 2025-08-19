@@ -41,12 +41,15 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({ regionData }) => {
     if (!mapRef.current || mapInstanceRef.current) return
 
     // Initialize map centered on West Java
-    const map = L.map(mapRef.current).setView([-6.9175, 107.6191], 8)
+    const map = L.map(mapRef.current, {
+      center: [-6.9175, 107.6191],
+      zoom: 8,
+      minZoom: 8,
+      maxZoom: 12,
+    })
 
     // Add OpenStreetMap tiles
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© OpenStreetMap contributors'
-    }).addTo(map)
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map)
 
     // Create custom icon function based on company count
     const createCustomIcon = (companies: number, color: string) => {
@@ -100,7 +103,7 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({ regionData }) => {
             <h3 class="font-bold text-lg mb-2 text-gray-900">${region.name}</h3>
             <div class="space-y-1 text-sm">
               <div class="flex justify-between">
-                <span class="text-gray-600">Perusahaan:</span>
+                <span class="text-gray-600">Pelaku Ekonomi Kreatif:</span>
                 <span class="font-medium">${region.companies}</span>
               </div>
               <div class="flex justify-between">

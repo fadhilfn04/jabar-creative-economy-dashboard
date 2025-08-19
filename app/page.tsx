@@ -4,6 +4,7 @@ import { ChartsSection } from "@/components/charts-section"
 import { DataTable } from "@/components/data-table"
 import { FiltersPanel } from "@/components/filters-panel"
 import { MapsSection } from "@/components/maps-section"
+import { DataSection } from "@/components/data-section"
 
 export default function Dashboard() {
   return (
@@ -12,8 +13,9 @@ export default function Dashboard() {
       <main className="max-w-7xl mx-auto px-6 py-8 space-y-8">
         <FiltersPanel />
         <MetricsOverview />
-        <ChartsSection />
         <MapsSection />
+        <ChartsSection />
+        {/* <DataSection /> */}
         <DataTable />
       </main>
     </div>

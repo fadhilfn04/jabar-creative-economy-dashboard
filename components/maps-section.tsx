@@ -39,40 +39,9 @@ export function MapsSection() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div className="rounded-lg overflow-hidden h-[450px] w-full">
               <InteractiveMap regionData={regionData} />
             </div>
-
-            <div className="space-y-3">
-              <h4 className="font-semibold text-gray-900 mb-4">Data per Kota/Kabupaten</h4>
-              {regionData.map((region, index) => (
-                <div
-                  key={index}
-                  className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className={`w-3 h-3 rounded-full ${region.color}`}></div>
-                    <span className="font-medium text-gray-900">{region.name}</span>
-                  </div>
-                  <div className="flex items-center gap-4 text-sm text-gray-600">
-                    <div className="flex items-center gap-1">
-                      <Building2 className="h-3 w-3" />
-                      <span>{region.companies}</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <TrendingUp className="h-3 w-3" />
-                      <span>{region.investment}</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <Users className="h-3 w-3" />
-                      <span>{region.workers}</span>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
         </CardContent>
       </Card>
     </div>

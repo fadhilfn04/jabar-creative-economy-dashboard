@@ -31,6 +31,29 @@ const cityData = [
   { name: "Bogor", companies: 445, workers: 22156 },
   { name: "Cirebon", companies: 298, workers: 15432 },
   { name: "Depok", companies: 234, workers: 12890 },
+  { name: "Sukabumi", companies: 210, workers: 11234 },
+  { name: "Tasikmalaya", companies: 198, workers: 10987 },
+  { name: "Banjar", companies: 120, workers: 6543 },
+  { name: "Cimahi", companies: 180, workers: 8456 },
+
+  { name: "Kabupaten Bandung", companies: 560, workers: 27654 },
+  { name: "Kabupaten Bandung Barat", companies: 345, workers: 17890 },
+  { name: "Kabupaten Bekasi", companies: 410, workers: 21345 },
+  { name: "Kabupaten Bogor", companies: 600, workers: 33456 },
+  { name: "Kabupaten Ciamis", companies: 230, workers: 11234 },
+  { name: "Kabupaten Cianjur", companies: 250, workers: 12456 },
+  { name: "Kabupaten Cirebon", companies: 270, workers: 13210 },
+  { name: "Kabupaten Garut", companies: 320, workers: 15678 },
+  { name: "Kabupaten Indramayu", companies: 280, workers: 14023 },
+  { name: "Kabupaten Karawang", companies: 400, workers: 20123 },
+  { name: "Kabupaten Kuningan", companies: 210, workers: 11230 },
+  { name: "Kabupaten Majalengka", companies: 220, workers: 11890 },
+  { name: "Kabupaten Pangandaran", companies: 150, workers: 7540 },
+  { name: "Kabupaten Purwakarta", companies: 260, workers: 12890 },
+  { name: "Kabupaten Subang", companies: 300, workers: 15230 },
+  { name: "Kabupaten Sukabumi", companies: 280, workers: 14123 },
+  { name: "Kabupaten Sumedang", companies: 240, workers: 12345 },
+  { name: "Kabupaten Tasikmalaya", companies: 270, workers: 13560 },
 ]
 
 const investmentTrend = [
@@ -51,11 +74,19 @@ export function ChartsSection() {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
       <div className="minimal-card p-6">
-        <h3 className="text-lg font-medium text-gray-900 mb-6">Perusahaan per Subsektor</h3>
+        <h3 className="text-lg font-medium text-gray-900 mb-6">Pelaku Ekonomi Kreatif per Subsektor</h3>
         <ResponsiveContainer width="100%" height={280}>
           <BarChart data={subsectorData}>
             <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" />
-            <XAxis dataKey="name" angle={-45} textAnchor="end" height={80} fontSize={12} stroke="#6b7280" />
+            <XAxis
+              dataKey="name"
+              stroke="#6b7280"
+              interval={0}
+              angle={-45}
+              textAnchor="end"
+              height={100}
+              fontSize={10}
+            />
             <YAxis stroke="#6b7280" />
             <Tooltip />
             <Bar dataKey="value" fill="#3b82f6" radius={[4, 4, 0, 0]} />
@@ -85,20 +116,39 @@ export function ChartsSection() {
         </ResponsiveContainer>
       </div>
 
-      <div className="minimal-card p-6">
-        <h3 className="text-lg font-medium text-gray-900 mb-6">Distribusi Geografis</h3>
-        <ResponsiveContainer width="100%" height={280}>
-          <BarChart data={cityData}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" />
-            <XAxis dataKey="name" stroke="#6b7280" />
-            <YAxis stroke="#6b7280" />
-            <Tooltip />
-            <Bar dataKey="companies" fill="#10b981" name="Perusahaan" radius={[4, 4, 0, 0]} />
-          </BarChart>
-        </ResponsiveContainer>
+      <div className="lg:col-span-2 minimal-card p-6">
+        <h3 className="text-lg font-medium text-gray-900 mb-6">
+          Distribusi Geografis
+        </h3>
+        <div className="w-full overflow-x-auto">
+          <div className="min-w-[1600px]">
+            <ResponsiveContainer width="100%" height={280}>
+              <BarChart data={cityData}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" />
+                <XAxis
+                  dataKey="name"
+                  stroke="#6b7280"
+                  interval={0}
+                  angle={-45}
+                  textAnchor="end"
+                  height={100}
+                  fontSize={11}
+                />
+                <YAxis stroke="#6b7280" />
+                <Tooltip />
+                <Bar
+                  dataKey="companies"
+                  fill="#10b981"
+                  name="Pelaku Ekonomi Kreatif"
+                  radius={[4, 4, 0, 0]}
+                />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
       </div>
 
-      <div className="minimal-card p-6">
+      <div className="lg:col-span-2 minimal-card p-6">
         <h3 className="text-lg font-medium text-gray-900 mb-6">Tren Investasi (PMA vs PMDN)</h3>
         <ResponsiveContainer width="100%" height={280}>
           <LineChart data={investmentTrend}>
