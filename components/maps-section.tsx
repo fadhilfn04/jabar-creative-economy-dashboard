@@ -7,10 +7,12 @@ import { MapPin, Building2, TrendingUp, Users } from "lucide-react"
 const InteractiveMap = dynamic(() => import('./interactive-map'), {
   ssr: false,
   loading: () => (
-    <div className="bg-gradient-to-br from-blue-50 to-indigo-100 rounded-lg h-[450px] w-full flex items-center justify-center">
-      <div className="text-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
-        <p className="text-gray-600 text-sm">Memuat peta...</p>
+    <div className="w-full h-full">
+      <div className="bg-gradient-to-br from-blue-50 to-indigo-100 rounded-lg h-full w-full flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600 text-sm">Memuat peta...</p>
+        </div>
       </div>
     </div>
   )
