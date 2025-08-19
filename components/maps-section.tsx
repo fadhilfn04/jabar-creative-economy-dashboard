@@ -40,13 +40,10 @@ export function MapsSection() {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Map Visualization */}
             <div className="rounded-lg overflow-hidden h-[450px] w-full">
-            {/* <div className="rounded-lg overflow-hidden min-h-[300px]"> */}
               <InteractiveMap regionData={regionData} />
             </div>
 
-            {/* Regional Data */}
             <div className="space-y-3">
               <h4 className="font-semibold text-gray-900 mb-4">Data per Kota/Kabupaten</h4>
               {regionData.map((region, index) => (
