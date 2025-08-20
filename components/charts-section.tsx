@@ -26,34 +26,34 @@ const subsectorData = [
 ]
 
 const cityData = [
-  { name: "Bandung", companies: 892, workers: 45678 },
-  { name: "Bekasi", companies: 567, workers: 28934 },
-  { name: "Bogor", companies: 445, workers: 22156 },
-  { name: "Cirebon", companies: 298, workers: 15432 },
-  { name: "Depok", companies: 234, workers: 12890 },
-  { name: "Sukabumi", companies: 210, workers: 11234 },
-  { name: "Tasikmalaya", companies: 198, workers: 10987 },
-  { name: "Banjar", companies: 120, workers: 6543 },
-  { name: "Cimahi", companies: 180, workers: 8456 },
+  { name: "Bandung", companiesA: 523, companiesB: 892, workers: 45678 },
+  { name: "Bekasi", companiesA: 153, companiesB: 567, workers: 28934 },
+  { name: "Bogor", companiesA: 253, companiesB: 445, workers: 22156 },
+  { name: "Cirebon", companiesA: 465, companiesB: 298, workers: 15432 },
+  { name: "Depok", companiesA: 431, companiesB: 234, workers: 12890 },
+  { name: "Sukabumi", companiesA: 431, companiesB: 210, workers: 11234 },
+  { name: "Tasikmalaya", companiesA: 321, companiesB: 198, workers: 10987 },
+  { name: "Banjar", companiesA: 241, companiesB: 120, workers: 6543 },
+  { name: "Cimahi", companiesA: 352, companiesB: 180, workers: 8456 },
 
-  { name: "Kabupaten Bandung", companies: 560, workers: 27654 },
-  { name: "Kabupaten Bandung Barat", companies: 345, workers: 17890 },
-  { name: "Kabupaten Bekasi", companies: 410, workers: 21345 },
-  { name: "Kabupaten Bogor", companies: 600, workers: 33456 },
-  { name: "Kabupaten Ciamis", companies: 230, workers: 11234 },
-  { name: "Kabupaten Cianjur", companies: 250, workers: 12456 },
-  { name: "Kabupaten Cirebon", companies: 270, workers: 13210 },
-  { name: "Kabupaten Garut", companies: 320, workers: 15678 },
-  { name: "Kabupaten Indramayu", companies: 280, workers: 14023 },
-  { name: "Kabupaten Karawang", companies: 400, workers: 20123 },
-  { name: "Kabupaten Kuningan", companies: 210, workers: 11230 },
-  { name: "Kabupaten Majalengka", companies: 220, workers: 11890 },
-  { name: "Kabupaten Pangandaran", companies: 150, workers: 7540 },
-  { name: "Kabupaten Purwakarta", companies: 260, workers: 12890 },
-  { name: "Kabupaten Subang", companies: 300, workers: 15230 },
-  { name: "Kabupaten Sukabumi", companies: 280, workers: 14123 },
-  { name: "Kabupaten Sumedang", companies: 240, workers: 12345 },
-  { name: "Kabupaten Tasikmalaya", companies: 270, workers: 13560 },
+  { name: "Kabupaten Bandung", companiesA: 432, companiesB: 560, workers: 27654 },
+  { name: "Kabupaten Bandung Barat", companiesA: 243, companiesB: 345, workers: 17890 },
+  { name: "Kabupaten Bekasi", companiesA: 132, companiesB: 410, workers: 21345 },
+  { name: "Kabupaten Bogor", companiesA: 412, companiesB: 600, workers: 33456 },
+  { name: "Kabupaten Ciamis", companiesA: 431, companiesB: 230, workers: 11234 },
+  { name: "Kabupaten Cianjur", companiesA: 321, companiesB: 250, workers: 12456 },
+  { name: "Kabupaten Cirebon", companiesA: 412, companiesB: 270, workers: 13210 },
+  { name: "Kabupaten Garut", companiesA: 321, companiesB: 320, workers: 15678 },
+  { name: "Kabupaten Indramayu", companiesA: 196, companiesB: 280, workers: 14023 },
+  { name: "Kabupaten Karawang", companiesA: 178, companiesB: 400, workers: 20123 },
+  { name: "Kabupaten Kuningan", companiesA: 285, companiesB: 210, workers: 11230 },
+  { name: "Kabupaten Majalengka", companiesA: 293, companiesB: 220, workers: 11890 },
+  { name: "Kabupaten Pangandaran", companiesA: 198, companiesB: 150, workers: 7540 },
+  { name: "Kabupaten Purwakarta", companiesA: 185, companiesB: 260, workers: 12890 },
+  { name: "Kabupaten Subang", companiesA: 293, companiesB: 300, workers: 15230 },
+  { name: "Kabupaten Sukabumi", companiesA: 395, companiesB: 280, workers: 14123 },
+  { name: "Kabupaten Sumedang", companiesA: 429, companiesB: 240, workers: 12345 },
+  { name: "Kabupaten Tasikmalaya", companiesA: 431, companiesB: 270, workers: 13560 },
 ]
 
 const investmentTrend = [
@@ -137,8 +137,14 @@ export function ChartsSection() {
                 <YAxis stroke="#6b7280" />
                 <Tooltip />
                 <Bar
-                  dataKey="companies"
+                  dataKey="companiesA"
                   fill="#10b981"
+                  name="Pelaku Ekonomi Kreatif"
+                  radius={[4, 4, 0, 0]}
+                />
+                <Bar
+                  dataKey="companiesB"
+                  fill="#9ed134"
                   name="Pelaku Ekonomi Kreatif"
                   radius={[4, 4, 0, 0]}
                 />
