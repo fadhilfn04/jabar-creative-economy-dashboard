@@ -22,15 +22,57 @@ interface InteractiveMapProps {
   regionData: RegionData[]
 }
 
-// Coordinates for major cities in West Java
-const cityCoordinates: Record<string, [number, number]> = {
-  'Bandung': [-6.9175, 107.6191],
-  'Bekasi': [-6.2383, 106.9756],
-  'Bogor': [-6.5971, 106.8060],
-  'Depok': [-6.4025, 106.7942],
-  'Cimahi': [-6.8721, 107.5420],
-  'Sukabumi': [-6.9278, 106.9271],
-  'Tasikmalaya': [-7.3506, 108.2172],
+// Polygon coordinates for major cities/regions in West Java
+const cityPolygons: Record<string, [number, number][]> = {
+  'Bandung': [
+    [-6.8500, 107.5500],
+    [-6.8500, 107.6800],
+    [-6.9800, 107.6800],
+    [-6.9800, 107.5500],
+    [-6.8500, 107.5500]
+  ],
+  'Bekasi': [
+    [-6.1800, 106.9200],
+    [-6.1800, 107.0300],
+    [-6.2900, 107.0300],
+    [-6.2900, 106.9200],
+    [-6.1800, 106.9200]
+  ],
+  'Bogor': [
+    [-6.5400, 106.7500],
+    [-6.5400, 106.8600],
+    [-6.6500, 106.8600],
+    [-6.6500, 106.7500],
+    [-6.5400, 106.7500]
+  ],
+  'Depok': [
+    [-6.3500, 106.7400],
+    [-6.3500, 106.8500],
+    [-6.4500, 106.8500],
+    [-6.4500, 106.7400],
+    [-6.3500, 106.7400]
+  ],
+  'Cimahi': [
+    [-6.8200, 107.4900],
+    [-6.8200, 107.5900],
+    [-6.9200, 107.5900],
+    [-6.9200, 107.4900],
+    [-6.8200, 107.4900]
+  ],
+  'Sukabumi': [
+    [-6.8800, 106.8700],
+    [-6.8800, 106.9800],
+    [-6.9800, 106.9800],
+    [-6.9800, 106.8700],
+    [-6.8800, 106.8700]
+  ],
+  'Tasikmalaya': [
+    [-7.3000, 108.1600],
+    [-7.3000, 108.2700],
+    [-7.4000, 108.2700],
+    [-7.4000, 108.1600],
+    [-7.3000, 108.1600]
+  ],
 }
 
 const InteractiveMap: React.FC<InteractiveMapProps> = ({ regionData }) => {
@@ -51,54 +93,35 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({ regionData }) => {
     // Add OpenStreetMap tiles
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map)
 
-    // Create custom icon function based on company count
-    const createCustomIcon = (companies: number, color: string) => {
-      const size = Math.max(20, Math.min(40, companies / 20))
-      const colorMap: Record<string, string> = {
-        'bg-blue-500': '#3b82f6',
-        'bg-green-500': '#10b981',
-        'bg-purple-500': '#8b5cf6',
-        'bg-orange-500': '#f97316',
-        'bg-red-500': '#ef4444',
-        'bg-indigo-500': '#6366f1',
-        'bg-pink-500': '#ec4899',
-      }
-
-      return L.divIcon({
-        className: 'custom-marker',
-        html: `
-          <div style="
-            background-color: ${colorMap[color] || '#3b82f6'};
-            width: ${size}px;
-            height: ${size}px;
-            border-radius: 50%;
-            border: 3px solid white;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: ${size > 30 ? '12px' : '10px'};
-          ">
-            ${companies > 999 ? '999+' : companies}
-          </div>
-        `,
-        iconSize: [size, size],
-        iconAnchor: [size / 2, size / 2]
-      })
+    // Color mapping for polygons
+    const colorMap: Record<string, string> = {
+      'bg-blue-500': '#3b82f6',
+      'bg-green-500': '#10b981',
+      'bg-purple-500': '#8b5cf6',
+      'bg-orange-500': '#f97316',
+      'bg-red-500': '#ef4444',
+      'bg-indigo-500': '#6366f1',
+      'bg-pink-500': '#ec4899',
     }
 
-    // Add markers for each region
+    // Add polygons for each region
     regionData.forEach((region) => {
-      const coordinates = cityCoordinates[region.name]
-      if (coordinates) {
-        const marker = L.marker(coordinates, {
-          icon: createCustomIcon(region.companies, region.color)
+      const polygonCoords = cityPolygons[region.name]
+      if (polygonCoords) {
+        // Calculate opacity based on company count (more companies = more opaque)
+        const opacity = Math.max(0.3, Math.min(0.8, region.companies / 1000))
+        const fillOpacity = Math.max(0.4, Math.min(0.7, region.companies / 1000))
+        
+        const polygon = L.polygon(polygonCoords, {
+          color: colorMap[region.color] || '#3b82f6',
+          weight: 2,
+          opacity: opacity,
+          fillColor: colorMap[region.color] || '#3b82f6',
+          fillOpacity: fillOpacity,
         }).addTo(map)
 
         // Add popup with region information
-        marker.bindPopup(`
+        polygon.bindPopup(`
           <div class="p-3 min-w-[200px]">
             <h3 class="font-bold text-lg mb-2 text-gray-900">${region.name}</h3>
             <div class="space-y-1 text-sm">
@@ -119,7 +142,26 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({ regionData }) => {
         `)
 
         // Add hover effects
-        marker.on('mouseover', function() {
+        polygon.on('mouseover', function() {
+          this.setStyle({
+            weight: 3,
+            opacity: 1,
+            fillOpacity: 0.8
+          })
+          this.openPopup()
+        })
+        
+        polygon.on('mouseout', function() {
+          this.setStyle({
+            weight: 2,
+            opacity: opacity,
+            fillOpacity: fillOpacity
+          })
+          this.closePopup()
+        })
+        
+        // Add click event for permanent popup
+        polygon.on('click', function() {
           this.openPopup()
         })
       }
