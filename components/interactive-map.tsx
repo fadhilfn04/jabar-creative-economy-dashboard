@@ -155,9 +155,7 @@ const InteractiveMapProps: React.FC<InteractiveMapProps> = ({ regionData }) => {
     })
 
     // Add OpenStreetMap tiles with a lighter style
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© OpenStreetMap contributors'
-    }).addTo(map)
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map)
 
     // Create a data map for easy lookup
     const dataMap = new Map(regionData.map(region => [region.name, region]))
