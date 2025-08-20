@@ -275,9 +275,6 @@ const InteractiveMapProps: React.FC<InteractiveMapProps> = ({ regionData }) => {
         ref={mapRef} 
         className="w-full h-full rounded-lg"
       />
-      <div className="absolute bottom-4 left-4 bg-white p-2 rounded shadow-md text-xs text-gray-600">
-        <strong>Total Data:</strong> {regionData.reduce((sum, region) => sum + region.companies, 0).toLocaleString()} Pelaku Ekonomi Kreatif
-      </div>
     </div>
   )
 }
