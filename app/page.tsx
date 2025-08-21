@@ -1,22 +1,25 @@
+"use client"
+import { useState } from "react"
+import { useState } from "react"
 import { DashboardHeader } from "@/components/dashboard-header"
-import { MetricsOverview } from "@/components/metrics-overview"
+import { DatabaseMetrics } from "@/components/database-metrics"
 import { ChartsSection } from "@/components/charts-section"
-import { DataTable } from "@/components/data-table"
-import { FiltersPanel } from "@/components/filters-panel"
+import { DatabaseDataTable } from "@/components/database-data-table"
+import { DatabaseFilters } from "@/components/database-filters"
 import { MapsSection } from "@/components/maps-section"
-import { DataSection } from "@/components/data-section"
 
 export default function Dashboard() {
+  const [filters, setFilters] = useState({})
+
   return (
     <div className="min-h-screen bg-gray-50">
       <DashboardHeader />
       <main className="max-w-7xl mx-auto px-6 py-8 space-y-8">
-        <FiltersPanel />
-        <MetricsOverview />
+        <DatabaseFilters onFiltersChange={setFilters} />
+        <DatabaseMetrics />
         <MapsSection />
         <ChartsSection />
-        {/* <DataSection /> */}
-        <DataTable />
+        <DatabaseDataTable filters={filters} />
       </main>
     </div>
   )
