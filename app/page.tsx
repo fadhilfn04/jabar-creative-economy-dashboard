@@ -1,6 +1,5 @@
 "use client"
 import { useState } from "react"
-import { useState } from "react"
 import { DashboardHeader } from "@/components/dashboard-header"
 import { DatabaseMetrics } from "@/components/database-metrics"
 import { ChartsSection } from "@/components/charts-section"
