@@ -7,7 +7,7 @@ import { DatabaseDataTable } from "@/components/database-data-table"
 import { DatabaseFilters } from "@/components/database-filters"
 import { MapsSection } from "@/components/maps-section"
 import { InvestmentRankingTable } from "@/components/investment-ranking-table"
-import { SubsectorContentTable } from "@/components/subsector-content-table"
+// import { SubsectorContentTable } from "@/components/subsector-content-table"
 
 export default function Dashboard() {
   const [filters, setFilters] = useState({})
@@ -23,7 +23,6 @@ export default function Dashboard() {
         <DatabaseDataTable filters={filters} />
         <InvestmentRankingTable />
         <InvestmentRankingTable />
-        <SubsectorContentTable />
       </main>
     </div>
   )
