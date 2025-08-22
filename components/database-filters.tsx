@@ -50,8 +50,24 @@ export function DatabaseFilters({ onFiltersChange }: DatabaseFiltersProps) {
     fetchFilterOptions()
   }, [])
 
+  // const handleFilterChange = (key: string, value: string) => {
+  //   const newFilters = { ...filters, [key]: value }
+  //   setFilters(newFilters)
+
+  //   // Convert to the format expected by the database service
+  //   const dbFilters: any = {}
+  //   if (newFilters.subsector) dbFilters.subsector = newFilters.subsector
+  //   if (newFilters.city) dbFilters.city = newFilters.city
+  //   if (newFilters.status) dbFilters.status = newFilters.status
+  //   if (newFilters.year) dbFilters.year = parseInt(newFilters.year)
+  //   if (newFilters.search) dbFilters.search = newFilters.search
+
+  //   onFiltersChange(dbFilters)
+  // }
+
   const handleFilterChange = (key: string, value: string) => {
-    const newFilters = { ...filters, [key]: value }
+    const normalizedValue = value === "all" ? "" : value
+    const newFilters = { ...filters, [key]: normalizedValue }
     setFilters(newFilters)
 
     // Convert to the format expected by the database service
@@ -100,7 +116,7 @@ export function DatabaseFilters({ onFiltersChange }: DatabaseFiltersProps) {
               <SelectValue placeholder="Subsektor EKRAF" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Semua Subsektor</SelectItem>
+              <SelectItem value="all">Semua Subsektor</SelectItem>
               {filterOptions.subsectors.map((subsector) => (
                 <SelectItem key={subsector} value={subsector}>
                   {subsector}
@@ -118,7 +134,7 @@ export function DatabaseFilters({ onFiltersChange }: DatabaseFiltersProps) {
               <SelectValue placeholder="Kota/Kabupaten" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Semua Kota</SelectItem>
+              <SelectItem value="all">Semua Kota</SelectItem>
               {filterOptions.cities.map((city) => (
                 <SelectItem key={city} value={city}>
                   {city}
@@ -135,7 +151,7 @@ export function DatabaseFilters({ onFiltersChange }: DatabaseFiltersProps) {
               <SelectValue placeholder="Status Modal" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Semua Status</SelectItem>
+              <SelectItem value="all">Semua Status</SelectItem>
               <SelectItem value="PMA">PMA</SelectItem>
               <SelectItem value="PMDN">PMDN</SelectItem>
             </SelectContent>
@@ -150,7 +166,7 @@ export function DatabaseFilters({ onFiltersChange }: DatabaseFiltersProps) {
               <SelectValue placeholder="Tahun" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Semua Tahun</SelectItem>
+              <SelectItem value="all">Semua Tahun</SelectItem>
               {filterOptions.years.map((year) => (
                 <SelectItem key={year} value={year.toString()}>
                   {year}
