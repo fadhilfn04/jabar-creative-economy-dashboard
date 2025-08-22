@@ -10,7 +10,7 @@ import { ChevronLeft, ChevronRight, Download, Loader2, TrendingUp, Users, Buildi
 import { InvestmentService } from "@/lib/investment-service"
 import type { InvestmentRealizationData, EmploymentAbsorptionData, ProjectCountData } from "@/lib/investment-types"
 
-type TabType = 'investment' | 'employment' | 'projects'
+type TabType = 'regional' | 'subsector'
 
 export function InvestmentAttachmentTable() {
   const [activeTab, setActiveTab] = useState<TabType>('investment')
