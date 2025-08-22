@@ -27,7 +27,7 @@ export class EmployeeAbsorptionService {
       .order('rank', { ascending: true })
 
     if (error) {
-      console.error('Error fetching regional data:', error)
+      console.error('Error fetching investment realization data:', error)
       throw error
     }
 
@@ -64,7 +64,7 @@ export class EmployeeAbsorptionService {
       .order('rank', { ascending: true })
 
     if (error) {
-      console.error('Error fetching subsector data:', error)
+      console.error('Error fetching employment absorption data:', error)
       throw error
     }
 
@@ -73,62 +73,6 @@ export class EmployeeAbsorptionService {
       count: count || 0,
       totalPages: Math.ceil((count || 0) / limit),
       currentPage: page
-    }
-  }
-
-  static async getRegionalGrandTotal(options: { year?: number } = {}) {
-    const { year } = options
-
-    let query = supabase
-      .from('labor_ranking')
-      .select('project_count, labor_count')
-      .eq('type', 1)
-
-    if (year) {
-      query = query.eq('year', year)
-    }
-
-    const { data, error } = await query
-
-    if (error) {
-      console.error('Error fetching regional grand total:', error)
-      throw error
-    }
-
-    const totalProjects = data?.reduce((sum, item) => sum + (item.project_count || 0), 0) || 0
-    const totalLabor = data?.reduce((sum, item) => sum + (item.labor_count || 0), 0) || 0
-
-    return {
-      projects: totalProjects,
-      labor: totalLabor
-    }
-  }
-
-  static async getSubsectorGrandTotal(options: { year?: number } = {}) {
-    const { year } = options
-
-    let query = supabase
-      .from('labor_ranking')
-      .select('project_count, labor_count')
-      .eq('type', 2)
-
-    if (year) {
-      query = query.eq('year', year)
-    }
-
-    const { data, error } = await query
-
-    if (error) {
-      console.error('Error fetching subsector grand total:', error)
-      throw error
-    }
-
-    const totalProjects = data?.reduce((sum, item) => sum + (item.project_count || 0), 0) || 0
-    const totalLabor = data?.reduce((sum, item) => sum + (item.labor_count || 0), 0) || 0
-
-    return {
-      projects: totalProjects,
-      labor: totalLabor
     }
   }
 
@@ -147,14 +91,14 @@ export class EmployeeAbsorptionService {
     return years
   }
 
-  static async bulkInsertData(data: Omit<EmployeeAbsorptionData, 'id' | 'created_at' | 'updated_at'>[]) {
+  static async bulkInsertInvestmentData(data: Omit<EmployeeAbsorptionData, 'id' | 'created_at' | 'updated_at'>[]) {
     const { data: insertedData, error } = await supabase
       .from('labor_ranking')
       .insert(data)
       .select()
 
     if (error) {
-      console.error('Error bulk inserting data:', error)
+      console.error('Error bulk inserting investment data:', error)
       throw error
     }
 
