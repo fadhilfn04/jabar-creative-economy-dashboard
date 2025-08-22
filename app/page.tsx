@@ -8,6 +8,7 @@ import { DatabaseFilters } from "@/components/database-filters"
 import { MapsSection } from "@/components/maps-section"
 import { RegionalContentTable } from "@/components/regional-content-table"
 import { SubsectorContentTable } from "@/components/subsector-content-table"
+import { InvestmentAttachmentTable } from "@/components/investment-attachment-table"
 
 export default function Dashboard() {
   const [filters, setFilters] = useState({})
@@ -23,6 +24,7 @@ export default function Dashboard() {
         <DatabaseDataTable filters={filters} />
         <RegionalContentTable />
         <SubsectorContentTable />
+        <InvestmentAttachmentTable />
       </main>
     </div>
   )
