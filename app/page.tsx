@@ -9,6 +9,8 @@ import { MapsSection } from "@/components/maps-section"
 import { RegionalContentTable } from "@/components/regional-content-table"
 import { SubsectorContentTable } from "@/components/subsector-content-table"
 import { InvestmentAttachmentTable } from "@/components/investment-attachment-table"
+import { EmploymentAbsorptionTable } from "@/components/employment-absorption-table"
+import { ProjectTable } from "@/components/project-table"
 
 export default function Dashboard() {
   const [filters, setFilters] = useState({})
@@ -25,6 +27,8 @@ export default function Dashboard() {
         <RegionalContentTable />
         <SubsectorContentTable />
         <InvestmentAttachmentTable />
+        <EmploymentAbsorptionTable />
+        <ProjectTable />
       </main>
     </div>
   )
