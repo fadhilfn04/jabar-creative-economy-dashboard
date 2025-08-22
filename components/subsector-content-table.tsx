@@ -156,7 +156,7 @@ export function InvestmentRankingTable() {
       let headers = []
       
       if (activeTab === 'investment') {
-        headers = ['Peringkat', 'Kabupaten/Kota', 'Tambahan Investasi (Rp)', 'Rasio (%)']
+        headers = ['Peringkat', 'Subsektor', 'Tambahan Investasi (Rp)', 'Rasio (%)']
         csvContent = [
           headers.join(','),
           ...data.map((row: InvestmentRealizationData) => [
@@ -167,7 +167,7 @@ export function InvestmentRankingTable() {
           ].join(','))
         ].join('\n')
       } else if (activeTab === 'employment') {
-        headers = ['Peringkat', 'Kabupaten/Kota', 'Jumlah Tenaga Kerja', 'Rasio (%)']
+        headers = ['Peringkat', 'Subsektor', 'Jumlah Tenaga Kerja', 'Rasio (%)']
         csvContent = [
           headers.join(','),
           ...data.map((row: EmploymentAbsorptionData) => [
@@ -178,7 +178,7 @@ export function InvestmentRankingTable() {
           ].join(','))
         ].join('\n')
       } else {
-        headers = ['Peringkat', 'Kabupaten/Kota', 'Jumlah Proyek', 'Rasio (%)']
+        headers = ['Peringkat', 'Subsektor', 'Jumlah Proyek', 'Rasio (%)']
         csvContent = [
           headers.join(','),
           ...data.map((row: ProjectCountData) => [
@@ -216,7 +216,7 @@ export function InvestmentRankingTable() {
           <TableHeader>
             <TableRow className="border-gray-100">
               <TableHead className="font-medium text-gray-700 w-20">Peringkat</TableHead>
-              <TableHead className="font-medium text-gray-700">Kabupaten/Kota</TableHead>
+              <TableHead className="font-medium text-gray-700">Subsektor</TableHead>
               <TableHead className="font-medium text-gray-700">Tambahan Investasi (Rp)</TableHead>
               <TableHead className="font-medium text-gray-700 w-24">Rasio</TableHead>
             </TableRow>
@@ -266,7 +266,7 @@ export function InvestmentRankingTable() {
           <TableHeader>
             <TableRow className="border-gray-100">
               <TableHead className="font-medium text-gray-700 w-20">Peringkat</TableHead>
-              <TableHead className="font-medium text-gray-700">Kabupaten/Kota</TableHead>
+              <TableHead className="font-medium text-gray-700">Subsektor</TableHead>
               <TableHead className="font-medium text-gray-700">Jumlah Tenaga Kerja</TableHead>
               <TableHead className="font-medium text-gray-700 w-24">Rasio</TableHead>
             </TableRow>
@@ -316,7 +316,7 @@ export function InvestmentRankingTable() {
           <TableHeader>
             <TableRow className="border-gray-100">
               <TableHead className="font-medium text-gray-700 w-20">Peringkat</TableHead>
-              <TableHead className="font-medium text-gray-700">Kabupaten/Kota</TableHead>
+              <TableHead className="font-medium text-gray-700">Subsektor</TableHead>
               <TableHead className="font-medium text-gray-700">Jumlah Proyek</TableHead>
               <TableHead className="font-medium text-gray-700 w-24">Rasio</TableHead>
             </TableRow>
@@ -422,7 +422,7 @@ export function InvestmentRankingTable() {
       <div className="flex items-center justify-between p-6 border-b border-gray-100">
         <div className="flex items-center gap-4">
           <div>
-            <h3 className="text-lg font-medium text-gray-900">Peringkat Berdasarkan Wilayah PMA/PMDN</h3>
+            <h3 className="text-lg font-medium text-gray-900">Peringkat Berdasarkan Subsektor PMA/PMDN</h3>
             <p className="text-sm text-gray-500 mt-1">
               Data ranking berdasarkan investasi, tenaga kerja, dan jumlah proyek
             </p>
