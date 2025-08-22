@@ -26,7 +26,7 @@ export default function Dashboard() {
         <DatabaseDataTable filters={filters} />
         <RegionalContentTable />
         <SubsectorContentTable />
-        {/* <InvestmentAttachmentTable /> */}
+        <InvestmentAttachmentTable />
         <EmployeeAbsorptionTable />
         {/* <ProjectTable /> */}
       </main>
