@@ -126,9 +126,6 @@ export function DatabaseDataTable({ filters = {} }: DatabaseDataTableProps) {
       <div className="flex items-center justify-between p-6 border-b border-gray-100">
         <div>
           <h3 className="text-lg font-medium text-gray-900">Data Pelaku Ekonomi Kreatif</h3>
-          <p className="text-sm text-gray-500 mt-1">
-            Data dari database Supabase - Total: {totalCount.toLocaleString()} records
-          </p>
         </div>
         <Button 
           variant="outline" 
