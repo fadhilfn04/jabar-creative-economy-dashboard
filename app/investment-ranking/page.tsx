@@ -8,7 +8,7 @@ export default function InvestmentRankingPage() {
       <main className="max-w-7xl mx-auto px-6 py-8">
         <div className="mb-6">
           <h1 className="text-2xl font-bold text-gray-900 mb-2">
-            Peringkat Realisasi Investasi PMA/PMDN
+            Peringkat Berdasarkan Wilayah PMA/PMDN
           </h1>
           <p className="text-gray-600">
             Data ranking investasi, penyerapan tenaga kerja, dan jumlah proyek berdasarkan kabupaten/kota di Jawa Barat
