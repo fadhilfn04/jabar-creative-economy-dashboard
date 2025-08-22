@@ -1,7 +1,7 @@
 import { supabase } from './supabase'
-import type { InvestmentRealizationData, EmploymentAbsorptionData, ProjectCountData } from './investment-types'
+import type { InvestmentRealizationData, EmploymentAbsorptionData, ProjectCountData } from './regional-types'
 
-export class InvestmentService {
+export class RegionalService {
   // Get investment realization ranking data
   static async getInvestmentRealizationData(options: {
     year?: number
@@ -13,6 +13,7 @@ export class InvestmentService {
     let query = supabase
       .from('investment_realization_ranking')
       .select('*', { count: 'exact' })
+      .eq('type', 1)
 
     if (year) {
       query = query.eq('year', year)
@@ -50,6 +51,7 @@ export class InvestmentService {
     let query = supabase
       .from('employment_absorption_ranking')
       .select('*', { count: 'exact' })
+      .eq('type', 1)
 
     if (year) {
       query = query.eq('year', year)
@@ -87,6 +89,7 @@ export class InvestmentService {
     let query = supabase
       .from('project_count_ranking')
       .select('*', { count: 'exact' })
+      .eq('type', 1)
 
     if (year) {
       query = query.eq('year', year)
@@ -118,6 +121,7 @@ export class InvestmentService {
     const { data, error } = await supabase
       .from('investment_realization_ranking')
       .select('year')
+      .eq('type', 1)
       .order('year', { ascending: false })
 
     if (error) {

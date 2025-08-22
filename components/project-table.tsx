@@ -486,7 +486,7 @@ export function ProjectTable() {
       {getCurrentData().length > 0 && (
         <div className="flex items-center justify-between p-6 border-t border-gray-100">
           <p className="text-sm text-gray-500">
-            Showing {((getCurrentPage() - 1) * pageSize) + 1}-{Math.min(getCurrentPage() * pageSize, getCurrentCount())} of {getCurrentCount().toLocaleString()} records
+            Menampilkan {((getCurrentPage() - 1) * pageSize) + 1}-{Math.min(getCurrentPage() * pageSize, getCurrentCount())} of {getCurrentCount().toLocaleString()} data
           </p>
           <div className="flex items-center gap-2">
             <Button 
@@ -497,10 +497,10 @@ export function ProjectTable() {
               className="text-gray-600 border-gray-200 bg-transparent"
             >
               <ChevronLeft className="w-4 h-4" />
-              Previous
+              Sebelumnya
             </Button>
             <span className="text-sm text-gray-600 px-3">
-              Page {getCurrentPage()} of {getCurrentTotalPages()}
+              Halaman {getCurrentPage()} of {getCurrentTotalPages()}
             </span>
             <Button 
               variant="outline" 
@@ -509,7 +509,7 @@ export function ProjectTable() {
               onClick={() => handlePageChange(getCurrentPage() + 1)}
               className="text-gray-600 border-gray-200 bg-transparent"
             >
-              Next
+              Selanjutnya
               <ChevronRight className="w-4 h-4" />
             </Button>
           </div>

@@ -7,14 +7,14 @@ import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ChevronLeft, ChevronRight, Download, Loader2, TrendingUp, Users, Building2 } from "lucide-react"
-import { InvestmentService } from "@/lib/investment-service"
-import type { InvestmentRealizationData, EmploymentAbsorptionData, ProjectCountData } from "@/lib/investment-types"
+import { RegionalService } from "@/lib/regional-service"
+import type { InvestmentRealizationData, EmploymentAbsorptionData, ProjectCountData } from "@/lib/regional-types"
 
 type TabType = 'investment' | 'employment' | 'projects'
 
 export function RegionalContentTable() {
   const [activeTab, setActiveTab] = useState<TabType>('investment')
-  const [selectedYear, setSelectedYear] = useState<number>(2024)
+  const [selectedYear, setSelectedYear] = useState<number>(2025)
   const [availableYears, setAvailableYears] = useState<number[]>([])
   
   // Investment data state
@@ -45,7 +45,7 @@ export function RegionalContentTable() {
   useEffect(() => {
     const fetchYears = async () => {
       try {
-        const years = await InvestmentService.getAvailableYears()
+        const years = await RegionalService.getAvailableYears()
         setAvailableYears(years)
         if (years.length > 0 && !years.includes(selectedYear)) {
           setSelectedYear(years[0])
@@ -63,7 +63,7 @@ export function RegionalContentTable() {
       setInvestmentLoading(true)
       setError(null)
       
-      const result = await InvestmentService.getInvestmentRealizationData({
+      const result = await RegionalService.getInvestmentRealizationData({
         year: selectedYear,
         page,
         limit: pageSize
@@ -87,7 +87,7 @@ export function RegionalContentTable() {
       setEmploymentLoading(true)
       setError(null)
       
-      const result = await InvestmentService.getEmploymentAbsorptionData({
+      const result = await RegionalService.getEmploymentAbsorptionData({
         year: selectedYear,
         page,
         limit: pageSize
@@ -111,7 +111,7 @@ export function RegionalContentTable() {
       setProjectLoading(true)
       setError(null)
       
-      const result = await InvestmentService.getProjectCountData({
+      const result = await RegionalService.getProjectCountData({
         year: selectedYear,
         page,
         limit: pageSize
@@ -241,7 +241,7 @@ export function RegionalContentTable() {
                     {formatCurrency(row.investment_amount)}
                   </TableCell>
                   <TableCell className="text-center">
-                    <Badge variant="secondary" className="bg-blue-100 text-blue-700">
+                    <Badge variant="secondary" className="bg-green-100 text-green-700">
                       {row.percentage.toFixed(2)}%
                     </Badge>
                   </TableCell>
@@ -486,7 +486,7 @@ export function RegionalContentTable() {
       {getCurrentData().length > 0 && (
         <div className="flex items-center justify-between p-6 border-t border-gray-100">
           <p className="text-sm text-gray-500">
-            Showing {((getCurrentPage() - 1) * pageSize) + 1}-{Math.min(getCurrentPage() * pageSize, getCurrentCount())} of {getCurrentCount().toLocaleString()} records
+            Menampilkan {((getCurrentPage() - 1) * pageSize) + 1}-{Math.min(getCurrentPage() * pageSize, getCurrentCount())} dari {getCurrentCount().toLocaleString()} data
           </p>
           <div className="flex items-center gap-2">
             <Button 
@@ -497,10 +497,10 @@ export function RegionalContentTable() {
               className="text-gray-600 border-gray-200 bg-transparent"
             >
               <ChevronLeft className="w-4 h-4" />
-              Previous
+              Sebelumnya
             </Button>
             <span className="text-sm text-gray-600 px-3">
-              Page {getCurrentPage()} of {getCurrentTotalPages()}
+              Halaman {getCurrentPage()} dari {getCurrentTotalPages()}
             </span>
             <Button 
               variant="outline" 
@@ -509,7 +509,7 @@ export function RegionalContentTable() {
               onClick={() => handlePageChange(getCurrentPage() + 1)}
               className="text-gray-600 border-gray-200 bg-transparent"
             >
-              Next
+              Selanjutnya
               <ChevronRight className="w-4 h-4" />
             </Button>
           </div>
