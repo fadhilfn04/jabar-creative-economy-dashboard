@@ -11,7 +11,7 @@ export default function InvestmentRankingPage() {
             Peringkat Berdasarkan Wilayah PMA/PMDN
           </h1>
           <p className="text-gray-600">
-            Data ranking investasi, penyerapan tenaga kerja, dan jumlah proyek berdasarkan kabupaten/kota di Jawa Barat
+            Data ranking investasiku sejarah, penyerapan tenaga kerja, dan jumlah proyek berdasarkan kabupaten/kota di Jawa Barat
           </p>
         </div>
         <InvestmentRankingTable />
