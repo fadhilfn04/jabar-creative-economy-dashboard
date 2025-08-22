@@ -69,6 +69,15 @@ CREATE INDEX IF NOT EXISTS idx_employment_ranking_rank ON employment_absorption_
 CREATE INDEX IF NOT EXISTS idx_project_ranking_year ON project_count_ranking(year);
 CREATE INDEX IF NOT EXISTS idx_project_ranking_rank ON project_count_ranking(rank);
 
+-- Function to automatically update updated_at column
+CREATE OR REPLACE FUNCTION update_updated_at_column()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at = NOW();
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
 -- Create trigger to update updated_at timestamp for investment table
 CREATE TRIGGER update_investment_ranking_updated_at
   BEFORE UPDATE ON investment_realization_ranking
