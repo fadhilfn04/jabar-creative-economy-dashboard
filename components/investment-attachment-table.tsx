@@ -12,7 +12,7 @@ import type { InvestmentRealizationData, EmploymentAbsorptionData, ProjectCountD
 
 type TabType = 'investment' | 'employment' | 'projects'
 
-export function SubsectorContentTable() {
+export function InvestmentAttachmentTable() {
   const [activeTab, setActiveTab] = useState<TabType>('investment')
   const [selectedYear, setSelectedYear] = useState<number>(2024)
   const [availableYears, setAvailableYears] = useState<number[]>([])
