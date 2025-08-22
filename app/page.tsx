@@ -6,7 +6,7 @@ import { ChartsSection } from "@/components/charts-section"
 import { DatabaseDataTable } from "@/components/database-data-table"
 import { DatabaseFilters } from "@/components/database-filters"
 import { MapsSection } from "@/components/maps-section"
-import { InvestmentRankingTable } from "@/components/investment-ranking-table"
+import { RegionalContentTable } from "@/components/regional-content-table"
 import { SubsectorContentTable } from "@/components/subsector-content-table"
 
 export default function Dashboard() {
@@ -21,7 +21,7 @@ export default function Dashboard() {
         <MapsSection />
         <ChartsSection />
         <DatabaseDataTable filters={filters} />
-        <InvestmentRankingTable />
+        <RegionalContentTable />
         <SubsectorContentTable />
       </main>
     </div>
