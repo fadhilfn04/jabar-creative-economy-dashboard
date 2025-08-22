@@ -8,7 +8,7 @@ import { DatabaseFilters } from "@/components/database-filters"
 import { MapsSection } from "@/components/maps-section"
 import { RegionalContentTable } from "@/components/regional-content-table"
 import { SubsectorContentTable } from "@/components/subsector-content-table"
-import { InvestmentAttachmentTable } from "@/components/investment-attachment-table"
+import { InvestmentRankingTable } from "@/components/investment-ranking-table"
 import { EmployeeAbsorptionTable } from "@/components/employee-absorption-table"
 import { ProjectTable } from "@/components/project-table"
 
@@ -24,9 +24,9 @@ export default function Dashboard() {
         <MapsSection />
         <ChartsSection />
         <DatabaseDataTable filters={filters} />
+        <InvestmentRankingTable />
         <RegionalContentTable />
         <SubsectorContentTable />
-        {/* <InvestmentAttachmentTable /> */}
         <EmployeeAbsorptionTable />
         {/* <ProjectTable /> */}
       </main>
