@@ -12,7 +12,7 @@ import type { InvestmentRealizationData, EmploymentAbsorptionData, ProjectCountD
 
 type TabType = 'investment' | 'employment' | 'projects'
 
-export function EmploymentAbsorptionTable() {
+export function ProjectTable() {
   const [activeTab, setActiveTab] = useState<TabType>('investment')
   const [selectedYear, setSelectedYear] = useState<number>(2024)
   const [availableYears, setAvailableYears] = useState<number[]>([])
@@ -422,7 +422,7 @@ export function EmploymentAbsorptionTable() {
       <div className="flex items-center justify-between p-6 border-b border-gray-100">
         <div className="flex items-center gap-4">
           <div>
-            <h3 className="text-lg font-medium text-gray-900">Peringkat Berdasarkan Tenaga Kerja PMA/PMDN</h3>
+            <h3 className="text-lg font-medium text-gray-900">Peringkat Berdasarkan Proyek PMA/PMDN</h3>
             <p className="text-sm text-gray-500 mt-1">
               Data ranking berdasarkan investasi, tenaga kerja, dan jumlah proyek
             </p>
