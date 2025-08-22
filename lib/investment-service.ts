@@ -13,7 +13,6 @@ export class InvestmentService {
     let query = supabase
       .from('investment_realization_ranking')
       .select('*', { count: 'exact' })
-      .eq("type", 2)
 
     if (year) {
       query = query.eq('year', year)
