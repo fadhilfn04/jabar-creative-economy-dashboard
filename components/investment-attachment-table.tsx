@@ -7,8 +7,8 @@ import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ChevronLeft, ChevronRight, Download, Loader2, MapPin, Building2 } from "lucide-react"
-import { InvestmentService } from "@/lib/investment-service"
-import type { InvestmentRealizationData, EmploymentAbsorptionData, ProjectCountData } from "@/lib/investment-types"
+import { InvestmentAttachmentService } from "@/lib/investment-attachment-service"
+import type { InvestmentAttachmentData } from "@/lib/investment-attachment-types"
 
 type TabType = 'regional' | 'subsector'
 
@@ -18,20 +18,20 @@ export function InvestmentAttachmentTable() {
   const [availableYears, setAvailableYears] = useState<number[]>([])
   
   // Regional data state
-  const [regionalData, setRegionalData] = useState<InvestmentRealizationData[]>([])
+  const [regionalData, setRegionalData] = useState<InvestmentAttachmentData[]>([])
   const [regionalLoading, setRegionalLoading] = useState(true)
   const [regionalPage, setRegionalPage] = useState(1)
   const [regionalTotalPages, setRegionalTotalPages] = useState(1)
   const [regionalCount, setRegionalCount] = useState(0)
-  const [regionalGrandTotal, setRegionalGrandTotal] = useState({ investment: 0 })
+  const [regionalGrandTotal, setRegionalGrandTotal] = useState({ projects: 0, investmentUSD: 0, investmentIDR: 0 })
 
   // Subsector data state
-  const [subsectorData, setSubsectorData] = useState<InvestmentRealizationData[]>([])
+  const [subsectorData, setSubsectorData] = useState<InvestmentAttachmentData[]>([])
   const [subsectorLoading, setSubsectorLoading] = useState(true)
   const [subsectorPage, setSubsectorPage] = useState(1)
   const [subsectorTotalPages, setSubsectorTotalPages] = useState(1)
   const [subsectorCount, setSubsectorCount] = useState(0)
-  const [subsectorGrandTotal, setSubsectorGrandTotal] = useState({ investment: 0 })
+  const [subsectorGrandTotal, setSubsectorGrandTotal] = useState({ projects: 0, investmentUSD: 0, investmentIDR: 0 })
 
   const [error, setError] = useState<string | null>(null)
   const pageSize = 15
@@ -40,7 +40,7 @@ export function InvestmentAttachmentTable() {
   useEffect(() => {
     const fetchYears = async () => {
       try {
-        const years = await InvestmentService.getAvailableYears()
+        const years = await InvestmentAttachmentService.getAvailableYears()
         setAvailableYears(years)
         if (years.length > 0 && !years.includes(selectedYear)) {
           setSelectedYear(years[0])
@@ -59,12 +59,12 @@ export function InvestmentAttachmentTable() {
       setError(null)
       
       const [result, grandTotal] = await Promise.all([
-        InvestmentService.getInvestmentRealizationData({
+        InvestmentAttachmentService.getRegionalData({
           year: selectedYear,
           page,
           limit: pageSize
         }),
-        InvestmentService.getInvestmentGrandTotal({
+        InvestmentAttachmentService.getRegionalGrandTotal({
           year: selectedYear
         })
       ])
@@ -89,12 +89,12 @@ export function InvestmentAttachmentTable() {
       setError(null)
       
       const [result, grandTotal] = await Promise.all([
-        InvestmentService.getInvestmentRealizationData({
+        InvestmentAttachmentService.getSubsectorData({
           year: selectedYear,
           page,
           limit: pageSize
         }),
-        InvestmentService.getInvestmentGrandTotal({
+        InvestmentAttachmentService.getSubsectorGrandTotal({
           year: selectedYear
         })
       ])
@@ -120,28 +120,12 @@ export function InvestmentAttachmentTable() {
     }
   }, [selectedYear])
 
-  const formatCurrency = (amount: number) => {
-    if (amount >= 1000000000000) {
-      return `${(amount / 1000000000000).toFixed(3)}`
-    } else if (amount >= 1000000000) {
-      return `${(amount / 1000000000).toFixed(3)}`
-    } else if (amount >= 1000000) {
-      return `${(amount / 1000000).toFixed(3)}`
-    } else {
-      return `${amount.toLocaleString()}`
-    }
+  const formatCurrencyUSD = (amount: number) => {
+    return `$ ${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
   }
 
   const formatCurrencyIDR = (amount: number) => {
-    if (amount >= 1000000000000) {
-      return `${(amount / 1000000000000).toFixed(3)}`
-    } else if (amount >= 1000000000) {
-      return `${(amount / 1000000000).toFixed(3)}`
-    } else if (amount >= 1000000) {
-      return `${(amount / 1000000).toFixed(3)}`
-    } else {
-      return `${amount.toLocaleString()}`
-    }
+    return `Rp ${amount.toLocaleString('id-ID')}`
   }
 
   const exportData = (data: any[], filename: string) => {
@@ -153,12 +137,12 @@ export function InvestmentAttachmentTable() {
         headers = ['Peringkat', 'Kabupaten/Kota', 'Jumlah Proyek', 'Tambahan Investasi (US$)', 'Tambahan Investasi (Rp)', 'Rasio (%)']
         csvContent = [
           headers.join(','),
-          ...data.map((row: InvestmentRealizationData) => [
+          ...data.map((row: InvestmentAttachmentData) => [
             row.rank,
-            `"${row.regency_city}"`,
-            547, // Sample project count
-            formatCurrency(row.investment_amount * 0.000065), // Convert to USD
-            formatCurrencyIDR(row.investment_amount),
+            `"${row.name}"`,
+            row.project_count,
+            row.investment_usd,
+            row.investment_idr,
             row.percentage
           ].join(','))
         ].join('\n')
@@ -166,12 +150,12 @@ export function InvestmentAttachmentTable() {
         headers = ['Peringkat', 'Subsektor', 'Jumlah Proyek', 'Tambahan Investasi (US$)', 'Tambahan Investasi (Rp)', 'Rasio (%)']
         csvContent = [
           headers.join(','),
-          ...data.map((row: InvestmentRealizationData) => [
+          ...data.map((row: InvestmentAttachmentData) => [
             row.rank,
-            `"${row.regency_city}"`,
-            45, // Sample project count
-            formatCurrency(row.investment_amount * 0.000065), // Convert to USD
-            formatCurrencyIDR(row.investment_amount),
+            `"${row.name}"`,
+            row.project_count,
+            row.investment_usd,
+            row.investment_idr,
             row.percentage
           ].join(','))
         ].join('\n')
@@ -226,13 +210,13 @@ export function InvestmentAttachmentTable() {
                         {row.rank}
                       </Badge>
                     </TableCell>
-                    <TableCell className="font-medium text-gray-900">{row.regency_city}</TableCell>
-                    <TableCell className="font-medium text-blue-600">547</TableCell>
+                    <TableCell className="font-medium text-gray-900">{row.name}</TableCell>
+                    <TableCell className="font-medium text-blue-600">{row.project_count.toLocaleString()}</TableCell>
                     <TableCell className="font-medium text-green-600">
-                      $ {formatCurrency(row.investment_amount * 0.000065)}
+                      {formatCurrencyUSD(row.investment_usd)}
                     </TableCell>
                     <TableCell className="font-medium text-green-600">
-                      Rp {formatCurrencyIDR(row.investment_amount)}
+                      {formatCurrencyIDR(row.investment_idr)}
                     </TableCell>
                     <TableCell className="text-center">
                       <Badge variant="secondary" className="bg-blue-100 text-blue-700">
@@ -249,12 +233,12 @@ export function InvestmentAttachmentTable() {
                     </Badge>
                   </TableCell>
                   <TableCell className="font-bold text-gray-900">Grand Total</TableCell>
-                  <TableCell className="font-bold text-blue-700">3,218</TableCell>
+                  <TableCell className="font-bold text-blue-700">{regionalGrandTotal.projects.toLocaleString()}</TableCell>
                   <TableCell className="font-bold text-green-700">
-                    $ {formatCurrency(regionalGrandTotal.investment * 0.000065)}
+                    {formatCurrencyUSD(regionalGrandTotal.investmentUSD)}
                   </TableCell>
                   <TableCell className="font-bold text-green-700">
-                    Rp {formatCurrencyIDR(regionalGrandTotal.investment)}
+                    {formatCurrencyIDR(regionalGrandTotal.investmentIDR)}
                   </TableCell>
                   <TableCell className="text-center">
                     <Badge variant="default" className="bg-blue-600 text-white">
@@ -305,13 +289,13 @@ export function InvestmentAttachmentTable() {
                         {row.rank}
                       </Badge>
                     </TableCell>
-                    <TableCell className="font-medium text-gray-900">{row.regency_city}</TableCell>
-                    <TableCell className="font-medium text-purple-600">45</TableCell>
+                    <TableCell className="font-medium text-gray-900">{row.name}</TableCell>
+                    <TableCell className="font-medium text-purple-600">{row.project_count.toLocaleString()}</TableCell>
                     <TableCell className="font-medium text-green-600">
-                      $ {formatCurrency(row.investment_amount * 0.000065)}
+                      {formatCurrencyUSD(row.investment_usd)}
                     </TableCell>
                     <TableCell className="font-medium text-green-600">
-                      Rp {formatCurrencyIDR(row.investment_amount)}
+                      {formatCurrencyIDR(row.investment_idr)}
                     </TableCell>
                     <TableCell className="text-center">
                       <Badge variant="secondary" className="bg-purple-100 text-purple-700">
@@ -328,12 +312,12 @@ export function InvestmentAttachmentTable() {
                     </Badge>
                   </TableCell>
                   <TableCell className="font-bold text-gray-900">Grand Total</TableCell>
-                  <TableCell className="font-bold text-purple-700">3,218</TableCell>
+                  <TableCell className="font-bold text-purple-700">{subsectorGrandTotal.projects.toLocaleString()}</TableCell>
                   <TableCell className="font-bold text-green-700">
-                    $ {formatCurrency(subsectorGrandTotal.investment * 0.000065)}
+                    {formatCurrencyUSD(subsectorGrandTotal.investmentUSD)}
                   </TableCell>
                   <TableCell className="font-bold text-green-700">
-                    Rp {formatCurrencyIDR(subsectorGrandTotal.investment)}
+                    {formatCurrencyIDR(subsectorGrandTotal.investmentIDR)}
                   </TableCell>
                   <TableCell className="text-center">
                     <Badge variant="default" className="bg-purple-600 text-white">

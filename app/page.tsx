@@ -10,7 +10,6 @@ import { RegionalContentTable } from "@/components/regional-content-table"
 import { SubsectorContentTable } from "@/components/subsector-content-table"
 import { InvestmentAttachmentTable } from "@/components/investment-attachment-table"
 import { EmployeeAbsorptionTable } from "@/components/employee-absorption-table"
-import { ProjectTable } from "@/components/project-table"
 
 export default function Dashboard() {
   const [filters, setFilters] = useState({})
@@ -28,7 +27,6 @@ export default function Dashboard() {
         <SubsectorContentTable />
         <InvestmentAttachmentTable />
         <EmployeeAbsorptionTable />
-        {/* <ProjectTable /> */}
       </main>
     </div>
   )
