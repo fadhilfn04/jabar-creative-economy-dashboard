@@ -1,6 +1,7 @@
 // Types for investment ranking data
 export interface InvestmentRealizationData {
   id: number
+  type: number
   year: number
   rank: number
   regency_city: string
@@ -14,6 +15,7 @@ export interface InvestmentRealizationData {
 
 export interface EmploymentAbsorptionData {
   id: number
+  type: number
   year: number
   rank: number
   regency_city: string
@@ -26,6 +28,7 @@ export interface EmploymentAbsorptionData {
 
 export interface ProjectCountData {
   id: number
+  type: number
   year: number
   rank: number
   regency_city: string
