@@ -372,13 +372,13 @@ export function EmployeeAbsorptionTable() {
   return (
     <div className="minimal-card">
       <div className="flex items-center justify-between p-6 border-b border-gray-100">
-        <div className="flex items-center gap-4">
-          <div>
-            <h3 className="text-lg font-medium text-gray-900">Peringkat Berdasarkan Tenaga Kerja PMA/PMDN</h3>
-            <p className="text-sm text-gray-500 mt-1">
-              Data ranking berdasarkan investasi, tenaga kerja, dan jumlah proyek
-            </p>
-          </div>
+        <div>
+          <h3 className="text-lg font-medium text-gray-900">Peringkat Berdasarkan Tenaga Kerja PMA/PMDN</h3>
+          <p className="text-sm text-gray-500 mt-1">
+            Data ranking berdasarkan investasi, tenaga kerja, dan jumlah proyek
+          </p>
+        </div>
+        <div className="flex items-center gap-3">
           <Select value={selectedYear.toString()} onValueChange={(value) => setSelectedYear(parseInt(value))}>
             <SelectTrigger className="w-[120px] border-gray-200">
               <SelectValue placeholder="Tahun" />
@@ -391,17 +391,17 @@ export function EmployeeAbsorptionTable() {
               ))}
             </SelectContent>
           </Select>
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="text-gray-600 border-gray-200 bg-transparent"
+            onClick={() => exportData(getCurrentData(), `ranking_${activeTab}_${selectedYear}.csv`)}
+            disabled={getCurrentData().length === 0}
+          >
+            <Download className="w-4 h-4 mr-2" />
+            Export
+          </Button>
         </div>
-        <Button 
-          variant="outline" 
-          size="sm" 
-          className="text-gray-600 border-gray-200 bg-transparent"
-          onClick={() => exportData(getCurrentData(), `ranking_${activeTab}_${selectedYear}.csv`)}
-          disabled={getCurrentData().length === 0}
-        >
-          <Download className="w-4 h-4 mr-2" />
-          Export
-        </Button>
       </div>
 
       <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as TabType)} className="w-full">

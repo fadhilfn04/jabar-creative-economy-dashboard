@@ -45,7 +45,7 @@ export function RankingAnalysisTable() {
   const [summaryMetrics, setSummaryMetrics] = useState<RankingAnalysisSummary | null>(null)
   const [error, setError] = useState<string | null>(null)
   
-  const pageSize = 15
+  const pageSize = 10
 
   // Fetch available years
   useEffect(() => {
@@ -239,9 +239,9 @@ export function RankingAnalysisTable() {
             <TableRow className="border-gray-100">
               <TableHead className="font-medium text-gray-700 w-20">Peringkat</TableHead>
               <TableHead className="font-medium text-gray-700">Kabupaten/Kota</TableHead>
-              <TableHead className="font-medium text-gray-700">Sum of Proyek</TableHead>
-              <TableHead className="font-medium text-gray-700">Sum of Tambahan Investasi (Dalam US$)</TableHead>
-              <TableHead className="font-medium text-gray-700">Sum of Tambahan Investasi (Dalam Rp)</TableHead>
+              <TableHead className="font-medium text-gray-700">Jumlah Proyek</TableHead>
+              <TableHead className="font-medium text-gray-700">Jumlah Tambahan Investasi (Dalam US$)</TableHead>
+              <TableHead className="font-medium text-gray-700">Jumlah Tambahan Investasi (Dalam Rp)</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -261,7 +261,7 @@ export function RankingAnalysisTable() {
                       </Badge>
                     </TableCell>
                     <TableCell className="font-medium text-gray-900">{row.region}</TableCell>
-                    <TableCell className="font-medium text-blue-600">{row.project_count.toLocaleString()}</TableCell>
+                    <TableCell className="font-medium text-green-600">{row.project_count.toLocaleString()}</TableCell>
                     <TableCell className="font-medium text-green-600">
                       {formatCurrencyUSD(row.investment_usd)}
                     </TableCell>
@@ -278,7 +278,7 @@ export function RankingAnalysisTable() {
                     </Badge>
                   </TableCell>
                   <TableCell className="font-bold text-gray-900">Grand Total</TableCell>
-                  <TableCell className="font-bold text-blue-700">
+                  <TableCell className="font-bold text-green-700">
                     {investmentData.reduce((sum, item) => sum + item.project_count, 0).toLocaleString()}
                   </TableCell>
                   <TableCell className="font-bold text-green-700">
@@ -309,8 +309,8 @@ export function RankingAnalysisTable() {
             <TableRow className="border-gray-100">
               <TableHead className="font-medium text-gray-700 w-20">Peringkat</TableHead>
               <TableHead className="font-medium text-gray-700">Kabupaten/Kota</TableHead>
-              <TableHead className="font-medium text-gray-700">Sum of Proyek</TableHead>
-              <TableHead className="font-medium text-gray-700">Sum of TK</TableHead>
+              <TableHead className="font-medium text-gray-700">Jumlah Proyek</TableHead>
+              <TableHead className="font-medium text-gray-700">Jumlah TK</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -370,8 +370,8 @@ export function RankingAnalysisTable() {
             <TableRow className="border-gray-100">
               <TableHead className="font-medium text-gray-700 w-20">Peringkat</TableHead>
               <TableHead className="font-medium text-gray-700">Kabupaten/Kota</TableHead>
-              <TableHead className="font-medium text-gray-700">Sum of Proyek</TableHead>
-              <TableHead className="font-medium text-gray-700">Sum of Tambahan Investasi (Dalam Rp)</TableHead>
+              <TableHead className="font-medium text-gray-700">Jumlah Proyek</TableHead>
+              <TableHead className="font-medium text-gray-700">Jumlah Tambahan Investasi (Dalam Rp)</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -392,7 +392,7 @@ export function RankingAnalysisTable() {
                     </TableCell>
                     <TableCell className="font-medium text-gray-900">{row.region}</TableCell>
                     <TableCell className="font-medium text-orange-600">{row.project_count.toLocaleString()}</TableCell>
-                    <TableCell className="font-medium text-green-600">
+                    <TableCell className="font-medium text-orange-600">
                       {formatCurrencyIDR(row.investment_idr)}
                     </TableCell>
                   </TableRow>
@@ -408,7 +408,7 @@ export function RankingAnalysisTable() {
                   <TableCell className="font-bold text-orange-700">
                     {projectData.reduce((sum, item) => sum + item.project_count, 0).toLocaleString()}
                   </TableCell>
-                  <TableCell className="font-bold text-green-700">
+                  <TableCell className="font-bold text-orange-700">
                     {formatCurrencyIDR(projectData.reduce((sum, item) => sum + item.investment_idr, 0))}
                   </TableCell>
                 </TableRow>
@@ -490,6 +490,12 @@ export function RankingAnalysisTable() {
 
   return (
     <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-2xl font-bold text-gray-900">Realisasi Ekonomi Kreatif PMA, PMDN, dan Total PMA & PDN di Jawa Barat</h2>
+          <p className="text-gray-600 mt-1">Analisis komprehensif ekonomi kreatif di Jawa Barat Menurut Kabupaten/Kota</p>
+        </div>
+      </div>
       {/* Summary Metrics */}
       {summaryMetrics && (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -513,7 +519,7 @@ export function RankingAnalysisTable() {
       )}
 
       {/* Filters */}
-      <div className="minimal-card p-6">
+      {/* <div className="minimal-card p-6">
         <div className="flex flex-col lg:flex-row gap-4">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
@@ -550,16 +556,13 @@ export function RankingAnalysisTable() {
             </Button>
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* Main Table */}
       <div className="minimal-card">
         <div className="flex items-center justify-between p-6 border-b border-gray-100">
           <div>
-            <h3 className="text-lg font-medium text-gray-900">Analisis Peringkat di Jawa Barat</h3>
-            <p className="text-sm text-gray-500 mt-1">
-              Analisis komprehensif peringkat investasi, tenaga kerja, dan proyek ekonomi kreatif
-            </p>
+            <h3 className="text-lg font-medium text-gray-900">Realisasi Ekonomi Kreatif di Jawa Barat</h3>
           </div>
           <Button 
             variant="outline" 

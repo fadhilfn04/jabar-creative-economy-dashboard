@@ -114,7 +114,7 @@ export function DatabaseDataTable({ filters = {} }: DatabaseDataTableProps) {
         <div className="text-center py-8">
           <p className="text-red-600 mb-4">{error}</p>
           <Button onClick={() => fetchData(currentPage)} variant="outline">
-            Try Again
+            Coba lagi
           </Button>
         </div>
       </div>
@@ -143,7 +143,7 @@ export function DatabaseDataTable({ filters = {} }: DatabaseDataTableProps) {
         {loading ? (
           <div className="flex items-center justify-center py-12">
             <Loader2 className="h-6 w-6 animate-spin text-blue-600" />
-            <span className="ml-2 text-gray-600">Loading data...</span>
+            <span className="ml-2 text-gray-600">Memuat data...</span>
           </div>
         ) : (
           <Table>
@@ -166,7 +166,7 @@ export function DatabaseDataTable({ filters = {} }: DatabaseDataTableProps) {
               {data.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={11} className="text-center py-8 text-gray-500">
-                    No data found
+                    Tidak ditemukan data yang sesuai.
                   </TableCell>
                 </TableRow>
               ) : (
@@ -209,7 +209,7 @@ export function DatabaseDataTable({ filters = {} }: DatabaseDataTableProps) {
       {!loading && data.length > 0 && (
         <div className="flex items-center justify-between p-6 border-t border-gray-100">
           <p className="text-sm text-gray-500">
-            Menampilkan {((currentPage - 1) * pageSize) + 1}-{Math.min(currentPage * pageSize, totalCount)} of {totalCount.toLocaleString()} data
+            Menampilkan {((currentPage - 1) * pageSize) + 1}-{Math.min(currentPage * pageSize, totalCount)} dari {totalCount.toLocaleString()} data
           </p>
           <div className="flex items-center gap-2">
             <Button 
@@ -223,7 +223,7 @@ export function DatabaseDataTable({ filters = {} }: DatabaseDataTableProps) {
               Sebelumnya
             </Button>
             <span className="text-sm text-gray-600 px-3">
-              Halaman {currentPage} of {totalPages}
+              Halaman {currentPage} dari {totalPages}
             </span>
             <Button 
               variant="outline" 

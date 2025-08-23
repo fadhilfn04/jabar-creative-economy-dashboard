@@ -23,10 +23,10 @@ export default function Dashboard() {
     <div className="min-h-screen bg-gray-50">
       <DashboardHeader />
       <main className="max-w-7xl mx-auto px-6 py-8 space-y-8">
-        <DatabaseFilters onFiltersChange={setFilters} />
         <DatabaseMetrics />
         <MapsSection />
         <ChartsSection />
+        <DatabaseFilters onFiltersChange={setFilters} />
         <DatabaseDataTable filters={filters} />
         <RegionalContentTable />
         <SubsectorContentTable />

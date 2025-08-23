@@ -16,7 +16,7 @@ export class EkrafAnalysisService {
   } = {}) {
     const {
       page = 1,
-      limit = 20,
+      limit = 10,
       tahun,
       sektor,
       kabupaten_kota,

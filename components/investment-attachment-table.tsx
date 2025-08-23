@@ -34,7 +34,7 @@ export function InvestmentAttachmentTable() {
   const [subsectorGrandTotal, setSubsectorGrandTotal] = useState({ projects: 0, investmentUSD: 0, investmentIDR: 0 })
 
   const [error, setError] = useState<string | null>(null)
-  const pageSize = 15
+  const pageSize = 10
 
   // Fetch available years
   useEffect(() => {
@@ -211,7 +211,7 @@ export function InvestmentAttachmentTable() {
                       </Badge>
                     </TableCell>
                     <TableCell className="font-medium text-gray-900">{row.name}</TableCell>
-                    <TableCell className="font-medium text-blue-600">{row.project_count.toLocaleString()}</TableCell>
+                    <TableCell className="font-medium text-green-600">{row.project_count.toLocaleString()}</TableCell>
                     <TableCell className="font-medium text-green-600">
                       {formatCurrencyUSD(row.investment_usd)}
                     </TableCell>
@@ -219,7 +219,7 @@ export function InvestmentAttachmentTable() {
                       {formatCurrencyIDR(row.investment_idr)}
                     </TableCell>
                     <TableCell className="text-center">
-                      <Badge variant="secondary" className="bg-blue-100 text-blue-700">
+                      <Badge variant="secondary" className="bg-green-100 text-green-700">
                         {row.percentage.toFixed(2)}%
                       </Badge>
                     </TableCell>
@@ -233,7 +233,7 @@ export function InvestmentAttachmentTable() {
                     </Badge>
                   </TableCell>
                   <TableCell className="font-bold text-gray-900">Grand Total</TableCell>
-                  <TableCell className="font-bold text-blue-700">{regionalGrandTotal.projects.toLocaleString()}</TableCell>
+                  <TableCell className="font-bold text-green-700">{regionalGrandTotal.projects.toLocaleString()}</TableCell>
                   <TableCell className="font-bold text-green-700">
                     {formatCurrencyUSD(regionalGrandTotal.investmentUSD)}
                   </TableCell>
@@ -241,7 +241,7 @@ export function InvestmentAttachmentTable() {
                     {formatCurrencyIDR(regionalGrandTotal.investmentIDR)}
                   </TableCell>
                   <TableCell className="text-center">
-                    <Badge variant="default" className="bg-blue-600 text-white">
+                    <Badge variant="default" className="bg-green-600 text-white">
                       100.00%
                     </Badge>
                   </TableCell>
@@ -291,10 +291,10 @@ export function InvestmentAttachmentTable() {
                     </TableCell>
                     <TableCell className="font-medium text-gray-900">{row.name}</TableCell>
                     <TableCell className="font-medium text-purple-600">{row.project_count.toLocaleString()}</TableCell>
-                    <TableCell className="font-medium text-green-600">
+                    <TableCell className="font-medium text-purple-600">
                       {formatCurrencyUSD(row.investment_usd)}
                     </TableCell>
-                    <TableCell className="font-medium text-green-600">
+                    <TableCell className="font-medium text-purple-600">
                       {formatCurrencyIDR(row.investment_idr)}
                     </TableCell>
                     <TableCell className="text-center">
@@ -313,10 +313,10 @@ export function InvestmentAttachmentTable() {
                   </TableCell>
                   <TableCell className="font-bold text-gray-900">Grand Total</TableCell>
                   <TableCell className="font-bold text-purple-700">{subsectorGrandTotal.projects.toLocaleString()}</TableCell>
-                  <TableCell className="font-bold text-green-700">
+                  <TableCell className="font-bold text-purple-700">
                     {formatCurrencyUSD(subsectorGrandTotal.investmentUSD)}
                   </TableCell>
-                  <TableCell className="font-bold text-green-700">
+                  <TableCell className="font-bold text-purple-700">
                     {formatCurrencyIDR(subsectorGrandTotal.investmentIDR)}
                   </TableCell>
                   <TableCell className="text-center">
@@ -392,13 +392,13 @@ export function InvestmentAttachmentTable() {
   return (
     <div className="minimal-card">
       <div className="flex items-center justify-between p-6 border-b border-gray-100">
-        <div className="flex items-center gap-4">
-          <div>
-            <h3 className="text-lg font-medium text-gray-900">Peringkat Berdasarkan Lampiran Investasi PMA/PMDN</h3>
-            <p className="text-sm text-gray-500 mt-1">
-              Data ranking berdasarkan lampiran investasi wilayah dan subsektor
-            </p>
-          </div>
+        <div>
+          <h3 className="text-lg font-medium text-gray-900">Peringkat Berdasarkan Lampiran Investasi PMA/PMDN</h3>
+          <p className="text-sm text-gray-500 mt-1">
+            Data ranking berdasarkan lampiran investasi wilayah dan subsektor
+          </p>
+        </div>
+        <div className="flex items-center gap-3">
           <Select value={selectedYear.toString()} onValueChange={(value) => setSelectedYear(parseInt(value))}>
             <SelectTrigger className="w-[120px] border-gray-200">
               <SelectValue placeholder="Tahun" />
@@ -411,17 +411,17 @@ export function InvestmentAttachmentTable() {
               ))}
             </SelectContent>
           </Select>
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="text-gray-600 border-gray-200 bg-transparent"
+            onClick={() => exportData(getCurrentData(), `lampiran_investasi_${activeTab}_${selectedYear}.csv`)}
+            disabled={getCurrentData().length === 0}
+          >
+            <Download className="w-4 h-4 mr-2" />
+            Export
+          </Button>
         </div>
-        <Button 
-          variant="outline" 
-          size="sm" 
-          className="text-gray-600 border-gray-200 bg-transparent"
-          onClick={() => exportData(getCurrentData(), `lampiran_investasi_${activeTab}_${selectedYear}.csv`)}
-          disabled={getCurrentData().length === 0}
-        >
-          <Download className="w-4 h-4 mr-2" />
-          Export
-        </Button>
       </div>
 
       <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as TabType)} className="w-full">

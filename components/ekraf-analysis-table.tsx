@@ -37,7 +37,7 @@ export function EkrafAnalysisTable() {
     subsektors: [] as string[]
   })
 
-  const pageSize = 20
+  const pageSize = 10
 
   // Fetch filter options
   useEffect(() => {
@@ -131,7 +131,7 @@ export function EkrafAnalysisTable() {
     try {
       const csvContent = [
         // Header
-        ['Tahun', 'Sektor', 'Nama Perusahaan', 'Kabupaten/Kota', 'Bidang Usaha', 'KBLI Code', 'Kode KBLI Lama', 'Judul KBLI Lama', 'Kode KBLI Baru', 'Judul KBLI Baru', 'Is EKRAF', 'Subsektor', 'Is Pariwisata', 'Subsektor Pariwisata', 'Negara', 'No Izin', 'Investasi USD', 'Investasi IDR', 'Proyek', 'TKI', 'TKA', 'TK', 'Status Modal', 'Periode'].join(','),
+        ['Tahun', 'Sektor', 'Nama Perusahaan', 'Kabupaten/Kota', 'Bidang Usaha', 'KBLI Code', 'Kode KBLI Lama', 'Judul KBLI Lama', 'Kode KBLI Baru', 'Judul KBLI Baru', 'EKRAF', 'Subsektor', 'Pariwisata', 'Subsektor Pariwisata', 'Negara', 'No Izin', 'Investasi USD', 'Investasi IDR', 'Proyek', 'TKI', 'TKA', 'TK', 'Status Modal', 'Periode'].join(','),
         // Data rows
         ...data.map(row => [
           row.tahun,
@@ -366,9 +366,9 @@ export function EkrafAnalysisTable() {
                   <TableHead className="font-medium text-gray-700">Judul KBLI Lama</TableHead>
                   <TableHead className="font-medium text-gray-700">Kode KBLI Baru</TableHead>
                   <TableHead className="font-medium text-gray-700">Judul KBLI Baru</TableHead>
-                  <TableHead className="font-medium text-gray-700">Is EKRAF</TableHead>
+                  <TableHead className="font-medium text-gray-700">EKRAF</TableHead>
                   <TableHead className="font-medium text-gray-700">Subsektor</TableHead>
-                  <TableHead className="font-medium text-gray-700">Is Pariwisata</TableHead>
+                  <TableHead className="font-medium text-gray-700">Pariwisata</TableHead>
                   <TableHead className="font-medium text-gray-700">Subsektor Pariwisata</TableHead>
                   <TableHead className="font-medium text-gray-700">Negara</TableHead>
                   <TableHead className="font-medium text-gray-700">No Izin</TableHead>
