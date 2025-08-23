@@ -13,6 +13,7 @@ import { EmployeeAbsorptionTable } from "@/components/employee-absorption-table"
 import { EkrafAnalysisTable } from "@/components/ekraf-analysis-table"
 import { InvestmentAnalysisDashboard } from "@/components/investment-analysis-dashboard"
 import { WorkforceAnalysisDashboard } from "@/components/workforce-analysis-dashboard"
+import { RankingAnalysisTable } from "@/components/ranking-analysis-table"
 
 export default function Dashboard() {
   const [filters, setFilters] = useState({})
@@ -33,6 +34,7 @@ export default function Dashboard() {
         <EkrafAnalysisTable />
         <InvestmentAnalysisDashboard />
         <WorkforceAnalysisDashboard />
+        <RankingAnalysisTable />
       </main>
     </div>
   )
