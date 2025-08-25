@@ -94,34 +94,52 @@ export class DatabaseService {
     return data as CitySummary[]
   }
 
-  // Get dashboard metrics
-  static async getDashboardMetrics() {
+  static async getDashboardMetrics(year?: number) {
     const { data, error } = await supabase
-      .from('creative_economy_data')
+      .from('creative_economy_data_total')
       .select(`
-        id,
-        investment_amount,
-        workers_count,
-        status,
+        total_companies,
+        total_investment,
+        total_workers,
+        total_growth,
         year
       `)
+      .eq('year', year || new Date().getFullYear()) // filter by current year or given year
 
     if (error) {
       console.error('Error fetching dashboard metrics:', error)
       throw error
     }
 
-    const totalCompanies = data.length
-    const totalInvestment = data.reduce((sum, item) => sum + (item.investment_amount || 0), 0)
-    const totalWorkers = data.reduce((sum, item) => sum + (item.workers_count || 0), 0)
-    
-    // Calculate growth rate (simplified - comparing current year vs previous)
-    const currentYear = new Date().getFullYear()
-    const currentYearData = data.filter(item => item.year === currentYear)
-    const previousYearData = data.filter(item => item.year === currentYear - 1)
-    
-    const growthRate = previousYearData.length > 0 
-      ? ((currentYearData.length - previousYearData.length) / previousYearData.length) * 100
+    if (!data || data.length === 0) {
+      return {
+        totalCompanies: 0,
+        totalInvestment: 0,
+        totalWorkers: 0,
+        growthRate: 0
+      }
+    }
+
+    const currentYear = year || new Date().getFullYear()
+    const currentYearData = data.find(item => item.year === currentYear)
+    const previousYearData = await supabase
+      .from('creative_economy_data_total')
+      .select(`
+        total_companies,
+        total_investment,
+        total_workers,
+        total_growth,
+        year
+      `)
+      .eq('year', currentYear - 1)
+      .single()
+
+    const totalCompanies = currentYearData?.total_companies || 0
+    const totalInvestment = currentYearData?.total_investment || 0
+    const totalWorkers = currentYearData?.total_workers || 0
+
+    const growthRate = previousYearData.data
+      ? ((totalCompanies - previousYearData.data.total_companies) / previousYearData.data.total_companies) * 100
       : 0
 
     return {
