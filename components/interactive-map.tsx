@@ -10,16 +10,10 @@ L.Icon.Default.mergeOptions({
   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
 })
 
-interface RegionData {
-  name: string
-  companies: number
-  investment: string
-  workers: number
-  color: string
-}
+import type { MapRegionData } from "@/lib/map-data-service"
 
 interface InteractiveMapProps {
-  regionData: RegionData[]
+  regionData: MapRegionData[]
 }
 
 // Coordinates for major cities in West Java

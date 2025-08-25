@@ -1,8 +1,11 @@
 'use client'
 
 import dynamic from 'next/dynamic'
+import { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { MapPin, Building2, TrendingUp, Users } from "lucide-react"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { MapPin, Building2, TrendingUp, Users, Loader2 } from "lucide-react"
+import { MapDataService, type MapRegionData } from "@/lib/map-data-service"
 
 const InteractiveMap = dynamic(() => import('./interactive-map'), {
   ssr: false,
@@ -19,29 +22,92 @@ const InteractiveMap = dynamic(() => import('./interactive-map'), {
 })
 
 export function MapsSection() {
-  const regionData = [
-    { name: "Bandung", companies: 847, investment: "2.1T", workers: 12450, color: "bg-blue-500" },
-    { name: "Bekasi", companies: 623, investment: "1.8T", workers: 9230, color: "bg-green-500" },
-    { name: "Bogor", companies: 445, investment: "1.2T", workers: 6780, color: "bg-purple-500" },
-    { name: "Depok", companies: 312, investment: "890M", workers: 4560, color: "bg-orange-500" },
-    { name: "Cimahi", companies: 298, investment: "750M", workers: 3890, color: "bg-red-500" },
-    { name: "Sukabumi", companies: 186, investment: "520M", workers: 2340, color: "bg-indigo-500" },
-    { name: "Tasikmalaya", companies: 136, investment: "380M", workers: 1890, color: "bg-pink-500" },
-  ]
+  const [regionData, setRegionData] = useState<MapRegionData[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [selectedYear, setSelectedYear] = useState<number>(2024)
+  const [availableYears, setAvailableYears] = useState<number[]>([])
+
+  // Fetch available years
+  useEffect(() => {
+    const fetchYears = async () => {
+      try {
+        const years = await MapDataService.getAvailableYears()
+        setAvailableYears(years)
+        if (years.length > 0 && !years.includes(selectedYear)) {
+          setSelectedYear(years[0])
+        }
+      } catch (err) {
+        console.error('Error fetching years:', err)
+      }
+    }
+    fetchYears()
+  }, [selectedYear])
+
+  // Fetch map data
+  useEffect(() => {
+    const fetchMapData = async () => {
+      try {
+        setLoading(true)
+        setError(null)
+        const data = await MapDataService.getMapData(selectedYear)
+        setRegionData(data)
+      } catch (err) {
+        console.error('Error fetching map data:', err)
+        setError('Failed to load map data')
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    if (selectedYear) {
+      fetchMapData()
+    }
+  }, [selectedYear])
 
   return (
     <div className="space-y-6">
       <Card>
-        <CardHeader>
+        <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="flex items-center gap-2 text-gray-900">
             <MapPin className="h-5 w-5 text-blue-600" />
             Peta Sebaran Ekonomi Kreatif Jawa Barat
           </CardTitle>
+          <div className="flex items-center gap-3">
+            <Select value={selectedYear.toString()} onValueChange={(value) => setSelectedYear(parseInt(value))}>
+              <SelectTrigger className="w-[120px] border-gray-200">
+                <SelectValue placeholder="Tahun" />
+              </SelectTrigger>
+              <SelectContent>
+                {availableYears.map((year) => (
+                  <SelectItem key={year} value={year.toString()}>
+                    {year}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
         </CardHeader>
         <CardContent>
+          {loading ? (
+            <div className="rounded-lg overflow-hidden h-[450px] w-full bg-gray-50 flex items-center justify-center">
+              <div className="text-center">
+                <Loader2 className="h-8 w-8 animate-spin text-blue-600 mx-auto mb-4" />
+                <p className="text-gray-600 text-sm">Memuat data peta...</p>
+              </div>
+            </div>
+          ) : error ? (
+            <div className="rounded-lg overflow-hidden h-[450px] w-full bg-red-50 flex items-center justify-center">
+              <div className="text-center">
+                <p className="text-red-600 mb-2">{error}</p>
+                <p className="text-gray-600 text-sm">Silakan periksa koneksi database</p>
+              </div>
+            </div>
+          ) : (
             <div className="rounded-lg overflow-hidden h-[450px] w-full">
               <InteractiveMap regionData={regionData} />
             </div>
+          )}
         </CardContent>
       </Card>
     </div>
