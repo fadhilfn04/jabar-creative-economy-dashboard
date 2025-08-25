@@ -9,6 +9,40 @@ export interface MapRegionData {
   investmentAmount: number
 }
 
+// Coordinates for major cities in West Java
+const cityCoordinates: Record<string, [number, number]> = {
+  // Cities (Kota)
+  'Kota Bandung': [-6.9175, 107.6191],
+  'Kota Bekasi': [-6.2383, 106.9756],
+  'Kota Bogor': [-6.5971, 106.8060],
+  'Kota Depok': [-6.4025, 106.7942],
+  'Kota Cimahi': [-6.8721, 107.5420],
+  'Kota Sukabumi': [-6.9278, 106.9271],
+  'Kota Tasikmalaya': [-7.3506, 108.2172],
+  'Kota Cirebon': [-6.7063, 108.5570],
+  'Kota Banjar': [-7.3721, 108.5389],
+  
+  // Regencies (Kabupaten)
+  'Kabupaten Bekasi': [-6.2649, 107.1281],
+  'Kabupaten Karawang': [-6.3067, 107.3032],
+  'Kabupaten Bogor': [-6.5944, 106.7892],
+  'Kabupaten Bandung': [-7.0051, 107.5619],
+  'Kabupaten Majalengka': [-6.8364, 108.2274],
+  'Kabupaten Garut': [-7.2134, 107.9067],
+  'Kabupaten Purwakarta': [-6.5569, 107.4431],
+  'Kabupaten Subang': [-6.5693, 107.7607],
+  'Kabupaten Sukabumi': [-6.9278, 106.9271],
+  'Kabupaten Sumedang': [-6.8595, 107.9239],
+  'Kabupaten Indramayu': [-6.3274, 108.3199],
+  'Kabupaten Cirebon': [-6.7767, 108.4815],
+  'Kabupaten Bandung Barat': [-6.8186, 107.4817],
+  'Kabupaten Cianjur': [-6.8174, 107.1425],
+  'Kabupaten Kuningan': [-6.9759, 108.4837],
+  'Kabupaten Tasikmalaya': [-7.3274, 108.2207],
+  'Kabupaten Ciamis': [-7.3274, 108.3534],
+  'Kabupaten Pangandaran': [-7.6840, 108.6500]
+}
+
 export class MapDataService {
   // Get combined data for the map from investment and labor ranking tables
   static async getMapData(year?: number): Promise<MapRegionData[]> {
