@@ -34,11 +34,11 @@ export function DatabaseMetrics() {
 
   const formatCurrency = (amount: number) => {
     if (amount >= 1000000000000) {
-      return `Rp ${(amount / 1000000000000).toFixed(1)}T`
+      return `Rp ${(amount / 1000000000000).toFixed(1)} T`
     } else if (amount >= 1000000000) {
-      return `Rp ${(amount / 1000000000).toFixed(1)}B`
+      return `Rp ${(amount / 1000000000).toFixed(1)} M`
     } else if (amount >= 1000000) {
-      return `Rp ${(amount / 1000000).toFixed(1)}M`
+      return `Rp ${(amount / 1000000).toFixed(1)} Jt`
     } else {
       return `Rp ${amount.toLocaleString()}`
     }

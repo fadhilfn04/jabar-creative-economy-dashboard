@@ -25,7 +25,7 @@ export function MapsSection() {
   const [regionData, setRegionData] = useState<MapRegionData[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [selectedYear, setSelectedYear] = useState<number>(2024)
+  const [selectedYear, setSelectedYear] = useState<number>(2025)
   const [availableYears, setAvailableYears] = useState<number[]>([])
 
   // Fetch available years
@@ -104,7 +104,10 @@ export function MapsSection() {
               </div>
             </div>
           ) : (
-            <div className="rounded-lg overflow-hidden h-[450px] w-full">
+            // <div className="rounded-lg overflow-hidden h-[450px] w-full">
+            //   <InteractiveMap regionData={regionData} />
+            // </div>
+            <div className="rounded-lg overflow-hidden h-[450px] w-full relative z-0">
               <InteractiveMap regionData={regionData} />
             </div>
           )}

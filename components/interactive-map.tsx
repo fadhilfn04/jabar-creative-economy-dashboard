@@ -62,7 +62,7 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({ regionData }) => {
       center: [-6.9175, 107.6191],
       zoom: 8,
       minZoom: 8,
-      maxZoom: 12,
+      maxZoom: 15,
     })
 
     // Add OpenStreetMap tiles
@@ -98,7 +98,7 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({ regionData }) => {
             font-weight: bold;
             font-size: ${size > 30 ? '12px' : '10px'};
           ">
-            ${companies > 999 ? '999+' : companies}
+            ${companies}
           </div>
         `,
         iconSize: [size, size],
@@ -120,7 +120,7 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({ regionData }) => {
             <h3 class="font-bold text-lg mb-2 text-gray-900">${region.name}</h3>
             <div class="space-y-1 text-sm">
               <div class="flex justify-between">
-                <span class="text-gray-600">Pelaku Ekonomi Kreatif:</span>
+                <span class="text-gray-600">Total Proyek:</span>
                 <span class="font-medium">${region.companies}</span>
               </div>
               <div class="flex justify-between">

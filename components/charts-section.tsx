@@ -30,7 +30,7 @@ export function ChartsSection() {
   const [investmentTrend, setInvestmentTrend] = useState<InvestmentTrendData[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [selectedYear, setSelectedYear] = useState<number>(2020)
+  const [selectedYear, setSelectedYear] = useState<number>(2025)
   const [availableYears, setAvailableYears] = useState<number[]>([])
 
   // Fetch available years
@@ -131,7 +131,7 @@ export function ChartsSection() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
       <div className="minimal-card p-6">
         <h3 className="text-lg font-medium text-gray-900 mb-6">
-          Pelaku Ekonomi Kreatif per Subsektor ({selectedYear})
+          Pelaku Ekonomi Kreatif ({selectedYear})
         </h3>
         <ResponsiveContainer width="100%" height={280}>
           <BarChart data={subsectorData}>
@@ -157,7 +157,7 @@ export function ChartsSection() {
 
       <div className="minimal-card p-6">
         <h3 className="text-lg font-medium text-gray-900 mb-6">
-          Distribusi Investasi per Subsektor ({selectedYear})
+          Distribusi Investasi ({selectedYear})
         </h3>
         <ResponsiveContainer width="100%" height={280}>
           <PieChart>

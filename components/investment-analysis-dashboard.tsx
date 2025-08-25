@@ -85,11 +85,11 @@ export function InvestmentAnalysisDashboard() {
 
   const formatCurrency = (amount: number) => {
     if (amount >= 1000000000000) {
-      return `Rp ${(amount / 1000000000000).toFixed(1)}T`
+      return `Rp ${(amount / 1000000000000).toFixed(1)} T`
     } else if (amount >= 1000000000) {
-      return `Rp ${(amount / 1000000000).toFixed(1)}B`
+      return `Rp ${(amount / 1000000000).toFixed(1)} M`
     } else if (amount >= 1000000) {
-      return `Rp ${(amount / 1000000).toFixed(1)}M`
+      return `Rp ${(amount / 1000000).toFixed(1)} Jt`
     } else {
       return `Rp ${amount.toLocaleString()}`
     }
@@ -371,7 +371,7 @@ export function InvestmentAnalysisDashboard() {
                     <XAxis dataKey="year" stroke="#6b7280" />
                     <YAxis stroke="#6b7280" />
                     <Tooltip 
-                      formatter={(value: number) => [`${value.toFixed(1)}T`, 'Investasi (Triliun Rp)']}
+                      formatter={(value: number) => [`${value.toFixed(1)} T`, 'Investasi (Triliun Rp)']}
                       labelFormatter={(label) => `Tahun ${label}`}
                     />
                     <Bar dataKey="investment" fill="#3b82f6" radius={[4, 4, 0, 0]} />
@@ -400,7 +400,7 @@ export function InvestmentAnalysisDashboard() {
                     <XAxis dataKey="year" stroke="#6b7280" />
                     <YAxis stroke="#6b7280" />
                     <Tooltip 
-                      formatter={(value: number) => [`${value.toFixed(1)}T`, 'Investasi (Triliun Rp)']}
+                      formatter={(value: number) => [`${value.toFixed(1)} T`, 'Investasi (Triliun Rp)']}
                       labelFormatter={(label) => `Tahun ${label}`}
                     />
                     <Bar dataKey="TW-I" fill="#3b82f6" name="TW-I" />

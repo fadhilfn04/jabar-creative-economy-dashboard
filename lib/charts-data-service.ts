@@ -44,7 +44,7 @@ export class ChartsDataService {
       // Also get investment data for subsectors
       let investmentQuery = supabase
         .from('investment_realization_ranking')
-        .select('regency_city, investment_amount')
+        .select('subsector, investment_amount')
         .eq('type', 2) // Subsector data
 
       if (year) {
@@ -61,7 +61,7 @@ export class ChartsDataService {
       // Create investment map for quick lookup
       const investmentMap = new Map<string, number>()
       investmentData?.forEach(item => {
-        investmentMap.set(item.regency_city, item.investment_amount)
+        investmentMap.set(item.subsector, item.investment_amount)
       })
 
       // Combine data

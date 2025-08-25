@@ -15,8 +15,8 @@ export class MapDataService {
     try {
       // Fetch investment data
       let investmentQuery = supabase
-        .from('investment_realization_ranking')
-        .select('regency_city, investment_amount')
+        .from('investment_attachment_ranking')
+        .select('name, investment_idr')
         .eq('type', 1) // Regional data
 
       if (year) {
@@ -51,7 +51,7 @@ export class MapDataService {
       // Create maps for quick lookup
       const investmentMap = new Map<string, number>()
       investmentResult.data?.forEach(item => {
-        investmentMap.set(item.regency_city, item.investment_amount)
+        investmentMap.set(item.name, item.investment_idr)
       })
 
       const laborMap = new Map<string, { companies: number, workers: number }>()
@@ -67,20 +67,20 @@ export class MapDataService {
       
       // Process investment data
       investmentResult.data?.forEach(item => {
-        const regionName = this.normalizeRegionName(item.regency_city)
+        const regionName = this.normalizeRegionName(item.name)
         if (!regionDataMap.has(regionName)) {
           regionDataMap.set(regionName, {
             name: regionName,
             companies: 0,
-            investment: this.formatInvestment(item.investment_amount),
+            investment: this.formatInvestment(item.investment_idr),
             workers: 0,
             color: this.getRegionColor(regionName),
-            investmentAmount: item.investment_amount
+            investmentAmount: item.investment_idr
           })
         }
         const region = regionDataMap.get(regionName)!
-        region.investmentAmount = item.investment_amount
-        region.investment = this.formatInvestment(item.investment_amount)
+        region.investmentAmount = item.investment_idr
+        region.investment = this.formatInvestment(item.investment_idr)
       })
 
       // Process labor data
@@ -145,11 +145,11 @@ export class MapDataService {
   // Format investment amount for display
   private static formatInvestment(amount: number): string {
     if (amount >= 1000000000000) {
-      return `${(amount / 1000000000000).toFixed(1)}T`
+      return `${(amount / 1000000000000).toFixed(1)} T`
     } else if (amount >= 1000000000) {
-      return `${(amount / 1000000000).toFixed(1)}B`
+      return `${(amount / 1000000000).toFixed(1)} M`
     } else if (amount >= 1000000) {
-      return `${(amount / 1000000).toFixed(1)}M`
+      return `${(amount / 1000000).toFixed(1)} Jt`
     } else {
       return `${amount.toLocaleString()}`
     }

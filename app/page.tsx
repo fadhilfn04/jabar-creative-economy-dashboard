@@ -32,7 +32,7 @@ export default function Dashboard() {
         <SubsectorContentTable />
         <InvestmentAttachmentTable />
         <EmployeeAbsorptionTable />
-        <EkrafAnalysisTable />
+        {/* <EkrafAnalysisTable /> */}
         <InvestmentAnalysisDashboard />
         <WorkforceAnalysisDashboard />
         <RankingAnalysisTable />
