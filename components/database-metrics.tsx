@@ -4,7 +4,17 @@ import { useState, useEffect } from "react"
 import { DatabaseService } from "@/lib/database"
 import { Loader2 } from "lucide-react"
 
-export function DatabaseMetrics() {
+interface DatabaseMetricsProps {
+  filters?: {
+    subsector?: string
+    city?: string
+    status?: string
+    year?: number
+    search?: string
+  }
+}
+
+export function DatabaseMetrics({ filters = {} }: DatabaseMetricsProps) {
   const [metrics, setMetrics] = useState({
     totalCompanies: 0,
     totalInvestment: 0,
@@ -19,7 +29,7 @@ export function DatabaseMetrics() {
       try {
         setLoading(true)
         setError(null)
-        const data = await DatabaseService.getDashboardMetrics()
+        const data = await DatabaseService.getDashboardMetrics(filters)
         setMetrics(data)
       } catch (err) {
         console.error('Error fetching metrics:', err)
@@ -30,7 +40,7 @@ export function DatabaseMetrics() {
     }
 
     fetchMetrics()
-  }, [])
+  }, [filters])
 
   const formatCurrency = (amount: number) => {
     if (amount >= 1000000000000) {
@@ -48,7 +58,7 @@ export function DatabaseMetrics() {
     {
       title: "Total Pelaku Ekonomi Kreatif",
       value: loading ? "..." : metrics.totalCompanies.toLocaleString(),
-      change: loading ? "..." : `+${Math.abs(metrics.growthRate).toFixed(1)}%`,
+      change: loading ? "..." : `${metrics.growthRate >= 0 ? '+' : ''}${metrics.growthRate.toFixed(1)}%`,
       bgColor: "bg-blue-50",
       textColor: "text-blue-700",
       borderColor: "border-blue-200",
@@ -56,7 +66,7 @@ export function DatabaseMetrics() {
     {
       title: "Total Investasi",
       value: loading ? "..." : formatCurrency(metrics.totalInvestment),
-      change: "+18.3%",
+      change: loading ? "..." : "+18.3%",
       bgColor: "bg-green-50",
       textColor: "text-green-700",
       borderColor: "border-green-200",
@@ -64,7 +74,7 @@ export function DatabaseMetrics() {
     {
       title: "Total Tenaga Kerja",
       value: loading ? "..." : metrics.totalWorkers.toLocaleString(),
-      change: "+8.7%",
+      change: loading ? "..." : "+8.7%",
       bgColor: "bg-purple-50",
       textColor: "text-purple-700",
       borderColor: "border-purple-200",
@@ -72,7 +82,7 @@ export function DatabaseMetrics() {
     {
       title: "Tingkat Pertumbuhan",
       value: loading ? "..." : `${metrics.growthRate.toFixed(1)}%`,
-      change: "+2.1%",
+      change: loading ? "..." : "+2.1%",
       bgColor: "bg-orange-50",
       textColor: "text-orange-700",
       borderColor: "border-orange-200",
@@ -107,7 +117,12 @@ export function DatabaseMetrics() {
             )}
             {metric.value}
           </div>
-          <div className="text-sm text-green-600 mt-1 font-medium">{metric.change}</div>
+          <div className={`text-sm mt-1 font-medium ${
+            metric.change.startsWith('+') ? 'text-green-600' : 
+            metric.change.startsWith('-') ? 'text-red-600' : 'text-gray-600'
+          }`}>
+            {metric.change}
+          </div>
         </div>
       ))}
     </div>

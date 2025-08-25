@@ -93,8 +93,30 @@ export function DatabaseFilters({ onFiltersChange }: DatabaseFiltersProps) {
     onFiltersChange({})
   }
 
+  // Debounced search to avoid too many API calls
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      if (filters.search !== undefined) {
+        const dbFilters: any = {}
+        if (filters.subsector) dbFilters.subsector = filters.subsector
+        if (filters.city) dbFilters.city = filters.city
+        if (filters.status) dbFilters.status = filters.status
+        if (filters.year) dbFilters.year = parseInt(filters.year)
+        if (filters.search) dbFilters.search = filters.search
+        onFiltersChange(dbFilters)
+      }
+    }, 500) // 500ms delay for search
+
+    return () => clearTimeout(timeoutId)
+  }, [filters.search])
   return (
     <div className="minimal-card p-6">
+      <div className="mb-4">
+        <h3 className="text-lg font-medium text-gray-900 mb-2">Filter Data</h3>
+        <p className="text-sm text-gray-500">
+          Gunakan filter di bawah untuk menyaring data ekonomi kreatif. Data akan diperbarui secara otomatis.
+        </p>
+      </div>
       <div className="flex flex-col lg:flex-row gap-4">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
@@ -102,7 +124,7 @@ export function DatabaseFilters({ onFiltersChange }: DatabaseFiltersProps) {
             placeholder="Cari Pelaku Ekonomi Kreatif, NIB, atau KBLI..."
             className="pl-10 border-gray-200 focus:border-gray-400"
             value={filters.search}
-            onChange={(e) => handleFilterChange("search", e.target.value)}
+            onChange={(e) => setFilters(prev => ({ ...prev, search: e.target.value }))}
           />
         </div>
 
@@ -186,6 +208,38 @@ export function DatabaseFilters({ onFiltersChange }: DatabaseFiltersProps) {
           </Button>
         </div>
       </div>
+      
+      {/* Active Filters Display */}
+      {Object.values(filters).some(value => value) && (
+        <div className="mt-4 flex flex-wrap gap-2">
+          <span className="text-sm text-gray-600">Filter aktif:</span>
+          {filters.subsector && (
+            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-blue-100 text-blue-800">
+              Subsektor: {filters.subsector}
+            </span>
+          )}
+          {filters.city && (
+            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-green-100 text-green-800">
+              Kota: {filters.city}
+            </span>
+          )}
+          {filters.status && (
+            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-purple-100 text-purple-800">
+              Status: {filters.status}
+            </span>
+          )}
+          {filters.year && (
+            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-orange-100 text-orange-800">
+              Tahun: {filters.year}
+            </span>
+          )}
+          {filters.search && (
+            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-gray-100 text-gray-800">
+              Pencarian: {filters.search}
+            </span>
+          )}
+        </div>
+      )}
     </div>
   )
 }
