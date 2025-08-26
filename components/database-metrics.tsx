@@ -4,17 +4,7 @@ import { useState, useEffect } from "react"
 import { DatabaseService } from "@/lib/database"
 import { Loader2 } from "lucide-react"
 
-interface DatabaseMetricsProps {
-  filters?: {
-    subsector?: string
-    city?: string
-    status?: string
-    year?: number
-    search?: string
-  }
-}
-
-export function DatabaseMetrics({ filters = {} }: DatabaseMetricsProps) {
+export function DatabaseMetrics() {
   const [metrics, setMetrics] = useState({
     totalCompanies: 0,
     totalInvestment: 0,
@@ -29,7 +19,7 @@ export function DatabaseMetrics({ filters = {} }: DatabaseMetricsProps) {
       try {
         setLoading(true)
         setError(null)
-        const data = await DatabaseService.getDashboardMetrics(filters)
+        const data = await DatabaseService.getDashboardMetrics()
         setMetrics(data)
       } catch (err) {
         console.error('Error fetching metrics:', err)
@@ -40,7 +30,7 @@ export function DatabaseMetrics({ filters = {} }: DatabaseMetricsProps) {
     }
 
     fetchMetrics()
-  }, [filters])
+  }, [])
 
   const formatCurrency = (amount: number) => {
     if (amount >= 1000000000000) {

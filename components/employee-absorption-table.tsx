@@ -122,11 +122,11 @@ export function EmployeeAbsorptionTable() {
 
   const formatCurrency = (amount: number) => {
     if (amount >= 1000000000000) {
-      return `Rp ${(amount / 1000000000000).toFixed(2)}T`
+      return `Rp ${(amount / 1000000000000).toFixed(2)} T`
     } else if (amount >= 1000000000) {
-      return `Rp ${(amount / 1000000000).toFixed(2)}B`
+      return `Rp ${(amount / 1000000000).toFixed(2)} M`
     } else if (amount >= 1000000) {
-      return `Rp ${(amount / 1000000).toFixed(2)}M`
+      return `Rp ${(amount / 1000000).toFixed(2)} Jt`
     } else {
       return `Rp ${amount.toLocaleString()}`
     }

@@ -94,96 +94,59 @@ export class DatabaseService {
     return data as CitySummary[]
   }
 
-  static async getDashboardMetrics(filters: {
-    subsector?: string
-    city?: string
-    status?: string
-    year?: number
-    search?: string
-  } = {}) {
-    try {
-      // Build the base query with filters
-      let query = supabase
-        .from('creative_economy_data')
-        .select(`
-          id,
-          investment_amount,
-          workers_count,
-          year,
-          company_name,
-          nib,
-          kbli_code,
-          subsector,
-          city,
-          status
-        `)
+  static async getDashboardMetrics(year?: number) {
+    const { data, error } = await supabase
+      .from('creative_economy_data_total')
+      .select(`
+        total_companies,
+        total_investment,
+        total_workers,
+        total_growth,
+        year
+      `)
+      .eq('year', year || new Date().getFullYear()) // filter by current year or given year
 
-      // Apply filters
-      if (filters.subsector) {
-        query = query.eq('subsector', filters.subsector)
-      }
-      if (filters.city) {
-        query = query.eq('city', filters.city)
-      }
-      if (filters.status) {
-        query = query.eq('status', filters.status)
-      }
-      if (filters.year) {
-        query = query.eq('year', filters.year)
-      }
-      if (filters.search) {
-        query = query.or(`company_name.ilike.%${filters.search}%,nib.ilike.%${filters.search}%,kbli_code.ilike.%${filters.search}%`)
-      }
+    if (error) {
+      console.error('Error fetching dashboard metrics:', error)
+      throw error
+    }
 
-      const { data, error } = await query
-
-      if (error) {
-        console.error('Error fetching dashboard metrics:', error)
-        throw error
-      }
-
-      if (!data || data.length === 0) {
-        return {
-          totalCompanies: 0,
-          totalInvestment: 0,
-          totalWorkers: 0,
-          growthRate: 0
-        }
-      }
-
-      // Calculate metrics from filtered data
-      const totalCompanies = data.length
-      const totalInvestment = data.reduce((sum, item) => sum + (item.investment_amount || 0), 0)
-      const totalWorkers = data.reduce((sum, item) => sum + (item.workers_count || 0), 0)
-
-      // Calculate growth rate by comparing with previous year
-      let growthRate = 0
-      if (filters.year && filters.year > 2020) {
-        const previousYearFilters = { ...filters, year: filters.year - 1 }
-        const previousYearMetrics = await this.getDashboardMetrics(previousYearFilters)
-        
-        if (previousYearMetrics.totalCompanies > 0) {
-          growthRate = ((totalCompanies - previousYearMetrics.totalCompanies) / previousYearMetrics.totalCompanies) * 100
-        }
-      } else {
-        // Default growth rate calculation if no specific year filter
-        growthRate = 12.5 // Default positive growth
-      }
-
-      return {
-        totalCompanies,
-        totalInvestment,
-        totalWorkers,
-        growthRate: Math.round(growthRate * 10) / 10
-      }
-    } catch (error) {
-      console.error('Error in getDashboardMetrics:', error)
+    if (!data || data.length === 0) {
       return {
         totalCompanies: 0,
         totalInvestment: 0,
         totalWorkers: 0,
         growthRate: 0
       }
+    }
+
+    const currentYear = year || new Date().getFullYear()
+    const currentYearData = data.find(item => item.year === currentYear)
+    const previousYearData = await supabase
+      .from('creative_economy_data_total')
+      .select(`
+        total_companies,
+        total_investment,
+        total_workers,
+        total_growth,
+        year
+      `)
+      .eq('year', currentYear - 1)
+      .single()
+
+    const totalCompanies = currentYearData?.total_companies || 0
+    const totalInvestment = currentYearData?.total_investment || 0
+    const totalWorkers = currentYearData?.total_workers || 0
+
+    const growthRate = previousYearData.data
+      ? ((totalCompanies - previousYearData.data.total_companies) / previousYearData.data.total_companies) * 100
+      : 0
+
+    return {
+      totalCompanies,
+      totalInvestment,
+      totalWorkers,
+      growthRate: Math.round(growthRate * 10) / 10
     }
   }
 
@@ -240,37 +203,18 @@ export class DatabaseService {
     return insertedData
   }
 
-  // Get unique values for filters (handling duplicates)
+  // Get unique values for filters
   static async getFilterOptions() {
-    try {
-      // Use DISTINCT to get unique values directly from database
-      const [subsectorsResult, citiesResult, yearsResult] = await Promise.all([
-        supabase
-          .from('creative_economy_data')
-          .select('subsector')
-          .not('subsector', 'is', null)
-          .order('subsector'),
-        supabase
-          .from('creative_economy_data')
-          .select('city')
-          .not('city', 'is', null)
-          .order('city'),
-        supabase
-          .from('creative_economy_data')
-          .select('year')
-          .not('year', 'is', null)
-          .order('year', { ascending: false })
-      ])
+    const [subsectorsResult, citiesResult, yearsResult] = await Promise.all([
+      supabase.from('creative_economy_data').select('subsector').order('subsector'),
+      supabase.from('creative_economy_data').select('city').order('city'),
+      supabase.from('creative_economy_data').select('year').order('year', { ascending: false })
+    ])
 
-      // Remove duplicates using Set
-      const subsectors = [...new Set(subsectorsResult.data?.map(item => item.subsector).filter(Boolean) || [])]
-      const cities = [...new Set(citiesResult.data?.map(item => item.city).filter(Boolean) || [])]
-      const years = [...new Set(yearsResult.data?.map(item => item.year).filter(Boolean) || [])]
+    const subsectors = [...new Set(subsectorsResult.data?.map(item => item.subsector) || [])]
+    const cities = [...new Set(citiesResult.data?.map(item => item.city) || [])]
+    const years = [...new Set(yearsResult.data?.map(item => item.year) || [])]
 
-      return { subsectors, cities, years }
-    } catch (error) {
-      console.error('Error fetching filter options:', error)
-      return { subsectors: [], cities: [], years: [] }
-    }
+    return { subsectors, cities, years }
   }
 }
