@@ -1,5 +1,6 @@
 "use client"
 import { useState } from "react"
+import { AuthGuard } from "@/components/auth/auth-guard"
 import { DashboardHeader } from "@/components/dashboard-header"
 import { DatabaseMetrics } from "@/components/database-metrics"
 import { ChartsSection } from "@/components/charts-section"
@@ -21,25 +22,27 @@ export default function Dashboard() {
   const [filters, setFilters] = useState({})
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <DashboardHeader />
-      <main className="max-w-7xl mx-auto px-6 py-8 space-y-8">
-        <DatabaseMetrics />
-        <MapsSection />
-        <ChartsSection />
-        <DatabaseFilters onFiltersChange={setFilters} />
-        <DatabaseDataTable filters={filters} />
-        <RegionalContentTable />
-        <SubsectorContentTable />
-        <InvestmentAttachmentTable />
-        <EmployeeAbsorptionTable />
-        {/* <EkrafAnalysisTable /> */}
-        <InvestmentAnalysisDashboard />
-        <WorkforceAnalysisDashboard />
-        <RankingAnalysisTable />
-        <RegionalAnalysisDashboard />
-        <PDKIJabarTable />
-      </main>
-    </div>
+    <AuthGuard>
+      <div className="min-h-screen bg-gray-50">
+        <DashboardHeader />
+        <main className="max-w-7xl mx-auto px-6 py-8 space-y-8">
+          <DatabaseMetrics />
+          <MapsSection />
+          <ChartsSection />
+          <DatabaseFilters onFiltersChange={setFilters} />
+          <DatabaseDataTable filters={filters} />
+          <RegionalContentTable />
+          <SubsectorContentTable />
+          <InvestmentAttachmentTable />
+          <EmployeeAbsorptionTable />
+          {/* <EkrafAnalysisTable /> */}
+          <InvestmentAnalysisDashboard />
+          <WorkforceAnalysisDashboard />
+          <RankingAnalysisTable />
+          <RegionalAnalysisDashboard />
+          <PDKIJabarTable />
+        </main>
+      </div>
+    </AuthGuard>
   )
 }
