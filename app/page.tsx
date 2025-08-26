@@ -15,6 +15,7 @@ import { InvestmentAnalysisDashboard } from "@/components/investment-analysis-da
 import { WorkforceAnalysisDashboard } from "@/components/workforce-analysis-dashboard"
 import { RankingAnalysisTable } from "@/components/ranking-analysis-table"
 import { RegionalAnalysisDashboard } from "@/components/regional-analysis-dashboard"
+import { PDKIJabarTable } from "@/components/pdki-jabar-table"
 
 export default function Dashboard() {
   const [filters, setFilters] = useState({})
@@ -37,6 +38,7 @@ export default function Dashboard() {
         <WorkforceAnalysisDashboard />
         <RankingAnalysisTable />
         <RegionalAnalysisDashboard />
+        <PDKIJabarTable />
       </main>
     </div>
   )
