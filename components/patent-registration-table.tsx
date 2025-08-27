@@ -35,7 +35,6 @@ export function PatentRegistrationTable() {
 
   // Filter states
   const [filters, setFilters] = useState({
-    year: "",
     region: "",
     search: ""
   })
@@ -64,7 +63,6 @@ export function PatentRegistrationTable() {
       
       // Convert filters to API format
       const apiFilters: any = {}
-      if (filters.year) apiFilters.year = parseInt(filters.year)
       if (filters.region) apiFilters.region = filters.region
       if (filters.search) apiFilters.search = filters.search
 
@@ -104,7 +102,6 @@ export function PatentRegistrationTable() {
 
   const handleReset = () => {
     setFilters({
-      year: "",
       region: "",
       search: ""
     })
@@ -262,20 +259,6 @@ export function PatentRegistrationTable() {
               </div>
 
               <div className="flex flex-wrap gap-3">
-                <Select value={filters.year} onValueChange={(value) => handleFilterChange("year", value)}>
-                  <SelectTrigger className="w-[120px] border-gray-200">
-                    <SelectValue placeholder="Tahun" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">Semua Tahun</SelectItem>
-                    <SelectItem value="2020">2020</SelectItem>
-                    <SelectItem value="2021">2021</SelectItem>
-                    <SelectItem value="2022">2022</SelectItem>
-                    <SelectItem value="2023">2023</SelectItem>
-                    <SelectItem value="2024">2024</SelectItem>
-                    <SelectItem value="2025">2025</SelectItem>
-                  </SelectContent>
-                </Select>
 
                 <Select value={filters.region} onValueChange={(value) => handleFilterChange("region", value)}>
                   <SelectTrigger className="w-[180px] border-gray-200">

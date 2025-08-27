@@ -23,9 +23,6 @@ export class PatentRegistrationService {
       .select('*', { count: 'exact' })
 
     // Apply filters
-    if (year) {
-      query = query.eq('year', year)
-    }
     if (region) {
       query = query.eq('region', region)
     }
@@ -59,8 +56,7 @@ export class PatentRegistrationService {
   static async getYearlySummary() {
     const { data, error } = await supabase
       .from('patent_registration_data')
-      .select('year, patents_2020, patents_2021, patents_2022, patents_2023, patents_2024, patents_2025')
-      .order('year', { ascending: true })
+      .select('patents_2020, patents_2021, patents_2022, patents_2023, patents_2024, patents_2025')
 
     if (error) {
       console.error('Error fetching yearly summary:', error)
