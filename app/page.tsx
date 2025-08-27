@@ -17,6 +17,7 @@ import { WorkforceAnalysisDashboard } from "@/components/workforce-analysis-dash
 import { RankingAnalysisTable } from "@/components/ranking-analysis-table"
 import { RegionalAnalysisDashboard } from "@/components/regional-analysis-dashboard"
 import { PDKIJabarTable } from "@/components/pdki-jabar-table"
+import { PatentRegistrationTable } from "@/components/patent-registration-table"
 
 export default function Dashboard() {
   const [filters, setFilters] = useState({})
@@ -41,6 +42,7 @@ export default function Dashboard() {
           <RankingAnalysisTable />
           <RegionalAnalysisDashboard />
           <PDKIJabarTable />
+          <PatentRegistrationTable />
         </main>
       </div>
     </AuthGuard>
