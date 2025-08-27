@@ -392,7 +392,7 @@ export function WorkforceAnalysisDashboard() {
         <TabsContent value="regional" className="mt-6">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle className="text-lg font-medium">Breakdown per Kabupaten/Kota</CardTitle>
+              <CardTitle className="text-lg font-medium">Data per Kabupaten/Kota</CardTitle>
               <Button 
                 variant="outline" 
                 size="sm" 
@@ -487,7 +487,7 @@ export function WorkforceAnalysisDashboard() {
         <TabsContent value="quarterly-chart" className="mt-6">
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg font-medium">Breakdown Tenaga Kerja per Kuartal</CardTitle>
+              <CardTitle className="text-lg font-medium">Tenaga Kerja per Kuartal</CardTitle>
             </CardHeader>
             <CardContent>
               {loading ? (

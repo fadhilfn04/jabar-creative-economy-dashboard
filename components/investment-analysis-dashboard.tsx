@@ -385,7 +385,7 @@ export function InvestmentAnalysisDashboard() {
         <TabsContent value="quarterly-chart" className="mt-6">
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg font-medium">Breakdown Investasi per Kuartal</CardTitle>
+              <CardTitle className="text-lg font-medium">Investasi per Kuartal</CardTitle>
             </CardHeader>
             <CardContent>
               {loading ? (

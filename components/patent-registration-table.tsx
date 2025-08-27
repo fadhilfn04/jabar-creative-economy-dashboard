@@ -442,7 +442,7 @@ export function PatentRegistrationTable() {
         <TabsContent value="yearly-chart" className="mt-6">
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg font-medium">Tren Pendaftaran Paten Tahunan</CardTitle>
+              <CardTitle className="text-lg font-medium">Tren HAKI Tahunan</CardTitle>
             </CardHeader>
             <CardContent>
               {loading ? (
@@ -477,7 +477,7 @@ export function PatentRegistrationTable() {
         <TabsContent value="regional-chart" className="mt-6">
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg font-medium">Top 10 Wilayah dengan Paten Terbanyak</CardTitle>
+              <CardTitle className="text-lg font-medium">Top 10 Wilayah dengan HAKI Terbanyak</CardTitle>
             </CardHeader>
             <CardContent>
               {loading ? (
