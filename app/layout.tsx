@@ -2,6 +2,7 @@ import type React from "react"
 import type { Metadata } from "next"
 import { Inter, Geist } from "next/font/google"
 import { AuthProvider } from "@/hooks/use-auth"
+import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "@/components/ui/toaster"
 import "./globals.css"
 
@@ -33,10 +34,17 @@ export default function RootLayout({
   return (
     <html lang="id" className={`${inter.variable} ${geist.variable} antialiased`}>
       <body className="font-sans">
-        <AuthProvider>
-          {children}
-          <Toaster />
-        </AuthProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <AuthProvider>
+            {children}
+            <Toaster />
+          </AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   )

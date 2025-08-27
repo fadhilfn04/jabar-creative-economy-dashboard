@@ -24,7 +24,7 @@ export default function Dashboard() {
 
   return (
     <AuthGuard>
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
         <DashboardHeader />
         <main className="max-w-7xl mx-auto px-6 py-8 space-y-8">
           <DatabaseMetrics />

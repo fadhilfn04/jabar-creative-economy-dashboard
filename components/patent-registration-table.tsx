@@ -153,7 +153,9 @@ export function PatentRegistrationTable() {
   }))
 
   const regionalChartData = data.slice(0, 10).map(item => ({
-    region: item.region.replace('Kabupaten ', '').replace('Kota ', ''),
+    region: item.region.length > 15 
+      ? item.region.replace('Kabupaten ', 'Kab. ').replace('Kota ', '') 
+      : item.region,
     total: item.total_patents
   }))
 
@@ -485,20 +487,22 @@ export function PatentRegistrationTable() {
                 </div>
               ) : (
                 <ResponsiveContainer width="100%" height={400}>
-                  <BarChart data={regionalChartData} layout="horizontal">
+                  <BarChart data={regionalChartData}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" />
-                    <XAxis type="number" stroke="#6b7280" />
-                    <YAxis 
-                      type="category" 
+                    <XAxis 
                       dataKey="region" 
                       stroke="#6b7280" 
-                      width={120}
-                      fontSize={12}
+                      angle={-45}
+                      textAnchor="end"
+                      height={100}
+                      fontSize={10}
+                      interval={0}
                     />
+                    <YAxis stroke="#6b7280" />
                     <Tooltip 
                       formatter={(value: number) => [value.toLocaleString(), 'Total Paten']}
                     />
-                    <Bar dataKey="total" fill="#3b82f6" radius={[0, 4, 4, 0]} />
+                    <Bar dataKey="total" fill="#3b82f6" radius={[4, 4, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               )}
