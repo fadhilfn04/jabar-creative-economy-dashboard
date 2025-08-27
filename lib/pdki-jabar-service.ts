@@ -6,21 +6,13 @@ export class PDKIJabarService {
   static async getPDKIJabarData(options: {
     page?: number
     limit?: number
-    tahun?: number
-    status_modal?: string
     kabupaten_kota?: string
-    sektor?: string
-    subsektor?: string
     search?: string
   } = {}) {
     const {
       page = 1,
       limit = 10,
-      tahun,
-      status_modal,
       kabupaten_kota,
-      sektor,
-      subsektor,
       search
     } = options
 
@@ -29,20 +21,8 @@ export class PDKIJabarService {
       .select('*', { count: 'exact' })
 
     // Apply filters
-    if (tahun) {
-      query = query.eq('tahun', tahun)
-    }
-    if (status_modal && status_modal !== 'all') {
-      query = query.eq('status_modal', status_modal)
-    }
     if (kabupaten_kota && kabupaten_kota !== 'all') {
       query = query.eq('kabupaten_kota', kabupaten_kota)
-    }
-    if (sektor && sektor !== 'all') {
-      query = query.eq('sektor', sektor)
-    }
-    if (subsektor && subsektor !== 'all') {
-      query = query.eq('subsektor', subsektor)
     }
     if (search) {
       query = query.or(`nama_perusahaan.ilike.%${search}%,nomor_permohonan.ilike.%${search}%,kbli_2020.ilike.%${search}%`)
@@ -54,7 +34,7 @@ export class PDKIJabarService {
 
     const { data, error, count } = await query
       .range(from, to)
-      .order('tahun', { ascending: false })
+      // .order('tahun', { ascending: false })
       .order('tanggal_permohonan', { ascending: false })
 
     if (error) {

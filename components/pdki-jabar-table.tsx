@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Input } from "@/components/ui/input"
 import { ChevronLeft, ChevronRight, Download, Loader2, Search, RotateCcw, Building2, TrendingUp, Users, Globe } from "lucide-react"
 import { PDKIJabarService } from "@/lib/pdki-jabar-service"
-import type { PDKIJabarData, PDKIJabarSummaryMetrics } from "@/lib/pdki-jabar-types"
+import type { PDKIJabarData } from "@/lib/pdki-jabar-types"
 
 export function PDKIJabarTable() {
   const [data, setData] = useState<PDKIJabarData[]>([])
@@ -17,24 +17,16 @@ export function PDKIJabarTable() {
   const [totalPages, setTotalPages] = useState(1)
   const [totalCount, setTotalCount] = useState(0)
   const [error, setError] = useState<string | null>(null)
-  const [summaryMetrics, setSummaryMetrics] = useState<PDKIJabarSummaryMetrics | null>(null)
+  // const [summaryMetrics, setSummaryMetrics] = useState<PDKIJabarSummaryMetrics | null>(null)
 
   // Filter states
   const [filters, setFilters] = useState({
-    tahun: "",
-    status_modal: "",
     kabupaten_kota: "",
-    sektor: "",
-    subsektor: "",
     search: ""
   })
 
   const [filterOptions, setFilterOptions] = useState({
-    tahuns: [] as number[],
-    statuses: [] as string[],
     kabupatens: [] as string[],
-    sektors: [] as string[],
-    subsektors: [] as string[]
   })
 
   const pageSize = 15
@@ -60,27 +52,23 @@ export function PDKIJabarTable() {
       
       // Convert filters to API format
       const apiFilters: any = {}
-      if (filters.tahun) apiFilters.tahun = parseInt(filters.tahun)
-      if (filters.status_modal) apiFilters.status_modal = filters.status_modal
       if (filters.kabupaten_kota) apiFilters.kabupaten_kota = filters.kabupaten_kota
-      if (filters.sektor) apiFilters.sektor = filters.sektor
-      if (filters.subsektor) apiFilters.subsektor = filters.subsektor
       if (filters.search) apiFilters.search = filters.search
 
-      const [result, metrics] = await Promise.all([
+      const [result] = await Promise.all([
         PDKIJabarService.getPDKIJabarData({
           page,
           limit: pageSize,
           ...apiFilters
         }),
-        PDKIJabarService.getSummaryMetrics(apiFilters.tahun ? { tahun: apiFilters.tahun } : {})
+        // PDKIJabarService.getSummaryMetrics(apiFilters.tahun ? { tahun: apiFilters.tahun } : {})
       ])
 
       setData(result.data)
       setTotalPages(result.totalPages)
       setTotalCount(result.count)
       setCurrentPage(result.currentPage)
-      setSummaryMetrics(metrics)
+      // setSummaryMetrics(metrics)
     } catch (err) {
       console.error('Error fetching data:', err)
       setError('Failed to load data. Please check your database connection.')
@@ -101,11 +89,7 @@ export function PDKIJabarTable() {
 
   const handleReset = () => {
     setFilters({
-      tahun: "",
-      status_modal: "",
       kabupaten_kota: "",
-      sektor: "",
-      subsektor: "",
       search: ""
     })
     setCurrentPage(1)
@@ -114,22 +98,6 @@ export function PDKIJabarTable() {
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= totalPages) {
       fetchData(page)
-    }
-  }
-
-  const formatCurrencyUSD = (amount: number) => {
-    return `$ ${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
-  }
-
-  const formatCurrencyIDR = (amount: number) => {
-    if (amount >= 1000000000000) {
-      return `Rp ${(amount / 1000000000000).toFixed(1)} T`
-    } else if (amount >= 1000000000) {
-      return `Rp ${(amount / 1000000000).toFixed(1)} M`
-    } else if (amount >= 1000000) {
-      return `Rp ${(amount / 1000000).toFixed(1)} Jt`
-    } else {
-      return `Rp ${amount.toLocaleString('id-ID')}`
     }
   }
 
@@ -146,36 +114,31 @@ export function PDKIJabarTable() {
     try {
       const csvContent = [
         // Header
-        ['Nomor Permohonan', 'Tanggal Permohonan', 'Tahun Permohonan', 'Nomor Pengesahan', 'Tanggal Pengesahan', 'Tahun Pengesahan', 'Tanggal Dimulai Penanaman', 'Nomor Pendaftaran', 'Tanggal Pendaftaran', 'Nama Perusahaan', 'WP Company', 'WP Person', 'Alamat Perusahaan', 'Bidang Usaha', 'KBLI 2020', 'Sektor', 'Subsektor', 'Kabupaten/Kota', 'Status Modal', 'Negara Asal', 'Investasi (USD)', 'Investasi (Rp)', 'TKA', 'TKI', 'Total TK', 'Tahun', 'Periode'].join(','),
+        ['ID Permohonan', 'Nomor Permohonan', 'Tanggal Permohonan', 'Nomor Pengumuman', 'Tanggal Pengumuman', 'Tanggal Dimulai Perlindungan', 'Tanggal Berakhir Perlindungan', 'Nomor Pendaftaran', 'Tanggal Pendaftaran', 'Translasi', 'Nama Merek', 'Status Permohonan', 'Nama Pemilik TM', 'Alamat Pemilik TM', 'Kabupaten Kota', 'Negara Asal', 'Kode Negara', 'Nama Konsultan', 'Alamat Konsultan', 'Provinsi', 'Deskripsi Kelas', 'Detail URL'].join(','),
         // Data rows
         ...data.map(row => [
+          row.id_permohonan || '',
           row.nomor_permohonan || '',
           row.tanggal_permohonan || '',
-          row.extract_tahun_permohonan || '',
-          row.nomor_pengesahan || '',
-          row.tanggal_pengesahan || '',
-          row.extract_tahun_pengesahan || '',
-          row.tanggal_dimulai_penanaman || '',
+          row.nomor_pengumuman || '',
+          row.tanggal_pengumuman || '',
+          row.tanggal_dimulai_perlindungan || '',
+          row.tanggal_berakhir_perlindungan || '',
           row.nomor_pendaftaran || '',
           row.tanggal_pendaftaran || '',
-          `"${row.nama_perusahaan}"`,
-          `"${row.wp_company || ''}"`,
-          `"${row.wp_person || ''}"`,
-          `"${row.alamat_perusahaan || ''}"`,
-          `"${row.bidang_usaha || ''}"`,
-          row.kbli_2020 || '',
-          row.sektor || '',
-          row.subsektor || '',
+          row.translasi || '',
+          row.nama_merek || '',
+          row.status_permohonan || '',
+          row.nama_pemilik_tm || '',
+          row.alamat_pemilik_tm || '',
           row.kabupaten_kota || '',
-          row.status_modal,
           row.negara_asal || '',
-          row.nilai_investasi_usd,
-          row.nilai_investasi_rp,
-          row.tenaga_kerja_asing,
-          row.tenaga_kerja_indonesia,
-          row.total_tenaga_kerja,
-          row.tahun,
-          row.periode || ''
+          row.kode_negara || '',
+          row.nama_konsultan || '',
+          row.alamat_konsultan || '',
+          row.provinsi || '',
+          row.deskripsi_kelas || '',
+          row.detail_url || ''
         ].join(','))
       ].join('\n')
 
@@ -209,7 +172,7 @@ export function PDKIJabarTable() {
   return (
     <div className="space-y-6">
       {/* Summary Metrics */}
-      {summaryMetrics && (
+      {/* {summaryMetrics && (
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
             <div className="flex items-center gap-2 mb-2">
@@ -254,10 +217,10 @@ export function PDKIJabarTable() {
             <div className="text-2xl font-bold text-pink-700">{summaryMetrics.pmaPercentage.toFixed(1)}%</div>
           </div>
         </div>
-      )}
+      )} */}
 
       {/* Filters */}
-      <div className="minimal-card p-6">
+      {/* <div className="minimal-card p-6">
         <div className="flex flex-col lg:flex-row gap-4">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
@@ -348,7 +311,7 @@ export function PDKIJabarTable() {
             </Button>
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* Main Table */}
       <div className="minimal-card">
@@ -356,7 +319,7 @@ export function PDKIJabarTable() {
           <div>
             <h3 className="text-lg font-medium text-gray-900">Data PDKI Jabar 2020 - 2025</h3>
             <p className="text-sm text-gray-500 mt-1">
-              Data Penanaman Modal Dalam dan Luar Negeri Jawa Barat periode 2020-2025
+              Penelusuran Data dan Informasi Kekayaan Intelektual Periode 2020 - 2025
             </p>
           </div>
           <Button 
@@ -381,24 +344,28 @@ export function PDKIJabarTable() {
             <Table>
               <TableHeader>
                 <TableRow className="border-gray-100">
+                  <TableHead className="font-medium text-gray-700">ID Permohonan</TableHead>
                   <TableHead className="font-medium text-gray-700">Nomor Permohonan</TableHead>
                   <TableHead className="font-medium text-gray-700">Tanggal Permohonan</TableHead>
-                  <TableHead className="font-medium text-gray-700">Tahun</TableHead>
-                  <TableHead className="font-medium text-gray-700">Nama Perusahaan</TableHead>
-                  <TableHead className="font-medium text-gray-700">Alamat</TableHead>
-                  <TableHead className="font-medium text-gray-700">Bidang Usaha</TableHead>
-                  <TableHead className="font-medium text-gray-700">KBLI 2020</TableHead>
-                  <TableHead className="font-medium text-gray-700">Sektor</TableHead>
-                  <TableHead className="font-medium text-gray-700">Subsektor</TableHead>
+                  <TableHead className="font-medium text-gray-700">Nomor Pengumuman</TableHead>
+                  <TableHead className="font-medium text-gray-700">Tanggal Pengumuman</TableHead>
+                  <TableHead className="font-medium text-gray-700">Tanggal Dimulai Perlindungan</TableHead>
+                  <TableHead className="font-medium text-gray-700">Tanggal Berakhir Perlindungan</TableHead>
+                  <TableHead className="font-medium text-gray-700">Nomor Pendaftaran</TableHead>
+                  <TableHead className="font-medium text-gray-700">Tanggal Pendaftaran</TableHead>
+                  <TableHead className="font-medium text-gray-700">Translasi</TableHead>
+                  <TableHead className="font-medium text-gray-700">Nama Merek</TableHead>
+                  <TableHead className="font-medium text-gray-700">Status Permohonan</TableHead>
+                  <TableHead className="font-medium text-gray-700">Nama Pemilik</TableHead>
+                  <TableHead className="font-medium text-gray-700">Alamat Pemilik</TableHead>
                   <TableHead className="font-medium text-gray-700">Kabupaten/Kota</TableHead>
-                  <TableHead className="font-medium text-gray-700">Status Modal</TableHead>
                   <TableHead className="font-medium text-gray-700">Negara Asal</TableHead>
-                  <TableHead className="font-medium text-gray-700">Investasi (USD)</TableHead>
-                  <TableHead className="font-medium text-gray-700">Investasi (Rp)</TableHead>
-                  <TableHead className="font-medium text-gray-700">TKA</TableHead>
-                  <TableHead className="font-medium text-gray-700">TKI</TableHead>
-                  <TableHead className="font-medium text-gray-700">Total TK</TableHead>
-                  <TableHead className="font-medium text-gray-700">Periode</TableHead>
+                  <TableHead className="font-medium text-gray-700">Kode Negara</TableHead>
+                  <TableHead className="font-medium text-gray-700">Nama Konsultan</TableHead>
+                  <TableHead className="font-medium text-gray-700">Alamat Konsultan</TableHead>
+                  <TableHead className="font-medium text-gray-700">Provinsi</TableHead>
+                  <TableHead className="font-medium text-gray-700">Deskripsi Kelas</TableHead>
+                  <TableHead className="font-medium text-gray-700">Detail URL</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -411,51 +378,56 @@ export function PDKIJabarTable() {
                 ) : (
                   data.map((row) => (
                     <TableRow key={row.id} className="border-gray-100 hover:bg-gray-50">
+                      <TableCell className="font-mono text-sm text-gray-600">{row.id_permohonan || '-'}</TableCell>
                       <TableCell className="font-mono text-sm text-gray-600">{row.nomor_permohonan || '-'}</TableCell>
                       <TableCell className="text-sm text-gray-600">{formatDate(row.tanggal_permohonan)}</TableCell>
-                      <TableCell className="text-gray-600">{row.tahun}</TableCell>
-                      <TableCell className="font-medium text-gray-900 max-w-xs truncate" title={row.nama_perusahaan}>
-                        {row.nama_perusahaan}
+                      <TableCell className="font-mono text-sm text-gray-600">{row.nomor_pengumuman || '-'}</TableCell>
+                      <TableCell className="text-sm text-gray-600">{formatDate(row.tanggal_pengumuman)}</TableCell>
+                      <TableCell className="text-sm text-gray-600">{formatDate(row.tanggal_dimulai_perlindungan)}</TableCell>
+                      <TableCell className="text-sm text-gray-600">{formatDate(row.tanggal_berakhir_perlindungan)}</TableCell>
+                      <TableCell className="font-mono text-sm text-gray-600">{row.nomor_pendaftaran || '-'}</TableCell>
+                      <TableCell className="text-sm text-gray-600">{formatDate(row.tanggal_pendaftaran)}</TableCell>
+                      <TableCell className=" text-gray-900 max-w-xs truncate" title={row.translasi}>
+                        {row.translasi}
                       </TableCell>
-                      <TableCell className="max-w-xs truncate text-gray-600" title={row.alamat_perusahaan || ''}>
-                        {row.alamat_perusahaan || '-'}
+                      <TableCell className="font-medium text-gray-900 max-w-xs truncate" title={row.nama_merek}>
+                        {row.nama_merek}
                       </TableCell>
-                      <TableCell className="text-gray-600">{row.bidang_usaha || '-'}</TableCell>
-                      <TableCell className="font-mono text-sm text-gray-600">{row.kbli_2020 || '-'}</TableCell>
                       <TableCell>
-                        {row.sektor ? (
+                        {row.status_permohonan ? (
                           <Badge variant="secondary" className="bg-blue-100 text-blue-700 text-xs">
-                            {row.sektor}
+                            {row.status_permohonan}
                           </Badge>
                         ) : '-'}
                       </TableCell>
-                      <TableCell>
-                        {row.subsektor ? (
-                          <Badge variant="secondary" className="bg-purple-100 text-purple-700 text-xs">
-                            {row.subsektor}
-                          </Badge>
-                        ) : '-'}
+                      <TableCell className="font-medium text-gray-900 max-w-xs truncate" title={row.nama_pemilik_tm}>
+                        {row.nama_pemilik_tm}
                       </TableCell>
-                      <TableCell className="text-gray-600">{row.kabupaten_kota || '-'}</TableCell>
-                      <TableCell>
-                        <Badge
-                          variant={row.status_modal === "PMA" ? "default" : "outline"}
-                          className={row.status_modal === "PMA" ? "bg-gray-900 text-white" : "border-gray-300 text-gray-700"}
-                        >
-                          {row.status_modal}
-                        </Badge>
+                      <TableCell className="font-medium text-gray-900 max-w-xs truncate" title={row.alamat_pemilik_tm}>
+                        {row.alamat_pemilik_tm}
                       </TableCell>
-                      <TableCell className="text-gray-600">{row.negara_asal || '-'}</TableCell>
-                      <TableCell className="font-medium text-green-600">
-                        {row.nilai_investasi_usd > 0 ? formatCurrencyUSD(row.nilai_investasi_usd) : '-'}
+                      <TableCell className="font-medium text-gray-900 max-w-xs truncate" title={row.kabupaten_kota}>
+                        {row.kabupaten_kota}
                       </TableCell>
-                      <TableCell className="font-medium text-green-600">
-                        {row.nilai_investasi_rp > 0 ? formatCurrencyIDR(row.nilai_investasi_rp) : '-'}
+                      <TableCell className="text-gray-600">{row.negara_asal}</TableCell>
+                      <TableCell className=" text-gray-900 max-w-xs truncate" title={row.kode_negara}>
+                        {row.kode_negara}
                       </TableCell>
-                      <TableCell className="text-center text-orange-600 font-medium">{row.tenaga_kerja_asing}</TableCell>
-                      <TableCell className="text-center text-blue-600 font-medium">{row.tenaga_kerja_indonesia}</TableCell>
-                      <TableCell className="text-center text-gray-900 font-bold">{row.total_tenaga_kerja}</TableCell>
-                      <TableCell className="text-gray-600">{row.periode || '-'}</TableCell>
+                      <TableCell className="font-medium max-w-xs truncate text-gray-600" title={row.nama_konsultan || ''}>
+                        {row.nama_konsultan || '-'}
+                      </TableCell>
+                      <TableCell className="font-medium max-w-xs truncate text-gray-600" title={row.alamat_konsultan || ''}>
+                        {row.alamat_konsultan || '-'}
+                      </TableCell>
+                      <TableCell className="max-w-xs truncate text-gray-600" title={row.provinsi || ''}>
+                        {row.provinsi || '-'}
+                      </TableCell>
+                      <TableCell className="max-w-xs truncate text-gray-600" title={row.deskripsi_kelas || ''}>
+                        {row.deskripsi_kelas || '-'}
+                      </TableCell>
+                      <TableCell className=" text-gray-600" title={row.detail_url || ''}>
+                        {row.detail_url || '-'}
+                      </TableCell>
                     </TableRow>
                   ))
                 )}

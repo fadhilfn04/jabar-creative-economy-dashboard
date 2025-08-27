@@ -1,45 +1,27 @@
 export interface PDKIJabarData {
   id: number
+  id_permohonan?: string
   nomor_permohonan?: string
   tanggal_permohonan?: string
-  extract_tahun_permohonan?: number
-  nomor_pengesahan?: string
-  tanggal_pengesahan?: string
-  extract_tahun_pengesahan?: number
-  tanggal_dimulai_penanaman?: string
-  nomor_pendaftaran?: string
+  nomor_pengumuman?: number
+  tanggal_pengumuman?: string
+  tanggal_dimulai_perlindungan?: string
+  tanggal_berakhir_perlindungan?: string
+  nomor_pendaftaran?: number
   tanggal_pendaftaran?: string
-  nama_perusahaan: string
-  wp_company?: string
-  wp_person?: string
-  alamat_perusahaan?: string
-  kode_pos?: string
-  telepon?: string
-  fax?: string
-  email?: string
-  website?: string
-  bidang_usaha?: string
-  kbli_2020?: string
-  kbli_2017?: string
-  kbli_2015?: string
-  kbli_2009?: string
-  kbli_lama?: string
-  judul_kbli?: string
-  sektor?: string
-  subsektor?: string
+  translasi?: string
+  nama_merek: string
+  status_permohonan?: string
+  nama_pemilik_tm?: string
+  alamat_pemilik_tm?: string
   kabupaten_kota?: string
-  kecamatan?: string
-  kelurahan?: string
-  status_modal: 'PMA' | 'PMDN'
   negara_asal?: string
-  nilai_investasi_usd: number
-  nilai_investasi_rp: number
-  tenaga_kerja_asing: number
-  tenaga_kerja_indonesia: number
-  total_tenaga_kerja: number
-  tahun: number
-  periode?: string
-  keterangan?: string
+  kode_negara?: string
+  nama_konsultan?: string
+  alamat_konsultan?: string
+  provinsi?: string
+  deskripsi_kelas?: string
+  detail_url?: string
   created_at: string
   updated_at: string
 }
