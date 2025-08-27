@@ -5,6 +5,7 @@ export interface PDKIJabarData {
   tanggal_permohonan?: string
   nomor_pengumuman?: number
   tanggal_pengumuman?: string
+  extract_tahun_pengumuman?: number
   tanggal_dimulai_perlindungan?: string
   tanggal_berakhir_perlindungan?: string
   nomor_pendaftaran?: number
@@ -28,12 +29,12 @@ export interface PDKIJabarData {
 
 export interface PDKIJabarSummaryMetrics {
   totalCompanies: number
-  totalInvestmentUSD: number
-  totalInvestmentIDR: number
-  totalTKA: number
-  totalTKI: number
-  totalTK: number
-  pmaCount: number
-  pmdnCount: number
-  pmaPercentage: number
+  // totalInvestmentUSD: number
+  // totalInvestmentIDR: number
+  // totalTKA: number
+  // totalTKI: number
+  // totalTK: number
+  // pmaCount: number
+  // pmdnCount: number
+  // pmaPercentage: number
 }

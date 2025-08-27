@@ -6,6 +6,7 @@ export class PDKIJabarService {
   static async getPDKIJabarData(options: {
     page?: number
     limit?: number
+    extract_tahun_pengumuman?: string
     kabupaten_kota?: string
     search?: string
   } = {}) {
@@ -13,6 +14,7 @@ export class PDKIJabarService {
       page = 1,
       limit = 10,
       kabupaten_kota,
+      extract_tahun_pengumuman,
       search
     } = options
 
@@ -24,8 +26,11 @@ export class PDKIJabarService {
     if (kabupaten_kota && kabupaten_kota !== 'all') {
       query = query.eq('kabupaten_kota', kabupaten_kota)
     }
+    if (extract_tahun_pengumuman && extract_tahun_pengumuman !== 'all') {
+      query = query.eq('extract_tahun_pengumuman', extract_tahun_pengumuman)
+    }
     if (search) {
-      query = query.or(`nama_perusahaan.ilike.%${search}%,nomor_permohonan.ilike.%${search}%,kbli_2020.ilike.%${search}%`)
+      query = query.or(`nomor_permohonan.ilike.%${search}%,nama_merek.ilike.%${search}%,nama_pemilik_tm.ilike.%${search}%,alamat_pemilik_tm.ilike.%${search}%`)
     }
 
     // Apply pagination
@@ -57,17 +62,11 @@ export class PDKIJabarService {
     let query = supabase
       .from('pdki_jabar_data')
       .select(`
-        id,
-        nilai_investasi_usd,
-        nilai_investasi_rp,
-        tenaga_kerja_asing,
-        tenaga_kerja_indonesia,
-        total_tenaga_kerja,
-        status_modal
+        id
       `)
 
     if (tahun) {
-      query = query.eq('tahun', tahun)
+      query = query.eq('extract_tahun_pengumuman', tahun)
     }
 
     const { data, error } = await query
@@ -78,59 +77,59 @@ export class PDKIJabarService {
     }
 
     const totalCompanies = data.length
-    const totalInvestmentUSD = data.reduce((sum, item) => sum + (item.nilai_investasi_usd || 0), 0)
-    const totalInvestmentIDR = data.reduce((sum, item) => sum + (item.nilai_investasi_rp || 0), 0)
-    const totalTKA = data.reduce((sum, item) => sum + (item.tenaga_kerja_asing || 0), 0)
-    const totalTKI = data.reduce((sum, item) => sum + (item.tenaga_kerja_indonesia || 0), 0)
-    const totalTK = data.reduce((sum, item) => sum + (item.total_tenaga_kerja || 0), 0)
-    const pmaCount = data.filter(item => item.status_modal === 'PMA').length
-    const pmdnCount = data.filter(item => item.status_modal === 'PMDN').length
+    // const totalInvestmentUSD = data.reduce((sum, item) => sum + (item.nilai_investasi_usd || 0), 0)
+    // const totalInvestmentIDR = data.reduce((sum, item) => sum + (item.nilai_investasi_rp || 0), 0)
+    // const totalTKA = data.reduce((sum, item) => sum + (item.tenaga_kerja_asing || 0), 0)
+    // const totalTKI = data.reduce((sum, item) => sum + (item.tenaga_kerja_indonesia || 0), 0)
+    // const totalTK = data.reduce((sum, item) => sum + (item.total_tenaga_kerja || 0), 0)
+    // const pmaCount = data.filter(item => item.status_modal === 'PMA').length
+    // const pmdnCount = data.filter(item => item.status_modal === 'PMDN').length
 
     return {
       totalCompanies,
-      totalInvestmentUSD,
-      totalInvestmentIDR,
-      totalTKA,
-      totalTKI,
-      totalTK,
-      pmaCount,
-      pmdnCount,
-      pmaPercentage: totalCompanies > 0 ? (pmaCount / totalCompanies) * 100 : 0
+      // totalInvestmentUSD,
+      // totalInvestmentIDR,
+      // totalTKA,
+      // totalTKI,
+      // totalTK,
+      // pmaCount,
+      // pmdnCount,
+      // pmaPercentage: totalCompanies > 0 ? (pmaCount / totalCompanies) * 100 : 0
     }
   }
 
   // Get filter options
   static async getFilterOptions() {
-    const [tahunResult, statusResult, kabupatenResult, sektorResult, subsektorResult] = await Promise.all([
-      supabase.from('pdki_jabar_data').select('tahun').order('tahun', { ascending: false }),
-      supabase.from('pdki_jabar_data').select('status_modal').order('status_modal'),
+    const [tahunResult, kabupatenResult] = await Promise.all([
+      supabase.from('pdki_jabar_data').select('extract_tahun_pengumuman').order('extract_tahun_pengumuman', { ascending: false }),
+      // supabase.from('pdki_jabar_data').select('status_modal').order('status_modal'),
       supabase.from('pdki_jabar_data').select('kabupaten_kota').order('kabupaten_kota'),
-      supabase.from('pdki_jabar_data').select('sektor').order('sektor'),
-      supabase.from('pdki_jabar_data').select('subsektor').order('subsektor')
+      // supabase.from('pdki_jabar_data').select('sektor').order('sektor'),
+      // supabase.from('pdki_jabar_data').select('subsektor').order('subsektor')
     ])
 
-    const tahuns = [...new Set(tahunResult.data?.map(item => item.tahun) || [])]
-    const statuses = [...new Set(statusResult.data?.map(item => item.status_modal) || [])]
+    const tahuns = [...new Set(tahunResult.data?.map(item => item.extract_tahun_pengumuman) || [])]
+    // const statuses = [...new Set(statusResult.data?.map(item => item.status_modal) || [])]
     const kabupatens = [...new Set(kabupatenResult.data?.map(item => item.kabupaten_kota) || [])]
-    const sektors = [...new Set(sektorResult.data?.map(item => item.sektor) || [])]
-    const subsektors = [...new Set(subsektorResult.data?.map(item => item.subsektor).filter(Boolean) || [])]
+    // const sektors = [...new Set(sektorResult.data?.map(item => item.sektor) || [])]
+    // const subsektors = [...new Set(subsektorResult.data?.map(item => item.subsektor).filter(Boolean) || [])]
 
-    return { tahuns, statuses, kabupatens, sektors, subsektors }
+    return { tahuns, kabupatens }
   }
 
   // Get available years
   static async getAvailableYears() {
     const { data, error } = await supabase
       .from('pdki_jabar_data')
-      .select('tahun')
-      .order('tahun', { ascending: false })
+      .select('extract_tahun_pengumuman')
+      .order('extract_tahun_pengumuman', { ascending: false })
 
     if (error) {
       console.error('Error fetching available years:', error)
       throw error
     }
 
-    const years = [...new Set(data?.map(item => item.tahun) || [])]
+    const years = [...new Set(data?.map(item => item.extract_tahun_pengumuman) || [])]
     return years
   }
 

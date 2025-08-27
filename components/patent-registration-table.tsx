@@ -177,8 +177,8 @@ export function PatentRegistrationTable() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Jumlah Paten yang Terdaftar per Tahun</h2>
-          <p className="text-gray-600 mt-1">Data pendaftaran paten di Jawa Barat periode 2020-2025</p>
+          <h2 className="text-2xl font-bold text-gray-900">Jumlah Hak Kekayaan Intelektual di Jawa Barat</h2>
+          <p className="text-gray-600 mt-1">Data pendaftaran Hak Kekayaan Intelektual di Jawa Barat periode 2020-2025</p>
         </div>
       </div>
 
@@ -293,9 +293,9 @@ export function PatentRegistrationTable() {
           <div className="minimal-card">
             <div className="flex items-center justify-between p-6 border-b border-gray-100">
               <div>
-                <h3 className="text-lg font-medium text-gray-900">Jumlah Paten yang Terdaftar per Tahun</h3>
+                <h3 className="text-lg font-medium text-gray-900">Jumlah Hak Kekayaan Intelektual yang Terdaftar di Jawa Barat</h3>
                 <p className="text-sm text-gray-500 mt-1">
-                  Data pendaftaran paten berdasarkan kabupaten/kota di Jawa Barat
+                  Data pendaftaran Hak Kekayaan Intelektual berdasarkan kabupaten/kota di Jawa Barat
                 </p>
               </div>
               <Button 
@@ -457,7 +457,7 @@ export function PatentRegistrationTable() {
                     <XAxis dataKey="year" stroke="#6b7280" />
                     <YAxis stroke="#6b7280" />
                     <Tooltip 
-                      formatter={(value: number) => [value.toLocaleString(), 'Jumlah Paten']}
+                      formatter={(value: number) => [value.toLocaleString(), 'Jumlah HAKI']}
                       labelFormatter={(label) => `Tahun ${label}`}
                     />
                     <Line 

@@ -17,19 +17,30 @@ export function PDKIJabarTable() {
   const [totalPages, setTotalPages] = useState(1)
   const [totalCount, setTotalCount] = useState(0)
   const [error, setError] = useState<string | null>(null)
-  // const [summaryMetrics, setSummaryMetrics] = useState<PDKIJabarSummaryMetrics | null>(null)
 
   // Filter states
   const [filters, setFilters] = useState({
+    extract_tahun_pengumuman: "",
     kabupaten_kota: "",
     search: ""
   })
 
   const [filterOptions, setFilterOptions] = useState({
+    tahuns: [] as number[],
     kabupatens: [] as string[],
   })
 
-  const pageSize = 15
+  const pageSize = 10
+
+  const cities = [
+    "Kabupaten Garut","Kabupaten Subang","Kabupaten Majalengka","Kabupaten Karawang","Kabupaten Sukabumi",
+    "Kabupaten Bandung","Kabupaten Bekasi","Kabupaten Bogor","Kabupaten Purwakarta","Kota Depok",
+    "Kota Bekasi","Kota Bandung","Kota Cirebon","Kota Bogor","Kabupaten Bandung Barat","Kota Cimahi",
+    "Kabupaten Sumedang","Kabupaten Cirebon","Kabupaten Indramayu","Kabupaten Kuningan","Kabupaten Cianjur",
+    "Kota Sukabumi","Kota Banjar","Kota Tasikmalaya","Kabupaten Pangandaran","Kabupaten Ciamis","Kabupaten Tasikmalaya"
+  ]
+
+  const years = [2020, 2021, 2022, 2023, 2024, 2025]
 
   // Fetch filter options
   useEffect(() => {
@@ -52,6 +63,7 @@ export function PDKIJabarTable() {
       
       // Convert filters to API format
       const apiFilters: any = {}
+      if (filters.extract_tahun_pengumuman) apiFilters.extract_tahun_pengumuman = parseInt(filters.extract_tahun_pengumuman)
       if (filters.kabupaten_kota) apiFilters.kabupaten_kota = filters.kabupaten_kota
       if (filters.search) apiFilters.search = filters.search
 
@@ -61,14 +73,12 @@ export function PDKIJabarTable() {
           limit: pageSize,
           ...apiFilters
         }),
-        // PDKIJabarService.getSummaryMetrics(apiFilters.tahun ? { tahun: apiFilters.tahun } : {})
       ])
 
       setData(result.data)
       setTotalPages(result.totalPages)
       setTotalCount(result.count)
       setCurrentPage(result.currentPage)
-      // setSummaryMetrics(metrics)
     } catch (err) {
       console.error('Error fetching data:', err)
       setError('Failed to load data. Please check your database connection.')
@@ -89,6 +99,7 @@ export function PDKIJabarTable() {
 
   const handleReset = () => {
     setFilters({
+      extract_tahun_pengumuman: "",
       kabupaten_kota: "",
       search: ""
     })
@@ -114,7 +125,11 @@ export function PDKIJabarTable() {
     try {
       const csvContent = [
         // Header
-        ['ID Permohonan', 'Nomor Permohonan', 'Tanggal Permohonan', 'Nomor Pengumuman', 'Tanggal Pengumuman', 'Tanggal Dimulai Perlindungan', 'Tanggal Berakhir Perlindungan', 'Nomor Pendaftaran', 'Tanggal Pendaftaran', 'Translasi', 'Nama Merek', 'Status Permohonan', 'Nama Pemilik TM', 'Alamat Pemilik TM', 'Kabupaten Kota', 'Negara Asal', 'Kode Negara', 'Nama Konsultan', 'Alamat Konsultan', 'Provinsi', 'Deskripsi Kelas', 'Detail URL'].join(','),
+        ['ID Permohonan', 'Nomor Permohonan', 'Tanggal Permohonan', 'Nomor Pengumuman', 
+          'Tanggal Pengumuman', 'Tanggal Dimulai Perlindungan', 'Tanggal Berakhir Perlindungan', 
+          'Nomor Pendaftaran', 'Tanggal Pendaftaran', 'Translasi', 'Nama Merek', 'Status Permohonan', 
+          'Nama Pemilik', 'Alamat Pemilik', 'Kabupaten Kota', 'Negara Asal', 'Kode Negara', 'Nama Konsultan', 
+          'Alamat Konsultan', 'Provinsi', 'Deskripsi Kelas', 'Detail URL'].join(','),
         // Data rows
         ...data.map(row => [
           row.id_permohonan || '',
@@ -171,61 +186,13 @@ export function PDKIJabarTable() {
 
   return (
     <div className="space-y-6">
-      {/* Summary Metrics */}
-      {/* {summaryMetrics && (
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-            <div className="flex items-center gap-2 mb-2">
-              <Building2 className="h-4 w-4 text-blue-600" />
-              <div className="text-sm font-medium text-gray-600">Total Perusahaan</div>
-            </div>
-            <div className="text-2xl font-bold text-blue-700">{summaryMetrics.totalCompanies.toLocaleString()}</div>
-          </div>
-          <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-            <div className="flex items-center gap-2 mb-2">
-              <TrendingUp className="h-4 w-4 text-green-600" />
-              <div className="text-sm font-medium text-gray-600">Investasi (USD)</div>
-            </div>
-            <div className="text-lg font-bold text-green-700">{formatCurrencyUSD(summaryMetrics.totalInvestmentUSD)}</div>
-          </div>
-          <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
-            <div className="flex items-center gap-2 mb-2">
-              <TrendingUp className="h-4 w-4 text-purple-600" />
-              <div className="text-sm font-medium text-gray-600">Investasi (IDR)</div>
-            </div>
-            <div className="text-lg font-bold text-purple-700">{formatCurrencyIDR(summaryMetrics.totalInvestmentIDR)}</div>
-          </div>
-          <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
-            <div className="flex items-center gap-2 mb-2">
-              <Users className="h-4 w-4 text-orange-600" />
-              <div className="text-sm font-medium text-gray-600">Total TK</div>
-            </div>
-            <div className="text-2xl font-bold text-orange-700">{summaryMetrics.totalTK.toLocaleString()}</div>
-          </div>
-          <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-4">
-            <div className="flex items-center gap-2 mb-2">
-              <Globe className="h-4 w-4 text-indigo-600" />
-              <div className="text-sm font-medium text-gray-600">TKA</div>
-            </div>
-            <div className="text-2xl font-bold text-indigo-700">{summaryMetrics.totalTKA.toLocaleString()}</div>
-          </div>
-          <div className="bg-pink-50 border border-pink-200 rounded-lg p-4">
-            <div className="flex items-center gap-2 mb-2">
-              <Users className="h-4 w-4 text-pink-600" />
-              <div className="text-sm font-medium text-gray-600">PMA Percentage</div>
-            </div>
-            <div className="text-2xl font-bold text-pink-700">{summaryMetrics.pmaPercentage.toFixed(1)}%</div>
-          </div>
-        </div>
-      )} */}
-
       {/* Filters */}
-      {/* <div className="minimal-card p-6">
+      <div className="minimal-card p-6">
         <div className="flex flex-col lg:flex-row gap-4">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
             <Input
-              placeholder="Cari nama perusahaan, nomor permohonan, atau KBLI..."
+              placeholder="Cari nomor permohonan, nama merek, nama pemilik, atau alamat pemilik..."
               className="pl-10 border-gray-200 focus:border-gray-400"
               value={filters.search}
               onChange={(e) => handleFilterChange("search", e.target.value)}
@@ -233,28 +200,23 @@ export function PDKIJabarTable() {
           </div>
 
           <div className="flex flex-wrap gap-3">
-            <Select value={filters.tahun} onValueChange={(value) => handleFilterChange("tahun", value)}>
+            <Select value={filters.extract_tahun_pengumuman} onValueChange={(value) => handleFilterChange("extract_tahun_pengumuman", value)}>
               <SelectTrigger className="w-[120px] border-gray-200">
                 <SelectValue placeholder="Tahun" />
               </SelectTrigger>
-              <SelectContent>
+              {/* <SelectContent>
                 <SelectItem value="all">Semua Tahun</SelectItem>
-                {filterOptions.tahuns.map((tahun) => (
-                  <SelectItem key={tahun} value={tahun.toString()}>
-                    {tahun}
+                {filterOptions.tahuns.map((extract_tahun_pengumuman) => (
+                  <SelectItem key={extract_tahun_pengumuman} value={extract_tahun_pengumuman.toString()}>
+                    {extract_tahun_pengumuman}
                   </SelectItem>
                 ))}
-              </SelectContent>
-            </Select>
-
-            <Select value={filters.status_modal} onValueChange={(value) => handleFilterChange("status_modal", value)}>
-              <SelectTrigger className="w-[120px] border-gray-200">
-                <SelectValue placeholder="Status Modal" />
-              </SelectTrigger>
+              </SelectContent> */}
               <SelectContent>
-                <SelectItem value="all">Semua Status</SelectItem>
-                <SelectItem value="PMA">PMA</SelectItem>
-                <SelectItem value="PMDN">PMDN</SelectItem>
+                <SelectItem value="all">Semua Tahun</SelectItem>
+                {years.map(year => (
+                  <SelectItem key={year} value={year.toString()}>{year}</SelectItem>
+                ))}
               </SelectContent>
             </Select>
 
@@ -264,38 +226,8 @@ export function PDKIJabarTable() {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">Semua Wilayah</SelectItem>
-                {filterOptions.kabupatens.map((kabupaten) => (
-                  <SelectItem key={kabupaten} value={kabupaten}>
-                    {kabupaten}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-
-            <Select value={filters.sektor} onValueChange={(value) => handleFilterChange("sektor", value)}>
-              <SelectTrigger className="w-[120px] border-gray-200">
-                <SelectValue placeholder="Sektor" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Semua Sektor</SelectItem>
-                {filterOptions.sektors.map((sektor) => (
-                  <SelectItem key={sektor} value={sektor}>
-                    {sektor}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-
-            <Select value={filters.subsektor} onValueChange={(value) => handleFilterChange("subsektor", value)}>
-              <SelectTrigger className="w-[140px] border-gray-200">
-                <SelectValue placeholder="Subsektor" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Semua Subsektor</SelectItem>
-                {filterOptions.subsektors.map((subsektor) => (
-                  <SelectItem key={subsektor} value={subsektor}>
-                    {subsektor}
-                  </SelectItem>
+                {cities.map(city => (
+                  <SelectItem key={city} value={city}>{city}</SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -311,13 +243,13 @@ export function PDKIJabarTable() {
             </Button>
           </div>
         </div>
-      </div> */}
+      </div>
 
       {/* Main Table */}
       <div className="minimal-card">
         <div className="flex items-center justify-between p-6 border-b border-gray-100">
           <div>
-            <h3 className="text-lg font-medium text-gray-900">Data PDKI Jabar 2020 - 2025</h3>
+            <h3 className="text-lg font-medium text-gray-900">Data PDKI Jawa Barat 2020 - 2025</h3>
             <p className="text-sm text-gray-500 mt-1">
               Penelusuran Data dan Informasi Kekayaan Intelektual Periode 2020 - 2025
             </p>
