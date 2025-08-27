@@ -1,16 +1,14 @@
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { User, Sun, Moon } from "lucide-react";
-import { useTheme } from "next-themes";
+import { User } from "lucide-react";
 import { ProfileDropdown } from "@/components/auth/profile-dropdown";
 import { useAuth } from "@/hooks/use-auth";
 
 export function DashboardHeader() {
   const { user } = useAuth();
-  const { theme, setTheme } = useTheme();
 
   return (
-    <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shadow-sm">
+    <header className="bg-white border-b border-gray-200 shadow-sm">
       <div className="max-w-7xl mx-auto px-6 py-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -18,25 +16,12 @@ export function DashboardHeader() {
             <img src="/logo/logo-parekraf.png" alt="Logo" className="h-20 w-20 object-contain" />
 
             {/* Judul */}
-            <h1 className="text-lg font-semibold text-gray-900 dark:text-white">
+            <h1 className="text-lg font-semibold text-gray-900">
               Dashboard Ekonomi Kreatif Jawa Barat
             </h1>
           </div>
 
           <div className="flex items-center gap-4">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              className="flex items-center gap-2"
-            >
-              {theme === "dark" ? (
-                <Sun className="h-4 w-4" />
-              ) : (
-                <Moon className="h-4 w-4" />
-              )}
-            </Button>
-
             {user ? (
               <ProfileDropdown />
             ) : (
@@ -59,4 +44,3 @@ export function DashboardHeader() {
     </header>
   );
 }
-"use client"
