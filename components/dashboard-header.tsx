@@ -22,26 +22,26 @@ export function DashboardHeader() {
 
           <div className="flex items-center gap-3">
             {/* Search */}
-            <div className="relative hidden md:block">
+            {/* <div className="relative hidden md:block">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
               <Input
                 placeholder="Cari data..."
                 className="pl-10 w-64 h-9 bg-gray-50 dark:bg-gray-700 border-gray-200 dark:border-gray-600"
               />
-            </div>
+            </div> */}
 
             {/* Notifications */}
-            <Button variant="ghost" size="sm" className="relative">
+            {/* <Button variant="ghost" size="sm" className="relative">
               <Bell className="h-5 w-5" />
               <Badge className="absolute -top-1 -right-1 h-5 w-5 p-0 text-xs bg-red-500">
                 3
               </Badge>
-            </Button>
+            </Button> */}
 
             {/* Settings */}
-            <Button variant="ghost" size="sm">
+            {/* <Button variant="ghost" size="sm">
               <Settings className="h-5 w-5" />
-            </Button>
+            </Button> */}
 
             {/* Profile */}
             {user ? (

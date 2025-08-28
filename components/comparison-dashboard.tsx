@@ -27,7 +27,8 @@ import {
   ArrowDownRight,
   Download,
   RefreshCw,
-  Loader2
+  Loader2,
+  DollarSign
 } from "lucide-react"
 
 interface ComparisonData {
@@ -41,7 +42,7 @@ interface ComparisonData {
 
 export function ComparisonDashboard() {
   const [selectedRegions, setSelectedRegions] = useState<string[]>(['Kota Bandung', 'Kota Bekasi'])
-  const [selectedYears, setSelectedYears] = useState<number[]>([2023, 2024])
+  const [selectedYears, setSelectedYears] = useState<number[]>([2024, 2025])
   const [comparisonData, setComparisonData] = useState<ComparisonData[]>([])
   const [loading, setLoading] = useState(false)
 
@@ -96,7 +97,7 @@ export function ComparisonDashboard() {
           <h2 className="text-2xl font-bold text-gray-900">Perbandingan Wilayah</h2>
           <p className="text-gray-600 mt-1">Bandingkan kinerja ekonomi kreatif antar wilayah dan periode</p>
         </div>
-        <div className="flex gap-2">
+        {/* <div className="flex gap-2">
           <Button variant="outline" size="sm">
             <RefreshCw className="w-4 h-4 mr-2" />
             Refresh
@@ -105,7 +106,7 @@ export function ComparisonDashboard() {
             <Download className="w-4 h-4 mr-2" />
             Export
           </Button>
-        </div>
+        </div> */}
       </div>
 
       {/* Filters */}

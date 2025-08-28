@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
+import { cn } from "@/lib/utils"
 import { 
   TrendingUp, 
   TrendingDown, 
@@ -178,18 +179,18 @@ export function EnhancedMetricsCards() {
                   <span className={metric.color}>{metric.progress}%</span>
                 </div>
                 <Progress value={metric.progress} className="h-2" />
-                {metric.target && (
+                {/* {metric.target && (
                   <p className="text-xs text-gray-500">{metric.target}</p>
-                )}
+                )} */}
               </div>
             )}
             
-            <div className="mt-3 flex items-center justify-between">
+            {/* <div className="mt-3 flex items-center justify-between">
               <span className="text-xs text-gray-500">{metric.changeLabel}</span>
               <Button variant="ghost" size="sm" className="h-6 px-2 text-xs">
                 Detail
               </Button>
-            </div>
+            </div> */}
           </CardContent>
         </Card>
       ))}

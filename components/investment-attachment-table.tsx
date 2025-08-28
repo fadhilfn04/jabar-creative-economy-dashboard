@@ -393,9 +393,9 @@ export function InvestmentAttachmentTable() {
     <div className="minimal-card">
       <div className="flex items-center justify-between p-6 border-b border-gray-100">
         <div>
-          <h3 className="text-lg font-medium text-gray-900">Peringkat Berdasarkan Lampiran Investasi PMA/PMDN</h3>
+          <h3 className="text-lg font-medium text-gray-900">Peringkat Berdasarkan Investasi PMA/PMDN</h3>
           <p className="text-sm text-gray-500 mt-1">
-            Data ranking berdasarkan lampiran investasi wilayah dan subsektor
+            Data ranking berdasarkan investasi wilayah dan subsektor
           </p>
         </div>
         <div className="flex items-center gap-3">
