@@ -4,9 +4,8 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Loader2, Eye, EyeOff, CheckCircle } from "lucide-react"
+import { Loader2, Eye, EyeOff, CheckCircle, UserPlus, Sparkles } from "lucide-react"
 import { useAuth } from "@/hooks/use-auth"
 
 interface RegisterFormProps {
@@ -57,69 +56,92 @@ export function RegisterForm({ onToggleMode }: RegisterFormProps) {
 
   if (success) {
     return (
-      <Card className="w-full max-w-md mx-auto">
-        <CardHeader className="text-center">
-          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
-            <CheckCircle className="h-6 w-6 text-green-600" />
+      <div className="w-full">
+        <div className="text-center mb-8">
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-green-100 rounded-2xl mb-6">
+            <CheckCircle className="w-10 h-10 text-green-600" />
           </div>
-          <CardTitle className="text-2xl font-bold">Akun Berhasil Dibuat!</CardTitle>
-          <CardDescription>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            Akun Berhasil Dibuat!
+          </h1>
+          <p className="text-gray-600">
             Anda telah berhasil mendaftar dan dapat langsung menggunakan dashboard
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Button onClick={onToggleMode} className="w-full">
+          </p>
+        </div>
+        
+        <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-8">
+          <Button 
+            onClick={onToggleMode} 
+            className="w-full h-12 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-xl transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98]"
+          >
+            <CheckCircle className="mr-2 h-5 w-5" />
             Masuk ke Dashboard
           </Button>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     )
   }
 
   return (
-    <Card className="w-full max-w-md mx-auto">
-      <CardHeader className="text-center">
-        <CardTitle className="text-2xl font-bold">Daftar Akun Baru</CardTitle>
-        <CardDescription>
-          Buat akun untuk mengakses dashboard ekonomi kreatif
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="w-full">
+      {/* Header */}
+      <div className="text-center mb-8">
+        <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-xl mb-4">
+          <UserPlus className="w-8 h-8 text-blue-600" />
+        </div>
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">
+          Buat Akun Baru
+        </h1>
+        <p className="text-gray-600">
+          Daftar untuk mengakses dashboard ekonomi kreatif Jawa Barat
+        </p>
+      </div>
+
+      {/* Form */}
+      <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-8">
+        <form onSubmit={handleSubmit} className="space-y-6">
           {error && (
-            <Alert variant="destructive">
+            <Alert variant="destructive" className="mb-6">
               <AlertDescription>{error}</AlertDescription>
             </Alert>
           )}
           
-          <div className="space-y-2">
-            <Label htmlFor="name">Nama Lengkap</Label>
+          <div className="space-y-3">
+            <Label htmlFor="name" className="text-sm font-semibold text-gray-700">
+              Nama Lengkap
+            </Label>
             <Input
               id="name"
               type="text"
-              placeholder="Masukkan nama lengkap"
+              placeholder="Masukkan nama lengkap Anda"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
               disabled={loading}
+              className="h-12 px-4 border-gray-200 focus:border-blue-500 focus:ring-blue-500/20"
             />
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
+          <div className="space-y-3">
+            <Label htmlFor="email" className="text-sm font-semibold text-gray-700">
+              Alamat Email
+            </Label>
             <Input
               id="email"
               type="email"
-              placeholder="nama@email.com"
+              placeholder="Masukkan alamat email Anda"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
               disabled={loading}
+              className="h-12 px-4 border-gray-200 focus:border-blue-500 focus:ring-blue-500/20"
             />
           </div>
           
-          <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
+          <div className="space-y-3">
+            <Label htmlFor="password" className="text-sm font-semibold text-gray-700">
+              Password
+            </Label>
             <div className="relative">
               <Input
                 id="password"
@@ -129,72 +151,93 @@ export function RegisterForm({ onToggleMode }: RegisterFormProps) {
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 disabled={loading}
+                className="h-12 px-4 pr-12 border-gray-200 focus:border-blue-500 focus:ring-blue-500/20"
               />
               <Button
                 type="button"
                 variant="ghost"
                 size="sm"
-                className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                className="absolute right-0 top-0 h-12 px-3 hover:bg-transparent"
                 onClick={() => setShowPassword(!showPassword)}
                 disabled={loading}
               >
                 {showPassword ? (
-                  <EyeOff className="h-4 w-4 text-gray-400" />
+                  <EyeOff className="h-5 w-5 text-gray-400" />
                 ) : (
-                  <Eye className="h-4 w-4 text-gray-400" />
+                  <Eye className="h-5 w-5 text-gray-400" />
                 )}
               </Button>
             </div>
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="confirmPassword">Konfirmasi Password</Label>
+          <div className="space-y-3">
+            <Label htmlFor="confirmPassword" className="text-sm font-semibold text-gray-700">
+              Konfirmasi Password
+            </Label>
             <div className="relative">
               <Input
                 id="confirmPassword"
                 type={showConfirmPassword ? "text" : "password"}
-                placeholder="Ulangi password"
+                placeholder="Ulangi password Anda"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
                 disabled={loading}
+                className="h-12 px-4 pr-12 border-gray-200 focus:border-blue-500 focus:ring-blue-500/20"
               />
               <Button
                 type="button"
                 variant="ghost"
                 size="sm"
-                className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                className="absolute right-0 top-0 h-12 px-3 hover:bg-transparent"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                 disabled={loading}
               >
                 {showConfirmPassword ? (
-                  <EyeOff className="h-4 w-4 text-gray-400" />
+                  <EyeOff className="h-5 w-5 text-gray-400" />
                 ) : (
-                  <Eye className="h-4 w-4 text-gray-400" />
+                  <Eye className="h-5 w-5 text-gray-400" />
                 )}
               </Button>
             </div>
           </div>
 
-          <Button type="submit" className="w-full" disabled={loading}>
-            {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            Daftar
+          <Button 
+            type="submit" 
+            className="w-full h-12 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98]" 
+            disabled={loading}
+          >
+            {loading ? (
+              <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+            ) : (
+              <Sparkles className="mr-2 h-5 w-5" />
+            )}
+            {loading ? 'Membuat Akun...' : 'Buat Akun'}
           </Button>
         </form>
 
-        <div className="mt-6 text-center">
-          <p className="text-sm text-gray-600">
+        <div className="mt-8 text-center">
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-gray-200"></div>
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-4 bg-white text-gray-500">atau</span>
+            </div>
+          </div>
+          
+          <p className="text-gray-600 mt-6">
             Sudah punya akun?{" "}
             <button
               type="button"
               onClick={onToggleMode}
-              className="text-blue-600 hover:text-blue-500 font-medium"
+              className="text-blue-600 hover:text-blue-700 font-semibold transition-colors"
             >
-              Masuk di sini
+              Masuk sekarang
             </button>
           </p>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   )
 }
