@@ -163,7 +163,7 @@ export function DashboardSidebar({ activeSection, onSectionChange }: DashboardSi
       </ScrollArea>
 
       {/* Footer Actions */}
-      <div className="p-3 border-t border-gray-200 space-y-2">
+      {/* <div className="p-3 border-t border-gray-200 space-y-2">
         {!collapsed && (
           <>
             <Button variant="outline" size="sm" className="w-full justify-start">
@@ -195,7 +195,7 @@ export function DashboardSidebar({ activeSection, onSectionChange }: DashboardSi
             </Button>
           )}
         </div>
-      </div>
+      </div> */}
     </div>
   )
 }

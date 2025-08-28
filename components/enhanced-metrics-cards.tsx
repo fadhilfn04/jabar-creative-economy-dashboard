@@ -5,10 +5,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { cn } from "@/lib/utils"
 import { 
-  TrendingUp, 
-  TrendingDown, 
   Building2, 
   Users, 
   DollarSign, 
@@ -32,6 +31,8 @@ interface MetricCard {
 }
 
 export function EnhancedMetricsCards() {
+  const currentYear = new Date().getFullYear()
+  const [year, setYear] = useState<number>(2025) // default ke 2025
   const [metrics, setMetrics] = useState({
     totalCompanies: 0,
     totalInvestment: 0,
@@ -46,7 +47,7 @@ export function EnhancedMetricsCards() {
       try {
         setLoading(true)
         setError(null)
-        const data = await DatabaseService.getDashboardMetrics()
+        const data = await DatabaseService.getDashboardMetrics(year)
         setMetrics(data)
       } catch (err) {
         console.error('Error fetching metrics:', err)
@@ -57,7 +58,7 @@ export function EnhancedMetricsCards() {
     }
 
     fetchMetrics()
-  }, [])
+  }, [year]) // kalau tahun berubah, reload data
 
   const formatCurrency = (amount: number) => {
     if (amount >= 1000000000000) {
@@ -76,7 +77,7 @@ export function EnhancedMetricsCards() {
       title: "Total Pelaku Ekonomi Kreatif",
       value: loading ? "..." : metrics.totalCompanies.toLocaleString(),
       change: loading ? 0 : metrics.growthRate,
-      changeLabel: "vs bulan lalu",
+      changeLabel: "vs tahun lalu",
       icon: Building2,
       color: "text-blue-700",
       bgColor: "bg-blue-50",
@@ -118,82 +119,80 @@ export function EnhancedMetricsCards() {
     }
   ]
 
-  if (error) {
-    return (
+  return (
+    <div className="space-y-4">
+      {/* Filter tahun */}
+      <div className="flex justify-end">
+        <Select value={year.toString()} onValueChange={(val) => setYear(Number(val))}>
+          <SelectTrigger className="w-[120px]">
+            <SelectValue placeholder="Pilih Tahun" />
+          </SelectTrigger>
+          <SelectContent>
+            {[2021, 2022, 2023, 2024, currentYear].map((y) => (
+              <SelectItem key={y} value={y.toString()}>
+                {y}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      {/* Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {metricsData.map((_, index) => (
-          <Card key={index} className="border-red-200 bg-red-50">
-            <CardContent className="p-6">
-              <div className="text-sm font-medium text-red-600">Error loading data</div>
-              <div className="text-2xl font-bold text-red-700 mt-2">--</div>
-              <div className="text-sm text-red-600 mt-1">Please check database connection</div>
+        {metricsData.map((metric, index) => (
+          <Card key={index} className={cn(
+            "border-0 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1",
+            metric.bgColor
+          )}>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <div className="flex flex-col">
+                <CardTitle className="text-sm font-medium text-gray-600">
+                  {metric.title}
+                </CardTitle>
+                <Badge className="w-fit mt-1 px-2.5 py-0.5 text-xs font-semibold bg-blue-100 text-blue-700 border border-blue-200">
+                  {year}
+                </Badge>
+              </div>
+              <div className={cn("p-2 rounded-lg", metric.bgColor)}>
+                <metric.icon className={cn("h-5 w-5", metric.color)} />
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-center justify-between mb-4">
+                <div className={cn("text-3xl font-bold", metric.color)}>
+                  {loading && (
+                    <Loader2 className="h-6 w-6 animate-spin mr-2 inline" />
+                  )}
+                  {metric.value}
+                </div>
+                <div className="flex items-center gap-1">
+                  {metric.change >= 0 ? (
+                    <ArrowUpRight className="h-4 w-4 text-green-600" />
+                  ) : (
+                    <ArrowDownRight className="h-4 w-4 text-red-600" />
+                  )}
+                  <span className={cn(
+                    "text-sm font-medium",
+                    metric.change >= 0 ? "text-green-600" : "text-red-600"
+                  )}>
+                    {metric.change >= 0 ? '+' : ''}{metric.change}%
+                  </span>
+                </div>
+              </div>
+              
+              {/* {metric.progress && (
+                <div className="space-y-2">
+                  <div className="flex justify-between text-xs">
+                    <span className="text-gray-500">Progress</span>
+                    <span className={metric.color}>{metric.progress}%</span>
+                  </div>
+                  <Progress value={metric.progress} className="h-2" />
+                </div>
+              )} */}
             </CardContent>
           </Card>
         ))}
       </div>
-    )
-  }
-
-  return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-      {metricsData.map((metric, index) => (
-        <Card key={index} className={cn(
-          "border-0 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1",
-          metric.bgColor
-        )}>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-gray-600">
-              {metric.title}
-            </CardTitle>
-            <div className={cn("p-2 rounded-lg", metric.bgColor)}>
-              <metric.icon className={cn("h-5 w-5", metric.color)} />
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center justify-between mb-4">
-              <div className={cn("text-3xl font-bold", metric.color)}>
-                {loading && (
-                  <Loader2 className="h-6 w-6 animate-spin mr-2 inline" />
-                )}
-                {metric.value}
-              </div>
-              <div className="flex items-center gap-1">
-                {metric.change >= 0 ? (
-                  <ArrowUpRight className="h-4 w-4 text-green-600" />
-                ) : (
-                  <ArrowDownRight className="h-4 w-4 text-red-600" />
-                )}
-                <span className={cn(
-                  "text-sm font-medium",
-                  metric.change >= 0 ? "text-green-600" : "text-red-600"
-                )}>
-                  {metric.change >= 0 ? '+' : ''}{metric.change}%
-                </span>
-              </div>
-            </div>
-            
-            {metric.progress && (
-              <div className="space-y-2">
-                <div className="flex justify-between text-xs">
-                  <span className="text-gray-500">Progress</span>
-                  <span className={metric.color}>{metric.progress}%</span>
-                </div>
-                <Progress value={metric.progress} className="h-2" />
-                {/* {metric.target && (
-                  <p className="text-xs text-gray-500">{metric.target}</p>
-                )} */}
-              </div>
-            )}
-            
-            {/* <div className="mt-3 flex items-center justify-between">
-              <span className="text-xs text-gray-500">{metric.changeLabel}</span>
-              <Button variant="ghost" size="sm" className="h-6 px-2 text-xs">
-                Detail
-              </Button>
-            </div> */}
-          </CardContent>
-        </Card>
-      ))}
     </div>
   )
 }

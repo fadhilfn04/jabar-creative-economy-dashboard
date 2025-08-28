@@ -42,12 +42,12 @@ export class ComparisonService {
 
       // Get investment data (type=1 for regional)
       let investmentQuery = supabase
-        .from('investment_realization_ranking')
-        .select('regency_city, year, investment_amount')
+        .from('investment_attachment_ranking')
+        .select('name, year, investment_idr')
         .eq('type', 1)
 
       if (regions.length > 0) {
-        investmentQuery = investmentQuery.in('regency_city', regions)
+        investmentQuery = investmentQuery.in('name', regions)
       }
       if (years.length > 0) {
         investmentQuery = investmentQuery.in('year', years)
@@ -63,8 +63,8 @@ export class ComparisonService {
       // Create investment lookup map
       const investmentMap = new Map<string, number>()
       investmentData?.forEach(item => {
-        const key = `${item.regency_city}-${item.year}`
-        investmentMap.set(key, item.investment_amount)
+        const key = `${item.name}-${item.year}`
+        investmentMap.set(key, item.investment_idr)
       })
 
       // Combine data and calculate growth

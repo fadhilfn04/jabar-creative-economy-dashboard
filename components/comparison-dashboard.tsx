@@ -101,12 +101,15 @@ export function ComparisonDashboard() {
   }, [selectedRegions, selectedYears])
 
   const formatCurrency = (amount: number) => {
-    if (amount >= 1000000000) {
+    if (amount >= 1000000000000) {
+      return `Rp ${(amount / 1000000000000).toFixed(1)} T`
+    } else if (amount >= 1000000000) {
       return `Rp ${(amount / 1000000000).toFixed(1)} M`
     } else if (amount >= 1000000) {
       return `Rp ${(amount / 1000000).toFixed(1)} Jt`
+    } else {
+      return `Rp ${amount.toLocaleString()}`
     }
-    return `Rp ${amount.toLocaleString()}`
   }
 
   const chartData = comparisonData.map(item => ({
@@ -159,7 +162,7 @@ export function ComparisonDashboard() {
           <h2 className="text-2xl font-bold text-gray-900">Perbandingan Wilayah</h2>
           <p className="text-gray-600 mt-1">Bandingkan kinerja ekonomi kreatif antar wilayah dan periode</p>
         </div>
-        <div className="flex gap-2">
+        {/* <div className="flex gap-2">
           <Button variant="outline" size="sm">
             <RefreshCw className="w-4 h-4 mr-2" />
             Refresh
@@ -168,7 +171,7 @@ export function ComparisonDashboard() {
             <Download className="w-4 h-4 mr-2" />
             Export
           </Button>
-        </div>
+        </div> */}
       </div>
 
       {/* Filters */}
@@ -180,8 +183,8 @@ export function ComparisonDashboard() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-3">
               <label className="text-sm font-medium text-gray-700">Pilih Wilayah (maksimal 4)</label>
-              <div className="grid grid-cols-2 gap-2">
-                {availableRegions.slice(0, 8).map(region => (
+              <div className="grid grid-cols-3 gap-3">
+                {availableRegions.slice(0, 27).map(region => (
                   <Button
                     key={region}
                     variant={selectedRegions.includes(region) ? "default" : "outline"}
@@ -196,7 +199,7 @@ export function ComparisonDashboard() {
                     }}
                     disabled={!selectedRegions.includes(region) && selectedRegions.length >= 4}
                   >
-                    {region.replace('Kabupaten ', 'Kab. ').replace('Kota ', '')}
+                    {region.replace('Kabupaten ', 'Kab. ')}
                   </Button>
                 ))}
               </div>
