@@ -21,7 +21,7 @@ export function AuthPage() {
             <img 
               src="/logo/logo-parekraf.png" 
               alt="Logo Dashboard" 
-              className="h-16 w-16 mb-6 bg-white/10 rounded-xl p-2"
+              className="h-16 w-28 mb-6 bg-white/10 rounded-xl p-2"
             />
             <h1 className="text-4xl font-bold mb-4">
               Dashboard Ekonomi Kreatif
@@ -38,7 +38,7 @@ export function AuthPage() {
           <div className="space-y-4">
             <div className="flex items-center space-x-3">
               <div className="w-2 h-2 bg-white rounded-full"></div>
-              <span className="text-blue-100">Data real-time dari seluruh wilayah</span>
+              <span className="text-blue-100">Data dari seluruh wilayah</span>
             </div>
             <div className="flex items-center space-x-3">
               <div className="w-2 h-2 bg-white rounded-full"></div>
