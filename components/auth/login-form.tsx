@@ -4,9 +4,8 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Loader2, Eye, EyeOff } from "lucide-react"
+import { Loader2, Eye, EyeOff, ArrowRight, Shield } from "lucide-react"
 import { useAuth } from "@/hooks/use-auth"
 
 interface LoginFormProps {
@@ -37,82 +36,113 @@ export function LoginForm({ onToggleMode }: LoginFormProps) {
   }
 
   return (
-    <Card className="w-full max-w-md mx-auto">
-      <CardHeader className="text-center">
-        <CardTitle className="text-2xl font-bold">Masuk ke Dashboard</CardTitle>
-        <CardDescription>
-          Masukkan email dan password untuk mengakses dashboard
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="w-full">
+      {/* Header */}
+      <div className="text-center mb-8">
+        <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-xl mb-4">
+          <Shield className="w-8 h-8 text-blue-600" />
+        </div>
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">
+          Selamat Datang Kembali
+        </h1>
+        <p className="text-gray-600">
+          Masuk ke dashboard untuk mengakses analisis ekonomi kreatif
+        </p>
+      </div>
+
+      {/* Form */}
+      <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-8">
+        <form onSubmit={handleSubmit} className="space-y-6">
           {error && (
-            <Alert variant="destructive">
+            <Alert variant="destructive" className="mb-6">
               <AlertDescription>{error}</AlertDescription>
             </Alert>
           )}
           
-          <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
+          <div className="space-y-3">
+            <Label htmlFor="email" className="text-sm font-semibold text-gray-700">
+              Alamat Email
+            </Label>
             <Input
               id="email"
               type="email"
-              placeholder="nama@email.com"
+              placeholder="Masukkan alamat email Anda"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
               disabled={loading}
+              className="h-12 px-4 border-gray-200 focus:border-blue-500 focus:ring-blue-500/20"
             />
           </div>
           
-          <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
+          <div className="space-y-3">
+            <Label htmlFor="password" className="text-sm font-semibold text-gray-700">
+              Password
+            </Label>
             <div className="relative">
               <Input
                 id="password"
                 type={showPassword ? "text" : "password"}
-                placeholder="Masukkan password"
+                placeholder="Masukkan password Anda"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 disabled={loading}
+                className="h-12 px-4 pr-12 border-gray-200 focus:border-blue-500 focus:ring-blue-500/20"
               />
               <Button
                 type="button"
                 variant="ghost"
                 size="sm"
-                className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                className="absolute right-0 top-0 h-12 px-3 hover:bg-transparent"
                 onClick={() => setShowPassword(!showPassword)}
                 disabled={loading}
               >
                 {showPassword ? (
-                  <EyeOff className="h-4 w-4 text-gray-400" />
+                  <EyeOff className="h-5 w-5 text-gray-400" />
                 ) : (
-                  <Eye className="h-4 w-4 text-gray-400" />
+                  <Eye className="h-5 w-5 text-gray-400" />
                 )}
               </Button>
             </div>
           </div>
 
-          <Button type="submit" className="w-full" disabled={loading}>
-            {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            Masuk
+          <Button 
+            type="submit" 
+            className="w-full h-12 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98]" 
+            disabled={loading}
+          >
+            {loading ? (
+              <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+            ) : (
+              <ArrowRight className="mr-2 h-5 w-5" />
+            )}
+            {loading ? 'Memproses...' : 'Masuk ke Dashboard'}
           </Button>
         </form>
 
-        <div className="mt-6 text-center">
-          <p className="text-sm text-gray-600">
+        <div className="mt-8 text-center">
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-gray-200"></div>
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-4 bg-white text-gray-500">atau</span>
+            </div>
+          </div>
+          
+          <p className="text-gray-600 mt-6">
             Belum punya akun?{" "}
             <button
               type="button"
               onClick={onToggleMode}
-              className="text-blue-600 hover:text-blue-500 font-medium"
+              className="text-blue-600 hover:text-blue-700 font-semibold transition-colors"
             >
-              Daftar di sini
+              Daftar sekarang
             </button>
           </p>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   )
 }

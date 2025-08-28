@@ -1,8 +1,7 @@
 "use client"
 
 import { useAuth } from "@/hooks/use-auth"
-import { AuthModal } from "./auth-modal"
-import { useState } from "react"
+import { AuthPage } from "./auth-page"
 import { Loader2 } from "lucide-react"
 
 interface AuthGuardProps {
@@ -27,13 +26,7 @@ export function AuthGuard({ children }: AuthGuardProps) {
 
   // Show auth modal if user is not authenticated
   if (!user) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="w-full max-w-md mx-auto px-6">
-          <AuthModal open={true} onOpenChange={() => {}} />
-        </div>
-      </div>
-    )
+    return <AuthPage />
   }
 
   // User is authenticated, show the dashboard
