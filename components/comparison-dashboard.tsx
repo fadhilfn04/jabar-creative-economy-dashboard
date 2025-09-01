@@ -306,9 +306,9 @@ export function ComparisonDashboard() {
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm text-purple-600 font-medium">Total Investasi</p>
-                      <p className="text-2xl font-bold text-purple-900">{formatCurrency(totalInvestment)}</p>
-                      <p className="text-sm text-purple-700">Gabungan semua wilayah</p>
+                      <p className="text-sm text-purple-600 font-medium">Investasi Terbesar</p>
+                      <p className="text-2xl font-bold text-purple-900">{formatCurrency(bestRegion ? bestRegion.investment : 0)}</p>
+                      <p className="text-sm text-purple-700">Pada wilayah dan tahun terbaik</p>
                     </div>
                     <DollarSign className="h-8 w-8 text-purple-600" />
                   </div>

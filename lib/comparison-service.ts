@@ -21,7 +21,7 @@ export class ComparisonService {
       // First get labor data (type=1 for regional)
       let laborQuery = supabase
         .from('labor_ranking')
-        .select('name, year, project_count, labor_count')
+        .select('name, year, project_count, labor_count, investment')
         .eq('type', 1)
 
       if (regions.length > 0) {
@@ -79,9 +79,9 @@ export class ComparisonService {
           region: item.name,
           year: item.year,
           companies: item.project_count,
-          investment: investment,
+          investment: item.investment,
           workers: item.labor_count,
-          growth: 0 // Will be calculated below
+          growth: 0
         }
 
         comparisonData.push(dataPoint)
