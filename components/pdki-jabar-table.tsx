@@ -319,8 +319,8 @@ export function PDKIJabarTable() {
                       <TableCell className="text-sm text-gray-600">{formatDate(row.tanggal_berakhir_perlindungan)}</TableCell>
                       <TableCell className="font-mono text-sm text-gray-600">{row.nomor_pendaftaran || '-'}</TableCell>
                       <TableCell className="text-sm text-gray-600">{formatDate(row.tanggal_pendaftaran)}</TableCell>
-                      <TableCell className=" text-gray-900 max-w-xs truncate" title={row.translasi}>
-                        {row.translasi}
+                      <TableCell className=" text-gray-900 max-w-xs truncate" title={row.translasi || '-'}>
+                        {row.translasi || '-'}
                       </TableCell>
                       <TableCell className="font-medium text-gray-900 max-w-xs truncate" title={row.nama_merek}>
                         {row.nama_merek}

@@ -95,10 +95,6 @@ export function InvestmentAnalysisDashboard() {
     }
   }
 
-  const formatCurrencyFull = (amount: number) => {
-    return `Rp ${amount.toLocaleString('id-ID')}`
-  }
-
   const exportYearlyData = () => {
     try {
       const csvContent = [
@@ -276,14 +272,14 @@ export function InvestmentAnalysisDashboard() {
                         <TableRow key={row.year}>
                           <TableCell className="font-medium">{row.year}</TableCell>
                           <TableCell className="font-medium text-green-600">
-                            {formatCurrencyFull(row.investment_amount)}
+                            {formatCurrency(row.investment_amount)}
                           </TableCell>
                         </TableRow>
                       ))}
                       <TableRow className="border-t-2 border-gray-300 bg-gray-50 font-bold">
                         <TableCell className="font-bold text-gray-900">Grand Total</TableCell>
                         <TableCell className="font-bold text-green-700">
-                          {formatCurrencyFull(grandTotal)}
+                          {formatCurrency(grandTotal)}
                         </TableCell>
                       </TableRow>
                     </TableBody>
@@ -399,8 +395,11 @@ export function InvestmentAnalysisDashboard() {
                     <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" />
                     <XAxis dataKey="year" stroke="#6b7280" />
                     <YAxis stroke="#6b7280" />
-                    <Tooltip 
-                      formatter={(value: number) => [`${value.toFixed(1)} T`, 'Investasi (Triliun Rp)']}
+                    <Tooltip
+                      formatter={(value: number, name: string) => [
+                        value.toLocaleString(),
+                        name,
+                      ]}
                       labelFormatter={(label) => `Tahun ${label}`}
                     />
                     <Bar dataKey="TW-I" fill="#3b82f6" name="TW-I" />

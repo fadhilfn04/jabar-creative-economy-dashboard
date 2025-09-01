@@ -128,7 +128,7 @@ export function EnhancedMetricsCards() {
             <SelectValue placeholder="Pilih Tahun" />
           </SelectTrigger>
           <SelectContent>
-            {[2021, 2022, 2023, 2024, currentYear].map((y) => (
+            {[currentYear, 2024, 2023, 2022, 2021, 2020].map((y) => (
               <SelectItem key={y} value={y.toString()}>
                 {y}
               </SelectItem>

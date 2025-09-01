@@ -149,7 +149,7 @@ export class ComparisonService {
         .from('labor_ranking')
         .select('year')
         .eq('type', 1)
-        .order('year', { ascending: false })
+        .order('year', { ascending: true })
 
       if (error) {
         console.error('Error fetching available years:', error)

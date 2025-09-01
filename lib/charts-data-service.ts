@@ -9,8 +9,7 @@ export interface SubsectorChartData {
 
 export interface CityChartData {
   name: string
-  companiesA: number
-  companiesB: number
+  companies: number
   workers: number
 }
 
@@ -103,8 +102,7 @@ export class ChartsDataService {
       // Transform data for the chart
       const chartData: CityChartData[] = data?.map(item => ({
         name: item.name,
-        companiesA: Math.floor(item.project_count * 0.6), // Split projects into two series for visual variety
-        companiesB: Math.ceil(item.project_count * 0.4),
+        companies: Math.floor(item.project_count),
         workers: item.labor_count
       })) || []
 
@@ -117,13 +115,19 @@ export class ChartsDataService {
   }
 
   // Get investment trend data from investment_analysis_data table
-  static async getInvestmentTrend(): Promise<InvestmentTrendData[]> {
+  static async getInvestmentTrend(year?: number): Promise<InvestmentTrendData[]> {
     try {
-      const { data, error } = await supabase
+      let query = supabase
         .from('investment_analysis_data')
         .select('year, quarter, investment_amount')
         .order('year', { ascending: true })
         .order('quarter', { ascending: true })
+      
+      if (year) {
+        query = query.eq('year', year)
+      }
+
+      const { data, error } = await query
 
       if (error) {
         console.error('Error fetching investment trend data:', error)

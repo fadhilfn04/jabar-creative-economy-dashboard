@@ -40,12 +40,12 @@ const navigationItems = [
     icon: Home,
     description: "Dashboard utama"
   },
-  {
-    id: "metrics",
-    label: "Metrics",
-    icon: BarChart3,
-    description: "Metrik kunci"
-  },
+  // {
+  //   id: "metrics",
+  //   label: "Metrics",
+  //   icon: BarChart3,
+  //   description: "Metrik kunci"
+  // },
   {
     id: "maps",
     label: "Peta Sebaran",

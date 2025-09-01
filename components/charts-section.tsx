@@ -59,7 +59,7 @@ export function ChartsSection() {
         const [subsector, city, trend] = await Promise.all([
           ChartsDataService.getSubsectorData(selectedYear),
           ChartsDataService.getCityData(selectedYear),
-          ChartsDataService.getInvestmentTrend()
+          ChartsDataService.getInvestmentTrend(selectedYear)
         ])
 
         setSubsectorData(subsector)
@@ -205,17 +205,17 @@ export function ChartsSection() {
                   labelFormatter={(label) => `Wilayah: ${label}`}
                 />
                 <Bar
-                  dataKey="companiesA"
-                  fill="#10b981"
-                  name="Proyek (60%)"
+                  dataKey="companies"
+                  fill="#3b82f6"
+                  name="Proyek"
                   radius={[4, 4, 0, 0]}
                 />
-                <Bar
+                {/* <Bar
                   dataKey="companiesB"
                   fill="#3b82f6"
                   name="Proyek (40%)"
                   radius={[4, 4, 0, 0]}
-                />
+                /> */}
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -223,7 +223,7 @@ export function ChartsSection() {
       </div>
 
       <div className="lg:col-span-2 minimal-card p-6">
-        <h3 className="text-lg font-medium text-gray-900 mb-6">Tren Investasi Ekonomi Kreatif</h3>
+        <h3 className="text-lg font-medium text-gray-900 mb-6">Tren Investasi Ekonomi Kreatif ({selectedYear})</h3>
         <ResponsiveContainer width="100%" height={280}>
           <LineChart data={investmentTrend}>
             <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" />

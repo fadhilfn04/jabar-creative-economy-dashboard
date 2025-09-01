@@ -14,7 +14,7 @@ type TabType = 'regional' | 'subsector'
 
 export function InvestmentAttachmentTable() {
   const [activeTab, setActiveTab] = useState<TabType>('regional')
-  const [selectedYear, setSelectedYear] = useState<number>(2020)
+  const [selectedYear, setSelectedYear] = useState<number>(2025)
   const [availableYears, setAvailableYears] = useState<number[]>([])
   
   // Regional data state
@@ -125,7 +125,15 @@ export function InvestmentAttachmentTable() {
   }
 
   const formatCurrencyIDR = (amount: number) => {
-    return `Rp ${amount.toLocaleString('id-ID')}`
+    if (amount >= 1000000000000) {
+      return `Rp ${(amount / 1000000000000).toFixed(1)} T`
+    } else if (amount >= 1000000000) {
+      return `Rp ${(amount / 1000000000).toFixed(1)} M`
+    } else if (amount >= 1000000) {
+      return `Rp ${(amount / 1000000).toFixed(1)} Jt`
+    } else {
+      return `Rp ${amount.toLocaleString()}`
+    }
   }
 
   const exportData = (data: any[], filename: string) => {

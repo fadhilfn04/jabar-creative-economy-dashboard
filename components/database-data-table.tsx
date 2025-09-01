@@ -26,7 +26,7 @@ export function DatabaseDataTable({ filters = {} }: DatabaseDataTableProps) {
   const [totalCount, setTotalCount] = useState(0)
   const [error, setError] = useState<string | null>(null)
 
-  const pageSize = 10
+  const pageSize = 15
 
   const fetchData = async (page: number = 1) => {
     try {

@@ -501,8 +501,11 @@ export function WorkforceAnalysisDashboard() {
                     <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" />
                     <XAxis dataKey="year" stroke="#6b7280" />
                     <YAxis stroke="#6b7280" />
-                    <Tooltip 
-                      formatter={(value: number) => [value.toLocaleString(), 'Tenaga Kerja']}
+                    <Tooltip
+                      formatter={(value: number, name: string) => [
+                        value.toLocaleString(),
+                        name,
+                      ]}
                       labelFormatter={(label) => `Tahun ${label}`}
                     />
                     <Bar dataKey="TW-I" fill="#3b82f6" name="TW-I" />

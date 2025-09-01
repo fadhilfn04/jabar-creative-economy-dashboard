@@ -59,7 +59,7 @@ export function ComparisonDashboard() {
           setSelectedRegions([regions[0], regions[1]])
         }
         if (years.length >= 2) {
-          setSelectedYears([years[1], years[0]]) // Latest 2 years
+          setSelectedYears([years[1], years[0]])
         }
       } catch (err) {
         console.error('Error fetching options:', err)
@@ -268,7 +268,7 @@ export function ComparisonDashboard() {
                     <div>
                       <p className="text-sm text-blue-600 font-medium">Wilayah Terbaik</p>
                       <p className="text-2xl font-bold text-blue-900">
-                        {bestRegion ? bestRegion.region.replace('Kabupaten ', 'Kab. ').replace('Kota ', '') : '-'}
+                        {bestRegion ? bestRegion.region.replace('Kabupaten ', 'Kab. ') : '-'}
                       </p>
                       <p className="text-sm text-blue-700">
                         {bestRegion ? `${bestRegion.companies.toLocaleString()} pelaku usaha` : '-'}
@@ -289,7 +289,7 @@ export function ComparisonDashboard() {
                       </p>
                       <p className="text-sm text-green-700">
                         {highestGrowth && highestGrowth.growth > 0 
-                          ? `${highestGrowth.region.replace('Kabupaten ', 'Kab. ').replace('Kota ', '')} ${highestGrowth.year}` 
+                          ? `${highestGrowth.region.replace('Kabupaten ', 'Kab. ')} ${highestGrowth.year}` 
                           : 'Tidak ada data pertumbuhan'}
                       </p>
                     </div>

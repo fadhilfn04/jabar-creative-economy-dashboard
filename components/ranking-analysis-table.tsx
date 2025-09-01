@@ -240,7 +240,7 @@ export function RankingAnalysisTable() {
               <TableHead className="font-medium text-gray-700 w-20">Peringkat</TableHead>
               <TableHead className="font-medium text-gray-700">Kabupaten/Kota</TableHead>
               <TableHead className="font-medium text-gray-700">Jumlah Proyek</TableHead>
-              <TableHead className="font-medium text-gray-700">Jumlah Tambahan Investasi (Dalam US$)</TableHead>
+              <TableHead className="font-medium text-gray-700">Jumlah Tambahan Investasi (Dalam USD)</TableHead>
               <TableHead className="font-medium text-gray-700">Jumlah Tambahan Investasi (Dalam Rp)</TableHead>
             </TableRow>
           </TableHeader>

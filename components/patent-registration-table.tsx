@@ -154,7 +154,7 @@ export function PatentRegistrationTable() {
 
   const regionalChartData = data.slice(0, 10).map(item => ({
     region: item.region.length > 15 
-      ? item.region.replace('Kabupaten ', 'Kab. ').replace('Kota ', '') 
+      ? item.region.replace('Kabupaten ', 'Kab. ')
       : item.region,
     total: item.total_patents
   }))
