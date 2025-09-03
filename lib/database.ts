@@ -217,4 +217,27 @@ export class DatabaseService {
 
     return { subsectors, cities, years }
   }
+
+  // Update creative economy data
+  static async updateCreativeEconomyData(id: number, updates: Partial<CreativeEconomyData>) {
+    const { data, error } = await supabase
+      .from('creative_economy_data')
+      .update({
+        ...updates,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', id)
+      .select()
+      .single()
+
+    if (error) {
+      console.error('Error updating creative economy data:', error)
+      throw error
+    }
+
+    // Refresh materialized views after update
+    await supabase.rpc('refresh_summary_views')
+
+    return data
+  }
 }

@@ -4,9 +4,12 @@ import { useState, useEffect } from "react"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { ChevronLeft, ChevronRight, Download, Loader2 } from "lucide-react"
+import { Input } from "@/components/ui/input"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { ChevronLeft, ChevronRight, Download, Loader2, Edit2, Check, X, Save } from "lucide-react"
 import { DatabaseService } from "@/lib/database"
 import type { CreativeEconomyData } from "@/lib/supabase"
+import { toast } from "@/hooks/use-toast"
 
 interface DatabaseDataTableProps {
   filters?: {
@@ -26,7 +29,19 @@ export function DatabaseDataTable({ filters = {} }: DatabaseDataTableProps) {
   const [totalCount, setTotalCount] = useState(0)
   const [error, setError] = useState<string | null>(null)
 
+  // Editing state
+  const [editingRow, setEditingRow] = useState<number | null>(null)
+  const [editingData, setEditingData] = useState<Partial<CreativeEconomyData>>({})
+  const [saving, setSaving] = useState(false)
+
   const pageSize = 15
+
+  // Available subsectors for dropdown
+  const subsectors = [
+    "FESYEN","KRIYA","KULINER","DESAIN PRODUK","PENERBITAN","FILM","ANIMASI","VIDEO",
+    "APLIKASI","PERIKLANAN","SENI PERTUNJUKAN","TV_RADIO","DESAIN INTERIOR","GAME DEVELOPER",
+    "ARSITEKTUR","FOTOGRAFI"
+  ]
 
   const fetchData = async (page: number = 1) => {
     try {
@@ -110,6 +125,80 @@ export function DatabaseDataTable({ filters = {} }: DatabaseDataTableProps) {
     }
   }
 
+  const handleEdit = (row: CreativeEconomyData) => {
+    setEditingRow(row.id)
+    setEditingData({
+      id: row.id,
+      company_name: row.company_name,
+      subsector: row.subsector,
+      city: row.city,
+      investment_amount: row.investment_amount,
+      workers_count: row.workers_count,
+      status: row.status
+    })
+  }
+
+  const handleCancelEdit = () => {
+    setEditingRow(null)
+    setEditingData({})
+  }
+
+  const handleSave = async () => {
+    if (!editingData.id) return
+
+    try {
+      setSaving(true)
+      
+      // Update the record in Supabase
+      const { error } = await DatabaseService.updateCreativeEconomyData(editingData.id, {
+        company_name: editingData.company_name,
+        subsector: editingData.subsector,
+        city: editingData.city,
+        investment_amount: editingData.investment_amount,
+        workers_count: editingData.workers_count,
+        status: editingData.status
+      })
+
+      if (error) {
+        throw error
+      }
+
+      // Update local data
+      setData(prevData => 
+        prevData.map(item => 
+          item.id === editingData.id 
+            ? { ...item, ...editingData }
+            : item
+        )
+      )
+
+      setEditingRow(null)
+      setEditingData({})
+      
+      toast({
+        title: "Data berhasil diperbarui",
+        description: "Perubahan telah disimpan ke database"
+      })
+
+    } catch (err) {
+      console.error('Error updating data:', err)
+      toast({
+        title: "Error",
+        description: "Gagal menyimpan perubahan",
+        variant: "destructive"
+      })
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  const handleInputChange = (field: keyof CreativeEconomyData, value: any) => {
+    setEditingData(prev => ({
+      ...prev,
+      [field]: value
+    }))
+  }
+
   if (error) {
     return (
       <div className="minimal-card p-6">
@@ -167,44 +256,162 @@ export function DatabaseDataTable({ filters = {} }: DatabaseDataTableProps) {
                 <TableHead className="font-medium text-gray-700">Status</TableHead>
                 <TableHead className="font-medium text-gray-700">Tahun</TableHead>
                 <TableHead className="font-medium text-gray-700">Periode</TableHead>
+                <TableHead className="font-medium text-gray-700 w-24">Aksi</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {data.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={11} className="text-center py-8 text-gray-500">
+                  <TableCell colSpan={12} className="text-center py-8 text-gray-500">
                     Tidak ditemukan data yang sesuai.
                   </TableCell>
                 </TableRow>
               ) : (
                 data.map((row) => (
                   <TableRow key={row.id} className="border-gray-100 hover:bg-gray-50">
-                    <TableCell className="font-medium text-gray-900">{row.company_name}</TableCell>
+                    <TableCell className="font-medium text-gray-900">
+                      {editingRow === row.id ? (
+                        <Input
+                          value={editingData.company_name || ''}
+                          onChange={(e) => handleInputChange('company_name', e.target.value)}
+                          className="h-8 text-sm"
+                        />
+                      ) : (
+                        row.company_name
+                      )}
+                    </TableCell>
                     <TableCell className="font-mono text-sm text-gray-600">{row.nib}</TableCell>
                     <TableCell className="font-mono text-sm text-gray-600">{row.kbli_code}</TableCell>
                     <TableCell className="max-w-xs truncate text-gray-600" title={row.kbli_title}>
                       {row.kbli_title}
                     </TableCell>
                     <TableCell>
-                      <Badge variant="secondary" className="bg-gray-100 text-gray-700 text-xs">
-                        {row.subsector}
-                      </Badge>
+                      {editingRow === row.id ? (
+                        <Select
+                          value={editingData.subsector || ''}
+                          onValueChange={(value) => handleInputChange('subsector', value)}
+                        >
+                          <SelectTrigger className="h-8 text-xs">
+                            <SelectValue placeholder="Pilih subsektor" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {subsectors.map(subsector => (
+                              <SelectItem key={subsector} value={subsector} className="text-xs">
+                                {subsector}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      ) : (
+                        <Badge 
+                          variant="secondary" 
+                          className={`text-xs ${
+                            !row.subsector || row.subsector.trim() === '' 
+                              ? "bg-red-100 text-red-700 border-red-200" 
+                              : "bg-gray-100 text-gray-700"
+                          }`}
+                        >
+                          {row.subsector || 'Belum diisi'}
+                        </Badge>
+                      )}
                     </TableCell>
-                    <TableCell className="text-gray-600">{row.city}</TableCell>
+                    <TableCell className="text-gray-600">
+                      {editingRow === row.id ? (
+                        <Input
+                          value={editingData.city || ''}
+                          onChange={(e) => handleInputChange('city', e.target.value)}
+                          className="h-8 text-sm"
+                        />
+                      ) : (
+                        row.city
+                      )}
+                    </TableCell>
                     <TableCell className="font-medium text-gray-900">
-                      {formatCurrency(row.investment_amount)}
+                      {editingRow === row.id ? (
+                        <Input
+                          type="number"
+                          value={editingData.investment_amount || 0}
+                          onChange={(e) => handleInputChange('investment_amount', parseInt(e.target.value) || 0)}
+                          className="h-8 text-sm"
+                        />
+                      ) : (
+                        formatCurrency(row.investment_amount)
+                      )}
                     </TableCell>
-                    <TableCell className="text-center text-gray-600">{row.workers_count}</TableCell>
+                    <TableCell className="text-center text-gray-600">
+                      {editingRow === row.id ? (
+                        <Input
+                          type="number"
+                          value={editingData.workers_count || 0}
+                          onChange={(e) => handleInputChange('workers_count', parseInt(e.target.value) || 0)}
+                          className="h-8 text-sm w-20"
+                        />
+                      ) : (
+                        row.workers_count
+                      )}
+                    </TableCell>
                     <TableCell>
-                      <Badge
-                        variant={row.status === "PMA" ? "default" : "outline"}
-                        className={row.status === "PMA" ? "bg-gray-900 text-white" : "border-gray-300 text-gray-700"}
-                      >
-                        {row.status}
-                      </Badge>
+                      {editingRow === row.id ? (
+                        <Select
+                          value={editingData.status || ''}
+                          onValueChange={(value) => handleInputChange('status', value)}
+                        >
+                          <SelectTrigger className="h-8 text-xs w-20">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="PMA">PMA</SelectItem>
+                            <SelectItem value="PMDN">PMDN</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      ) : (
+                        <Badge
+                          variant={row.status === "PMA" ? "default" : "outline"}
+                          className={row.status === "PMA" ? "bg-gray-900 text-white" : "border-gray-300 text-gray-700"}
+                        >
+                          {row.status}
+                        </Badge>
+                      )}
                     </TableCell>
                     <TableCell className="text-gray-600">{row.year}</TableCell>
                     <TableCell className="text-gray-600">{row.period}</TableCell>
+                    <TableCell>
+                      {editingRow === row.id ? (
+                        <div className="flex items-center gap-1">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={handleSave}
+                            disabled={saving}
+                            className="h-7 w-7 p-0"
+                          >
+                            {saving ? (
+                              <Loader2 className="h-3 w-3 animate-spin" />
+                            ) : (
+                              <Check className="h-3 w-3" />
+                            )}
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={handleCancelEdit}
+                            disabled={saving}
+                            className="h-7 w-7 p-0"
+                          >
+                            <X className="h-3 w-3" />
+                          </Button>
+                        </div>
+                      ) : (
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => handleEdit(row)}
+                          className="h-7 w-7 p-0"
+                        >
+                          <Edit2 className="h-3 w-3" />
+                        </Button>
+                      )}
+                    </TableCell>
                   </TableRow>
                 ))
               )}
