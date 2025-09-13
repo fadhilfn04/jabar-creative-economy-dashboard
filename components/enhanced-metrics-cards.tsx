@@ -141,19 +141,18 @@ export function EnhancedMetricsCards() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {metricsData.map((metric, index) => (
           <Card key={index} className={cn(
-            "border-0 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1",
-            metric.bgColor
+            "border border-amber-200 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 bg-gradient-to-br from-amber-50 to-orange-50"
           )}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <div className="flex flex-col">
-                <CardTitle className="text-sm font-medium text-gray-600">
+                <CardTitle className="text-sm font-medium text-amber-700">
                   {metric.title}
                 </CardTitle>
-                <Badge className="w-fit mt-1 px-2.5 py-0.5 text-xs font-semibold bg-blue-100 text-blue-700 border border-blue-200">
+                <Badge className="w-fit mt-1 px-2.5 py-0.5 text-xs font-semibold bg-orange-100 text-orange-700 border border-orange-200">
                   {year}
                 </Badge>
               </div>
-              <div className={cn("p-2 rounded-lg", metric.bgColor)}>
+              <div className="p-2 rounded-lg bg-gradient-to-br from-orange-100 to-amber-100">
                 <metric.icon className={cn("h-5 w-5", metric.color)} />
               </div>
             </CardHeader>

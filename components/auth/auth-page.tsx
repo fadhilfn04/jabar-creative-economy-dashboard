@@ -12,9 +12,9 @@ export function AuthPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 flex">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-indigo-50 flex">
       {/* Left Side - Branding */}
-      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 relative overflow-hidden">
+      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-green-600 via-green-700 to-green-800 relative overflow-hidden">
         <div className="absolute inset-0 bg-black/10"></div>
         <div className="relative z-10 flex flex-col justify-center px-12 text-white">
           <div className="mb-8">
@@ -29,7 +29,7 @@ export function AuthPage() {
             <h2 className="text-2xl font-light mb-6">
               Jawa Barat
             </h2>
-            <p className="text-xl text-blue-100 leading-relaxed">
+            <p className="text-xl text-green-100 leading-relaxed">
               Platform analitik komprehensif untuk memantau dan menganalisis 
               perkembangan ekonomi kreatif di Jawa Barat
             </p>
@@ -38,15 +38,15 @@ export function AuthPage() {
           <div className="space-y-4">
             <div className="flex items-center space-x-3">
               <div className="w-2 h-2 bg-white rounded-full"></div>
-              <span className="text-blue-100">Data dari seluruh wilayah</span>
+              <span className="text-green-100">Data dari seluruh wilayah</span>
             </div>
             <div className="flex items-center space-x-3">
               <div className="w-2 h-2 bg-white rounded-full"></div>
-              <span className="text-blue-100">Analisis mendalam per subsektor</span>
+              <span className="text-green-100">Analisis mendalam per subsektor</span>
             </div>
             <div className="flex items-center space-x-3">
               <div className="w-2 h-2 bg-white rounded-full"></div>
-              <span className="text-blue-100">Visualisasi data interaktif</span>
+              <span className="text-green-100">Visualisasi data interaktif</span>
             </div>
           </div>
         </div>

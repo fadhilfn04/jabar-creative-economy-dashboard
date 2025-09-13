@@ -214,11 +214,11 @@ export function SubsectorContentTable() {
       ) : (
         <Table>
           <TableHeader>
-            <TableRow className="border-gray-100">
-              <TableHead className="font-medium text-gray-700 w-20">Peringkat</TableHead>
-              <TableHead className="font-medium text-gray-700">Subsektor</TableHead>
-              <TableHead className="font-medium text-gray-700">Tambahan Investasi (Rp)</TableHead>
-              <TableHead className="font-medium text-gray-700 w-24">Rasio</TableHead>
+            <TableRow className="border-amber-200">
+              <TableHead className="table-header-orange w-20">Peringkat</TableHead>
+              <TableHead className="table-header-orange">Subsektor</TableHead>
+              <TableHead className="table-header-orange">Tambahan Investasi (Rp)</TableHead>
+              <TableHead className="table-header-orange w-24">Rasio</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -230,7 +230,7 @@ export function SubsectorContentTable() {
               </TableRow>
             ) : (
               investmentData.map((row) => (
-                <TableRow key={row.id} className="border-gray-100 hover:bg-gray-50">
+                <TableRow key={row.id} className="table-row-yellow">
                   <TableCell className="text-center">
                     <Badge variant="outline" className="font-mono">
                       {row.rank}
@@ -264,11 +264,11 @@ export function SubsectorContentTable() {
       ) : (
         <Table>
           <TableHeader>
-            <TableRow className="border-gray-100">
-              <TableHead className="font-medium text-gray-700 w-20">Peringkat</TableHead>
-              <TableHead className="font-medium text-gray-700">Subsektor</TableHead>
-              <TableHead className="font-medium text-gray-700">Jumlah Tenaga Kerja</TableHead>
-              <TableHead className="font-medium text-gray-700 w-24">Rasio</TableHead>
+            <TableRow className="border-amber-200">
+              <TableHead className="table-header-orange w-20">Peringkat</TableHead>
+              <TableHead className="table-header-orange">Subsektor</TableHead>
+              <TableHead className="table-header-orange">Jumlah Tenaga Kerja</TableHead>
+              <TableHead className="table-header-orange w-24">Rasio</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -280,7 +280,7 @@ export function SubsectorContentTable() {
               </TableRow>
             ) : (
               employmentData.map((row) => (
-                <TableRow key={row.id} className="border-gray-100 hover:bg-gray-50">
+                <TableRow key={row.id} className="table-row-yellow">
                   <TableCell className="text-center">
                     <Badge variant="outline" className="font-mono">
                       {row.rank}
@@ -314,11 +314,11 @@ export function SubsectorContentTable() {
       ) : (
         <Table>
           <TableHeader>
-            <TableRow className="border-gray-100">
-              <TableHead className="font-medium text-gray-700 w-20">Peringkat</TableHead>
-              <TableHead className="font-medium text-gray-700">Subsektor</TableHead>
-              <TableHead className="font-medium text-gray-700">Jumlah Proyek</TableHead>
-              <TableHead className="font-medium text-gray-700 w-24">Rasio</TableHead>
+            <TableRow className="border-amber-200">
+              <TableHead className="table-header-orange w-20">Peringkat</TableHead>
+              <TableHead className="table-header-orange">Subsektor</TableHead>
+              <TableHead className="table-header-orange">Jumlah Proyek</TableHead>
+              <TableHead className="table-header-orange w-24">Rasio</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -330,7 +330,7 @@ export function SubsectorContentTable() {
               </TableRow>
             ) : (
               projectData.map((row) => (
-                <TableRow key={row.id} className="border-gray-100 hover:bg-gray-50">
+                <TableRow key={row.id} className="table-row-yellow">
                   <TableCell className="text-center">
                     <Badge variant="outline" className="font-mono">
                       {row.rank}

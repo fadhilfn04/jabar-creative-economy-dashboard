@@ -86,8 +86,8 @@ export function RegisterForm({ onToggleMode }: RegisterFormProps) {
     <div className="w-full">
       {/* Header */}
       <div className="text-center mb-8">
-        <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-xl mb-4">
-          <UserPlus className="w-8 h-8 text-blue-600" />
+        <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-xl mb-4">
+          <UserPlus className="w-8 h-8 text-green-600" />
         </div>
         <h1 className="text-3xl font-bold text-gray-900 mb-2">
           Buat Akun Baru
@@ -118,7 +118,7 @@ export function RegisterForm({ onToggleMode }: RegisterFormProps) {
               onChange={(e) => setName(e.target.value)}
               required
               disabled={loading}
-              className="h-12 px-4 border-gray-200 focus:border-blue-500 focus:ring-blue-500/20"
+              className="h-12 px-4 border-gray-200 focus:border-green-500 focus:ring-green-500/20"
             />
           </div>
 
@@ -134,7 +134,7 @@ export function RegisterForm({ onToggleMode }: RegisterFormProps) {
               onChange={(e) => setEmail(e.target.value)}
               required
               disabled={loading}
-              className="h-12 px-4 border-gray-200 focus:border-blue-500 focus:ring-blue-500/20"
+              className="h-12 px-4 border-gray-200 focus:border-green-500 focus:ring-green-500/20"
             />
           </div>
           
@@ -151,7 +151,7 @@ export function RegisterForm({ onToggleMode }: RegisterFormProps) {
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 disabled={loading}
-                className="h-12 px-4 pr-12 border-gray-200 focus:border-blue-500 focus:ring-blue-500/20"
+                className="h-12 px-4 pr-12 border-gray-200 focus:border-green-500 focus:ring-green-500/20"
               />
               <Button
                 type="button"
@@ -183,7 +183,7 @@ export function RegisterForm({ onToggleMode }: RegisterFormProps) {
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
                 disabled={loading}
-                className="h-12 px-4 pr-12 border-gray-200 focus:border-blue-500 focus:ring-blue-500/20"
+                className="h-12 px-4 pr-12 border-gray-200 focus:border-green-500 focus:ring-green-500/20"
               />
               <Button
                 type="button"
@@ -204,7 +204,7 @@ export function RegisterForm({ onToggleMode }: RegisterFormProps) {
 
           <Button 
             type="submit" 
-            className="w-full h-12 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98]" 
+            className="w-full h-12 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-xl transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98]" 
             disabled={loading}
           >
             {loading ? (
@@ -231,7 +231,7 @@ export function RegisterForm({ onToggleMode }: RegisterFormProps) {
             <button
               type="button"
               onClick={onToggleMode}
-              className="text-blue-600 hover:text-blue-700 font-semibold transition-colors"
+              className="text-green-600 hover:text-green-700 font-semibold transition-colors"
             >
               Masuk sekarang
             </button>

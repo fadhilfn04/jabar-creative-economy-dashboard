@@ -98,7 +98,7 @@ export default function Dashboard() {
   return (
     <AuthGuard>
       <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex">
+        <div className="min-h-screen bg-amber-50 checkered-bg dark:bg-gray-900 flex">
           <DashboardSidebar 
             activeSection={activeSection} 
             onSectionChange={setActiveSection} 

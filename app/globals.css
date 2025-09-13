@@ -4,24 +4,24 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: oklch(1 0 0);
+  --background: oklch(0.98 0.02 85);
   --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
+  --card: oklch(0.99 0.01 85);
   --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
+  --popover: oklch(0.99 0.01 85);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
+  --primary: oklch(0.65 0.15 45);
   --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
+  --secondary: oklch(0.95 0.03 85);
   --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
+  --muted: oklch(0.96 0.02 85);
   --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
+  --accent: oklch(0.95 0.03 85);
   --accent-foreground: oklch(0.205 0 0);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
+  --border: oklch(0.88 0.02 85);
+  --input: oklch(0.96 0.02 85);
   --ring: oklch(0.708 0 0);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
@@ -29,13 +29,13 @@
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
   --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
+  --sidebar: oklch(0.98 0.02 85);
   --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary: oklch(0.65 0.15 45);
   --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent: oklch(0.95 0.03 85);
   --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-border: oklch(0.88 0.02 85);
   --sidebar-ring: oklch(0.708 0 0);
 }
 
@@ -128,14 +128,32 @@
 /* Added custom minimal card styles */
 @layer components {
   .minimal-card {
-    @apply bg-white border border-gray-100 rounded-lg shadow-sm;
+    @apply bg-amber-50/80 border border-amber-200 rounded-lg shadow-sm backdrop-blur-sm;
   }
 
   .minimal-label {
-    @apply text-sm font-medium text-gray-500;
+    @apply text-sm font-medium text-amber-700;
   }
 
   .minimal-metric {
-    @apply text-2xl font-semibold text-gray-900;
+    @apply text-2xl font-semibold text-amber-900;
+  }
+
+  .table-header-orange {
+    @apply bg-gradient-to-r from-orange-400 to-amber-400 text-white font-bold;
+  }
+
+  .table-row-yellow {
+    @apply bg-amber-50/60 hover:bg-amber-100/80 border-amber-200;
+  }
+
+  .checkered-bg {
+    background-image: 
+      linear-gradient(45deg, rgba(251, 191, 36, 0.1) 25%, transparent 25%), 
+      linear-gradient(-45deg, rgba(251, 191, 36, 0.1) 25%, transparent 25%), 
+      linear-gradient(45deg, transparent 75%, rgba(251, 191, 36, 0.1) 75%), 
+      linear-gradient(-45deg, transparent 75%, rgba(251, 191, 36, 0.1) 75%);
+    background-size: 20px 20px;
+    background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
   }
 }

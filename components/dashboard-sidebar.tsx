@@ -108,20 +108,20 @@ export function DashboardSidebar({ activeSection, onSectionChange }: DashboardSi
 
   return (
     <div className={cn(
-      "bg-white border-r border-gray-200 transition-all duration-300 flex flex-col",
+      "bg-gradient-to-b from-amber-50 to-orange-50 border-r border-amber-200 transition-all duration-300 flex flex-col",
       collapsed ? "w-16" : "w-64"
     )}>
       {/* Header */}
-      <div className="p-4 border-b border-gray-200">
+      <div className="p-4 border-b border-amber-200">
         <div className="flex items-center justify-between">
           {!collapsed && (
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+              <div className="w-8 h-8 bg-gradient-to-br from-orange-500 to-amber-600 rounded-lg flex items-center justify-center">
                 <Globe className="w-4 h-4 text-white" />
               </div>
               <div>
-                <h2 className="font-semibold text-gray-900 text-sm">Dashboard</h2>
-                <p className="text-xs text-gray-500">Ekonomi Kreatif</p>
+                <h2 className="font-semibold text-amber-900 text-sm">Dashboard</h2>
+                <p className="text-xs text-amber-700">Ekonomi Kreatif</p>
               </div>
             </div>
           )}
@@ -146,15 +146,15 @@ export function DashboardSidebar({ activeSection, onSectionChange }: DashboardSi
               className={cn(
                 "w-full justify-start h-10 px-3",
                 collapsed ? "px-2" : "px-3",
-                activeSection === item.id && "bg-blue-50 text-blue-700 border-blue-200"
+                activeSection === item.id && "bg-gradient-to-r from-orange-100 to-amber-100 text-orange-800 border-orange-300"
               )}
               onClick={() => onSectionChange(item.id)}
             >
               <item.icon className={cn("w-4 h-4", collapsed ? "mx-auto" : "mr-3")} />
               {!collapsed && (
                 <div className="flex-1 text-left">
-                  <div className="font-medium text-sm">{item.label}</div>
-                  <div className="text-xs text-gray-500">{item.description}</div>
+                  <div className="font-medium text-sm text-amber-900">{item.label}</div>
+                  <div className="text-xs text-amber-700">{item.description}</div>
                 </div>
               )}
             </Button>

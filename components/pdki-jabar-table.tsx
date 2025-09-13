@@ -275,29 +275,29 @@ export function PDKIJabarTable() {
           ) : (
             <Table>
               <TableHeader>
-                <TableRow className="border-gray-100">
-                  <TableHead className="font-medium text-gray-700">ID Permohonan</TableHead>
-                  <TableHead className="font-medium text-gray-700">Nomor Permohonan</TableHead>
-                  <TableHead className="font-medium text-gray-700">Tanggal Permohonan</TableHead>
-                  <TableHead className="font-medium text-gray-700">Nomor Pengumuman</TableHead>
-                  <TableHead className="font-medium text-gray-700">Tanggal Pengumuman</TableHead>
-                  <TableHead className="font-medium text-gray-700">Tanggal Dimulai Perlindungan</TableHead>
-                  <TableHead className="font-medium text-gray-700">Tanggal Berakhir Perlindungan</TableHead>
-                  <TableHead className="font-medium text-gray-700">Nomor Pendaftaran</TableHead>
-                  <TableHead className="font-medium text-gray-700">Tanggal Pendaftaran</TableHead>
-                  <TableHead className="font-medium text-gray-700">Translasi</TableHead>
-                  <TableHead className="font-medium text-gray-700">Nama Merek</TableHead>
-                  <TableHead className="font-medium text-gray-700">Status Permohonan</TableHead>
-                  <TableHead className="font-medium text-gray-700">Nama Pemilik</TableHead>
-                  <TableHead className="font-medium text-gray-700">Alamat Pemilik</TableHead>
-                  <TableHead className="font-medium text-gray-700">Kabupaten/Kota</TableHead>
-                  <TableHead className="font-medium text-gray-700">Negara Asal</TableHead>
-                  <TableHead className="font-medium text-gray-700">Kode Negara</TableHead>
-                  <TableHead className="font-medium text-gray-700">Nama Konsultan</TableHead>
-                  <TableHead className="font-medium text-gray-700">Alamat Konsultan</TableHead>
-                  <TableHead className="font-medium text-gray-700">Provinsi</TableHead>
-                  <TableHead className="font-medium text-gray-700">Deskripsi Kelas</TableHead>
-                  <TableHead className="font-medium text-gray-700">Detail URL</TableHead>
+                <TableRow className="border-amber-200">
+                  <TableHead className="table-header-orange">ID Permohonan</TableHead>
+                  <TableHead className="table-header-orange">Nomor Permohonan</TableHead>
+                  <TableHead className="table-header-orange">Tanggal Permohonan</TableHead>
+                  <TableHead className="table-header-orange">Nomor Pengumuman</TableHead>
+                  <TableHead className="table-header-orange">Tanggal Pengumuman</TableHead>
+                  <TableHead className="table-header-orange">Tanggal Dimulai Perlindungan</TableHead>
+                  <TableHead className="table-header-orange">Tanggal Berakhir Perlindungan</TableHead>
+                  <TableHead className="table-header-orange">Nomor Pendaftaran</TableHead>
+                  <TableHead className="table-header-orange">Tanggal Pendaftaran</TableHead>
+                  <TableHead className="table-header-orange">Translasi</TableHead>
+                  <TableHead className="table-header-orange">Nama Merek</TableHead>
+                  <TableHead className="table-header-orange">Status Permohonan</TableHead>
+                  <TableHead className="table-header-orange">Nama Pemilik</TableHead>
+                  <TableHead className="table-header-orange">Alamat Pemilik</TableHead>
+                  <TableHead className="table-header-orange">Kabupaten/Kota</TableHead>
+                  <TableHead className="table-header-orange">Negara Asal</TableHead>
+                  <TableHead className="table-header-orange">Kode Negara</TableHead>
+                  <TableHead className="table-header-orange">Nama Konsultan</TableHead>
+                  <TableHead className="table-header-orange">Alamat Konsultan</TableHead>
+                  <TableHead className="table-header-orange">Provinsi</TableHead>
+                  <TableHead className="table-header-orange">Deskripsi Kelas</TableHead>
+                  <TableHead className="table-header-orange">Detail URL</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -309,7 +309,7 @@ export function PDKIJabarTable() {
                   </TableRow>
                 ) : (
                   data.map((row) => (
-                    <TableRow key={row.id} className="border-gray-100 hover:bg-gray-50">
+                    <TableRow key={row.id} className="table-row-yellow">
                       <TableCell className="font-mono text-sm text-gray-600">{row.id_permohonan || '-'}</TableCell>
                       <TableCell className="font-mono text-sm text-gray-600">{row.nomor_permohonan || '-'}</TableCell>
                       <TableCell className="text-sm text-gray-600">{formatDate(row.tanggal_permohonan)}</TableCell>

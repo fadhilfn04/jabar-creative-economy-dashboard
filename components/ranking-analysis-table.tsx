@@ -236,12 +236,12 @@ export function RankingAnalysisTable() {
       ) : (
         <Table>
           <TableHeader>
-            <TableRow className="border-gray-100">
-              <TableHead className="font-medium text-gray-700 w-20">Peringkat</TableHead>
-              <TableHead className="font-medium text-gray-700">Kabupaten/Kota</TableHead>
-              <TableHead className="font-medium text-gray-700">Jumlah Proyek</TableHead>
-              <TableHead className="font-medium text-gray-700">Jumlah Tambahan Investasi (Dalam USD)</TableHead>
-              <TableHead className="font-medium text-gray-700">Jumlah Tambahan Investasi (Dalam Rp)</TableHead>
+            <TableRow className="border-amber-200">
+              <TableHead className="table-header-orange w-20">Peringkat</TableHead>
+              <TableHead className="table-header-orange">Kabupaten/Kota</TableHead>
+              <TableHead className="table-header-orange">Jumlah Proyek</TableHead>
+              <TableHead className="table-header-orange">Jumlah Tambahan Investasi (Dalam USD)</TableHead>
+              <TableHead className="table-header-orange">Jumlah Tambahan Investasi (Dalam Rp)</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -254,7 +254,7 @@ export function RankingAnalysisTable() {
             ) : (
               <>
                 {investmentData.map((row) => (
-                  <TableRow key={row.id} className="border-gray-100 hover:bg-gray-50">
+                  <TableRow key={row.id} className="table-row-yellow">
                     <TableCell className="text-center">
                       <Badge variant="outline" className="font-mono">
                         {row.rank}
@@ -306,11 +306,11 @@ export function RankingAnalysisTable() {
       ) : (
         <Table>
           <TableHeader>
-            <TableRow className="border-gray-100">
-              <TableHead className="font-medium text-gray-700 w-20">Peringkat</TableHead>
-              <TableHead className="font-medium text-gray-700">Kabupaten/Kota</TableHead>
-              <TableHead className="font-medium text-gray-700">Jumlah Proyek</TableHead>
-              <TableHead className="font-medium text-gray-700">Jumlah TK</TableHead>
+            <TableRow className="border-amber-200">
+              <TableHead className="table-header-orange w-20">Peringkat</TableHead>
+              <TableHead className="table-header-orange">Kabupaten/Kota</TableHead>
+              <TableHead className="table-header-orange">Jumlah Proyek</TableHead>
+              <TableHead className="table-header-orange">Jumlah TK</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -323,7 +323,7 @@ export function RankingAnalysisTable() {
             ) : (
               <>
                 {workforceData.map((row) => (
-                  <TableRow key={row.id} className="border-gray-100 hover:bg-gray-50">
+                  <TableRow key={row.id} className="table-row-yellow">
                     <TableCell className="text-center">
                       <Badge variant="outline" className="font-mono">
                         {row.rank}
@@ -367,11 +367,11 @@ export function RankingAnalysisTable() {
       ) : (
         <Table>
           <TableHeader>
-            <TableRow className="border-gray-100">
-              <TableHead className="font-medium text-gray-700 w-20">Peringkat</TableHead>
-              <TableHead className="font-medium text-gray-700">Kabupaten/Kota</TableHead>
-              <TableHead className="font-medium text-gray-700">Jumlah Proyek</TableHead>
-              <TableHead className="font-medium text-gray-700">Jumlah Tambahan Investasi (Dalam Rp)</TableHead>
+            <TableRow className="border-amber-200">
+              <TableHead className="table-header-orange w-20">Peringkat</TableHead>
+              <TableHead className="table-header-orange">Kabupaten/Kota</TableHead>
+              <TableHead className="table-header-orange">Jumlah Proyek</TableHead>
+              <TableHead className="table-header-orange">Jumlah Tambahan Investasi (Dalam Rp)</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -384,7 +384,7 @@ export function RankingAnalysisTable() {
             ) : (
               <>
                 {projectData.map((row) => (
-                  <TableRow key={row.id} className="border-gray-100 hover:bg-gray-50">
+                  <TableRow key={row.id} className="table-row-yellow">
                     <TableCell className="text-center">
                       <Badge variant="outline" className="font-mono">
                         {row.rank}

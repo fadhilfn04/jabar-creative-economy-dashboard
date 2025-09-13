@@ -319,15 +319,15 @@ export function PatentRegistrationTable() {
               ) : (
                 <Table>
                   <TableHeader>
-                    <TableRow className="border-gray-100">
-                      <TableHead className="font-medium text-gray-700 sticky left-0 bg-white z-10">Kabupaten/Kota</TableHead>
-                      <TableHead className="font-medium text-gray-700 text-center w-20">2020</TableHead>
-                      <TableHead className="font-medium text-gray-700 text-center w-20">2021</TableHead>
-                      <TableHead className="font-medium text-gray-700 text-center w-20">2022</TableHead>
-                      <TableHead className="font-medium text-gray-700 text-center w-20">2023</TableHead>
-                      <TableHead className="font-medium text-gray-700 text-center w-20">2024</TableHead>
-                      <TableHead className="font-medium text-gray-700 text-center w-20">2025</TableHead>
-                      <TableHead className="font-medium text-gray-700 text-center w-24">Grand Total</TableHead>
+                    <TableRow className="border-amber-200">
+                      <TableHead className="table-header-orange sticky left-0 z-10">Kabupaten/Kota</TableHead>
+                      <TableHead className="table-header-orange text-center w-20">2020</TableHead>
+                      <TableHead className="table-header-orange text-center w-20">2021</TableHead>
+                      <TableHead className="table-header-orange text-center w-20">2022</TableHead>
+                      <TableHead className="table-header-orange text-center w-20">2023</TableHead>
+                      <TableHead className="table-header-orange text-center w-20">2024</TableHead>
+                      <TableHead className="table-header-orange text-center w-20">2025</TableHead>
+                      <TableHead className="table-header-orange text-center w-24">Grand Total</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -340,8 +340,8 @@ export function PatentRegistrationTable() {
                     ) : (
                       <>
                         {data.map((row) => (
-                          <TableRow key={row.id} className="border-gray-100 hover:bg-gray-50">
-                            <TableCell className="font-medium text-gray-900 sticky left-0 bg-white z-10">
+                          <TableRow key={row.id} className="table-row-yellow">
+                            <TableCell className="font-medium text-gray-900 sticky left-0 bg-amber-50 z-10">
                               {row.region}
                             </TableCell>
                             <TableCell className="text-center text-blue-600 font-medium">

@@ -244,19 +244,19 @@ export function DatabaseDataTable({ filters = {} }: DatabaseDataTableProps) {
         ) : (
           <Table>
             <TableHeader>
-              <TableRow className="border-gray-100">
-                <TableHead className="font-medium text-gray-700">Nama Perusahaan</TableHead>
-                <TableHead className="font-medium text-gray-700">NIB</TableHead>
-                <TableHead className="font-medium text-gray-700">Kode KBLI</TableHead>
-                <TableHead className="font-medium text-gray-700">Judul KBLI</TableHead>
-                <TableHead className="font-medium text-gray-700">Subsektor EKRAF</TableHead>
-                <TableHead className="font-medium text-gray-700">Kota</TableHead>
-                <TableHead className="font-medium text-gray-700">Investasi</TableHead>
-                <TableHead className="font-medium text-gray-700">Tenaga Kerja</TableHead>
-                <TableHead className="font-medium text-gray-700">Status</TableHead>
-                <TableHead className="font-medium text-gray-700">Tahun</TableHead>
-                <TableHead className="font-medium text-gray-700">Periode</TableHead>
-                <TableHead className="font-medium text-gray-700 w-24">Aksi</TableHead>
+              <TableRow className="border-amber-200">
+                <TableHead className="table-header-orange">Nama Perusahaan</TableHead>
+                <TableHead className="table-header-orange">NIB</TableHead>
+                <TableHead className="table-header-orange">Kode KBLI</TableHead>
+                <TableHead className="table-header-orange">Judul KBLI</TableHead>
+                <TableHead className="table-header-orange">Subsektor EKRAF</TableHead>
+                <TableHead className="table-header-orange">Kota</TableHead>
+                <TableHead className="table-header-orange">Investasi</TableHead>
+                <TableHead className="table-header-orange">Tenaga Kerja</TableHead>
+                <TableHead className="table-header-orange">Status</TableHead>
+                <TableHead className="table-header-orange">Tahun</TableHead>
+                <TableHead className="table-header-orange">Periode</TableHead>
+                <TableHead className="table-header-orange w-24">Aksi</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -268,7 +268,7 @@ export function DatabaseDataTable({ filters = {} }: DatabaseDataTableProps) {
                 </TableRow>
               ) : (
                 data.map((row) => (
-                  <TableRow key={row.id} className="border-gray-100 hover:bg-gray-50">
+                  <TableRow key={row.id} className="table-row-yellow">
                     <TableCell className="font-medium text-gray-900">
                       {editingRow === row.id ? (
                         <Input
