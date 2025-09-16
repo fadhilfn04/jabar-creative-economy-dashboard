@@ -79,17 +79,17 @@ export function ProfileDropdown() {
           <Button
             variant="ghost"
             size="sm"
-            className="flex items-center gap-2 hover:bg-gray-100"
+            className="flex items-center gap-2 hover:bg-amber-500"
           >
             <Avatar className="h-7 w-7">
               <AvatarImage src={user.avatar_url} alt={user.name} />
-              <AvatarFallback className="bg-blue-100 text-blue-700 text-xs">
+              <AvatarFallback className="bg-[#FFE797] text-black text-xs">
                 {getInitials(user.name || user.email)}
               </AvatarFallback>
             </Avatar>
             <div className="flex flex-col items-start">
-              <span className="text-sm font-medium text-gray-900">{user.name}</span>
-              <span className="text-xs text-gray-500">{user.email}</span>
+              <span className="text-sm font-medium text-[#FFE797]">{user.name}</span>
+              <span className="text-xs text-[#FFE797]">{user.email}</span>
             </div>
           </Button>
         </DropdownMenuTrigger>

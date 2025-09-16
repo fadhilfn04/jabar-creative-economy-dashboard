@@ -335,7 +335,7 @@ export function ComparisonDashboard() {
                       <Tooltip 
                         formatter={(value: number) => [value.toLocaleString(), 'Jumlah']}
                       />
-                      <Bar dataKey="companies" fill="#3b82f6" radius={[4, 4, 0, 0]} />
+                      <Bar dataKey="companies" fill="#59AC77" radius={[4, 4, 0, 0]} />
                     </BarChart>
                   </ResponsiveContainer>
                 )}
@@ -363,9 +363,9 @@ export function ComparisonDashboard() {
                       <Line 
                         type="monotone" 
                         dataKey="companies" 
-                        stroke="#3b82f6" 
+                        stroke="#59AC77" 
                         strokeWidth={3}
-                        dot={{ fill: "#3b82f6", strokeWidth: 2, r: 6 }}
+                        dot={{ fill: "#59AC77", strokeWidth: 2, r: 6 }}
                       />
                     </LineChart>
                   </ResponsiveContainer>

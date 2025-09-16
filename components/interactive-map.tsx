@@ -90,7 +90,7 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({ regionData }) => {
         className: "custom-marker",
         html: `
           <div style="
-            background-color: ${colorMap[color] || "#3b82f6"};
+            background-color: ${colorMap[color] || "#59AC77"};
             width: ${size}px;
             height: ${size}px;
             border-radius: 50%;
