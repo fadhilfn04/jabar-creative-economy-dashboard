@@ -227,7 +227,7 @@ export function DatabaseDataTable({ filters = {} }: DatabaseDataTableProps) {
             </p>
           )}
         </div>
-        <Button 
+        {/* <Button
           variant="outline" 
           size="sm" 
           className="text-gray-600 border-gray-200 bg-transparent"
@@ -236,7 +236,7 @@ export function DatabaseDataTable({ filters = {} }: DatabaseDataTableProps) {
         >
           <Download className="w-4 h-4 mr-2" />
           Export
-        </Button>
+        </Button> */}
       </div>
 
       <div className="overflow-x-auto">
@@ -253,7 +253,7 @@ export function DatabaseDataTable({ filters = {} }: DatabaseDataTableProps) {
                 <TableHead className="table-header-orange">Tahun</TableHead>
                 <TableHead className="table-header-orange">Sektor Utama</TableHead>
                 <TableHead className="table-header-orange">24 Sektor</TableHead>
-                <TableHead className="table-header-orange">Nama Perusahaan</TableHead>
+                <TableHead className="table-header-orange">Pelaku Ekonomi Kreatif</TableHead>
                 <TableHead className="table-header-orange">Kota</TableHead>
                 <TableHead className="table-header-orange">Bidang Usaha</TableHead>
                 <TableHead className="table-header-orange">Kode KBLI</TableHead>
@@ -275,7 +275,7 @@ export function DatabaseDataTable({ filters = {} }: DatabaseDataTableProps) {
                 <TableHead className="table-header-orange">Semester</TableHead>
                 <TableHead className="table-header-orange">23 Sektor</TableHead>
                 <TableHead className="table-header-orange">17 Sektor</TableHead>
-                <TableHead className="table-header-orange w-24">Aksi</TableHead>
+                {/* <TableHead className="table-header-orange w-24">Aksi</TableHead> */}
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -419,7 +419,7 @@ export function DatabaseDataTable({ filters = {} }: DatabaseDataTableProps) {
                     <TableCell className="text-gray-600">{row.semester}</TableCell>
                     <TableCell className="text-gray-600">{row.sector_23 ? row.sector_23 : '-'}</TableCell>
                     <TableCell className="text-gray-600">{row.sector_17 ? row.sector_17 : '-'}</TableCell>
-                    <TableCell>
+                    {/* <TableCell>
                       {editingRow === row.id ? (
                         <div className="flex items-center gap-1">
                           <Button
@@ -455,7 +455,7 @@ export function DatabaseDataTable({ filters = {} }: DatabaseDataTableProps) {
                           <Edit2 className="h-3 w-3" />
                         </Button>
                       )}
-                    </TableCell>
+                    </TableCell> */}
                   </TableRow>
                 ))
               )}
