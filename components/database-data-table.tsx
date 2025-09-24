@@ -76,7 +76,11 @@ export function DatabaseDataTable({ filters = {} }: DatabaseDataTableProps) {
     }
   }
 
-  const formatCurrency = (amount: number) => {
+  const formatCurrencyUSD = (amount: number) => {
+    return `$ ${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+  }
+
+  const formatCurrencyIDR = (amount: number) => {
     if (amount >= 1000000000) {
       return `Rp ${(amount / 1000000000).toFixed(1)} M`
     } else if (amount >= 1000000) {
@@ -84,7 +88,7 @@ export function DatabaseDataTable({ filters = {} }: DatabaseDataTableProps) {
     } else if (amount >= 1000) {
       return `Rp ${(amount / 1000).toFixed(1)} Rb`
     } else {
-      return `Rp`
+      return `Rp ${amount.toLocaleString()}`
     }
   }
 
@@ -94,36 +98,20 @@ export function DatabaseDataTable({ filters = {} }: DatabaseDataTableProps) {
       // In a real implementation, you might want to export all filtered data
       const csvContent = [
         // Header
-        ['Sektor', 'Nama Perusahaan', 'Kabupaten', 'Bidang Usaha', 'NIB', 'Kode KBLI', 'Judul KBLI', 'Is EKRAF', 'Subsektor', 'Is Pariwisata', 'Subsektor Pariwisata', 'Negara', 'No Izin', 'Tambahan Investasi (USD)', 'Tambahan Investasi (Rp)', 'Proyek', 'TKI', 'TKA', 'TK', 'Kota', 'Status', 'Tahun', 'Periode', 'Semester', '23 Sektor', '17 Sektor', 'BPS'].join(','),
+        ['Nama Perusahaan', 'NIB', 'Kode KBLI', 'Judul KBLI', 'Subsektor', 'Kota', 'Investasi', 'Tenaga Kerja', 'Status', 'Tahun', 'Periode'].join(','),
         // Data rows
         ...data.map(row => [
-          row.sektor,
           `"${row.company_name}"`,
-          row.kabupaten,
-          row.bidang_usaha,
           row.nib,
-          row.kode_kbli,
-          `"${row.judul_kbli}"`,
-          row.is_ekraf ? 'Ya' : 'Tidak',
+          row.kbli_code,
+          `"${row.kbli_title}"`,
           row.subsector,
-          row.is_pariwisata ? 'Ya' : 'Tidak',
-          row.subsektor_pariwisata || '',
-          row.negara,
-          row.no_izin,
-          row.tambahan_investasi_usd,
-          row.tambahan_investasi_rp,
-          row.proyek,
-          row.tki,
-          row.tka,
-          row.tk,
           row.city,
+          row.investment_amount,
+          row.workers_count,
           row.status,
           row.year,
-          row.period,
-          row.periode_semester || '',
-          row.sektor_23 || '',
-          row.sektor_17 || '',
-          row.bps || ''
+          row.period
         ].join(','))
       ].join('\n')
 
@@ -261,47 +249,49 @@ export function DatabaseDataTable({ filters = {} }: DatabaseDataTableProps) {
           <Table>
             <TableHeader>
               <TableRow className="border-amber-200">
-                <TableHead className="table-header-orange">Sektor</TableHead>
+                <TableHead className="table-header-orange">Tahap</TableHead>
+                <TableHead className="table-header-orange">Tahun</TableHead>
+                <TableHead className="table-header-orange">Sektor Utama</TableHead>
+                <TableHead className="table-header-orange">24 Sektor</TableHead>
                 <TableHead className="table-header-orange">Nama Perusahaan</TableHead>
-                <TableHead className="table-header-orange">Kabupaten</TableHead>
+                <TableHead className="table-header-orange">Kota</TableHead>
                 <TableHead className="table-header-orange">Bidang Usaha</TableHead>
-                <TableHead className="table-header-orange">NIB</TableHead>
                 <TableHead className="table-header-orange">Kode KBLI</TableHead>
                 <TableHead className="table-header-orange">Judul KBLI</TableHead>
-                <TableHead className="table-header-orange">Is EKRAF</TableHead>
+                <TableHead className="table-header-orange">Apakah Ekraf?</TableHead>
                 <TableHead className="table-header-orange">Subsektor EKRAF</TableHead>
-                <TableHead className="table-header-orange">Is Pariwisata</TableHead>
+                <TableHead className="table-header-orange">Apakah Pariwisata?</TableHead>
                 <TableHead className="table-header-orange">Subsektor Pariwisata</TableHead>
                 <TableHead className="table-header-orange">Negara</TableHead>
-                <TableHead className="table-header-orange">No Izin</TableHead>
-                <TableHead className="table-header-orange">Tambahan Investasi (USD)</TableHead>
-                <TableHead className="table-header-orange">Tambahan Investasi (Rp)</TableHead>
+                <TableHead className="table-header-orange">No. Izin</TableHead>
+                <TableHead className="table-header-orange">Tambahan Investasi (Dalam US$)</TableHead>
+                <TableHead className="table-header-orange">Tambahan Investasi (Dalam Rp)</TableHead>
                 <TableHead className="table-header-orange">Proyek</TableHead>
                 <TableHead className="table-header-orange">TKI</TableHead>
                 <TableHead className="table-header-orange">TKA</TableHead>
                 <TableHead className="table-header-orange">TK</TableHead>
-                <TableHead className="table-header-orange">Kota</TableHead>
                 <TableHead className="table-header-orange">Status</TableHead>
-                <TableHead className="table-header-orange">Tahun</TableHead>
                 <TableHead className="table-header-orange">Periode</TableHead>
                 <TableHead className="table-header-orange">Semester</TableHead>
                 <TableHead className="table-header-orange">23 Sektor</TableHead>
                 <TableHead className="table-header-orange">17 Sektor</TableHead>
-                <TableHead className="table-header-orange">BPS</TableHead>
                 <TableHead className="table-header-orange w-24">Aksi</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {data.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={25} className="text-center py-8 text-gray-500">
+                  <TableCell colSpan={12} className="text-center py-8 text-gray-500">
                     Tidak ditemukan data yang sesuai.
                   </TableCell>
                 </TableRow>
               ) : (
                 data.map((row) => (
                   <TableRow key={row.id} className="table-row-yellow">
-                    <TableCell className="text-gray-600">{row.sektor}</TableCell>
+                    <TableCell className="text-gray-600">{row.stage}</TableCell>
+                    <TableCell className="text-gray-600">{row.year}</TableCell>
+                    <TableCell className="text-gray-600">{row.sector}</TableCell>
+                    <TableCell className="text-gray-600">{row.sector_24}</TableCell>
                     <TableCell className="font-medium text-gray-900">
                       {editingRow === row.id ? (
                         <Input
@@ -312,18 +302,28 @@ export function DatabaseDataTable({ filters = {} }: DatabaseDataTableProps) {
                       ) : (
                         row.company_name
                       )}
+                    </TableCell>           
+                    <TableCell className="text-gray-600">
+                      {editingRow === row.id ? (
+                        <Input
+                          value={editingData.city || ''}
+                          onChange={(e) => handleInputChange('city', e.target.value)}
+                          className="h-8 text-sm"
+                        />
+                      ) : (
+                        row.city
+                      )}
+                    </TableCell>         
+                    <TableCell className="text-gray-600">{row.company_business ? row.company_business : '-'}</TableCell>
+                    <TableCell className="font-mono text-sm text-gray-600">{row.kbli_code}</TableCell>
+                    <TableCell className="text-gray-600" title={row.kbli_title}>
+                      {row.kbli_title}
                     </TableCell>
-                    <TableCell className="text-gray-600">{row.kabupaten}</TableCell>
-                    <TableCell className="text-gray-600">{row.bidang_usaha}</TableCell>
-                    <TableCell className="font-mono text-sm text-gray-600">{row.nib}</TableCell>
-                    <TableCell className="font-mono text-sm text-gray-600">{row.kode_kbli}</TableCell>
-                    <TableCell className="max-w-xs truncate text-gray-600" title={row.judul_kbli}>
-                      {row.judul_kbli}
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant={row.is_ekraf ? "default" : "secondary"} className={row.is_ekraf ? "bg-green-600 text-white" : "bg-gray-100 text-gray-700"}>
-                        {row.is_ekraf ? 'Ya' : 'Tidak'}
-                      </Badge>
+                    <TableCell
+                      className="max-w-xs truncate text-gray-600"
+                      title={row.is_ekraf ? "Ya" : "Tidak"}
+                    >
+                      {row.is_ekraf ? "Ya" : "Tidak"}
                     </TableCell>
                     <TableCell>
                       {editingRow === row.id ? (
@@ -355,44 +355,43 @@ export function DatabaseDataTable({ filters = {} }: DatabaseDataTableProps) {
                         </Badge>
                       )}
                     </TableCell>
-                    <TableCell>
-                      <Badge variant={row.is_pariwisata ? "default" : "secondary"} className={row.is_pariwisata ? "bg-purple-600 text-white" : "bg-gray-100 text-gray-700"}>
-                        {row.is_pariwisata ? 'Ya' : 'Tidak'}
-                      </Badge>
+                    <TableCell
+                      className="max-w-xs truncate text-gray-600"
+                      title={row.is_pariwisata ? "Ya" : "Tidak"}
+                    >
+                      {row.is_pariwisata ? "Ya" : "Tidak"}
                     </TableCell>
-                    <TableCell className="text-gray-600">{row.subsektor_pariwisata || '-'}</TableCell>
-                    <TableCell className="text-gray-600">{row.negara}</TableCell>
-                    <TableCell className="font-mono text-sm text-gray-600">{row.no_izin}</TableCell>
-                    <TableCell className="font-medium text-green-600">
-                      {row.tambahan_investasi_usd > 0 ? `$ ${row.tambahan_investasi_usd.toLocaleString()}` : '-'}
-                    </TableCell>
-                    <TableCell className="font-medium text-green-600">
+                    <TableCell className="text-gray-600">{row.subsector_tourism}</TableCell>
+                    <TableCell className="text-gray-600">{row.country}</TableCell>  
+                    <TableCell className="font-mono text-sm text-gray-600">{row.no_permit}</TableCell>
+                    <TableCell className="font-medium text-gray-900">
                       {editingRow === row.id ? (
                         <Input
                           type="number"
-                          value={editingData.tambahan_investasi_rp || 0}
-                          onChange={(e) => handleInputChange('tambahan_investasi_rp', parseInt(e.target.value) || 0)}
+                          value={editingData.investment_amount_usd || 0}
+                          onChange={(e) => handleInputChange('investment_amount_usd', parseInt(e.target.value) || 0)}
                           className="h-8 text-sm"
                         />
                       ) : (
-                        formatCurrency(row.tambahan_investasi_rp)
+                        formatCurrencyUSD(row.investment_amount_usd)
                       )}
                     </TableCell>
-                    <TableCell className="text-center text-gray-600">{row.proyek}</TableCell>
-                    <TableCell className="text-center text-gray-600">{row.tki}</TableCell>
-                    <TableCell className="text-center text-gray-600">{row.tka}</TableCell>
-                    <TableCell className="text-center text-gray-600">{row.tk}</TableCell>
-                    <TableCell className="text-gray-600">
+                    <TableCell className="font-medium text-gray-900">
                       {editingRow === row.id ? (
                         <Input
-                          value={editingData.city || ''}
-                          onChange={(e) => handleInputChange('city', e.target.value)}
+                          type="number"
+                          value={editingData.investment_amount_idr || 0}
+                          onChange={(e) => handleInputChange('investment_amount_idr', parseInt(e.target.value) || 0)}
                           className="h-8 text-sm"
                         />
                       ) : (
-                        row.city
+                        formatCurrencyIDR(row.investment_amount_idr)
                       )}
                     </TableCell>
+                    <TableCell className="text-gray-600">{row.project}</TableCell>
+                    <TableCell className="text-gray-600">{row.tki}</TableCell>
+                    <TableCell className="text-gray-600">{row.tka}</TableCell>
+                    <TableCell className="text-gray-600">{row.tk}</TableCell>
                     <TableCell>
                       {editingRow === row.id ? (
                         <Select
@@ -415,13 +414,11 @@ export function DatabaseDataTable({ filters = {} }: DatabaseDataTableProps) {
                           {row.status}
                         </Badge>
                       )}
-                    </TableCell>
-                    <TableCell className="text-gray-600">{row.year}</TableCell>
+                    </TableCell>                    
                     <TableCell className="text-gray-600">{row.period}</TableCell>
-                    <TableCell className="text-gray-600">{row.periode_semester || '-'}</TableCell>
-                    <TableCell className="text-gray-600">{row.sektor_23 || '-'}</TableCell>
-                    <TableCell className="text-gray-600">{row.sektor_17 || '-'}</TableCell>
-                    <TableCell className="text-gray-600">{row.bps || '-'}</TableCell>
+                    <TableCell className="text-gray-600">{row.semester}</TableCell>
+                    <TableCell className="text-gray-600">{row.sector_23 ? row.sector_23 : '-'}</TableCell>
+                    <TableCell className="text-gray-600">{row.sector_17 ? row.sector_17 : '-'}</TableCell>
                     <TableCell>
                       {editingRow === row.id ? (
                         <div className="flex items-center gap-1">
