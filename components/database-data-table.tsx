@@ -84,7 +84,7 @@ export function DatabaseDataTable({ filters = {} }: DatabaseDataTableProps) {
     } else if (amount >= 1000) {
       return `Rp ${(amount / 1000).toFixed(1)} Rb`
     } else {
-      return `Rp ${amount.toLocaleString()}`
+      return `Rp`
     }
   }
 
