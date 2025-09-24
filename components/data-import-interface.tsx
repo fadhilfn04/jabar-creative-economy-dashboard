@@ -228,15 +228,33 @@ export function DataImportInterface() {
             <div className="space-y-4">
               <h4 className="font-medium text-gray-900">Kolom yang Diperlukan</h4>
               <div className="text-sm text-gray-600 space-y-1">
+                <p>• sektor (Sektor Ekonomi)</p>
                 <p>• company_name (Nama Perusahaan)</p>
+                <p>• kabupaten (Kabupaten)</p>
+                <p>• bidang_usaha (Bidang Usaha)</p>
                 <p>• nib (Nomor Induk Berusaha)</p>
-                <p>• kbli_code (Kode KBLI)</p>
+                <p>• kode_kbli (Kode KBLI)</p>
+                <p>• judul_kbli (Judul KBLI)</p>
+                <p>• is_ekraf (Apakah EKRAF: true/false)</p>
                 <p>• subsector (Subsektor EKRAF)</p>
+                <p>• is_pariwisata (Apakah Pariwisata: true/false)</p>
+                <p>• subsektor_pariwisata (Subsektor Pariwisata)</p>
+                <p>• negara (Negara Asal)</p>
+                <p>• no_izin (Nomor Izin)</p>
+                <p>• tambahan_investasi_usd (Investasi USD)</p>
+                <p>• tambahan_investasi_rp (Investasi Rupiah)</p>
+                <p>• proyek (Jumlah Proyek)</p>
+                <p>• tki (Tenaga Kerja Indonesia)</p>
+                <p>• tka (Tenaga Kerja Asing)</p>
+                <p>• tk (Total Tenaga Kerja)</p>
                 <p>• city (Kota/Kabupaten)</p>
-                <p>• investment_amount (Jumlah Investasi)</p>
-                <p>• workers_count (Jumlah Tenaga Kerja)</p>
                 <p>• status (PMA/PMDN)</p>
                 <p>• year (Tahun)</p>
+                <p>• period (Periode)</p>
+                <p>• periode_semester (Semester)</p>
+                <p>• sektor_23 (23 Sektor)</p>
+                <p>• sektor_17 (17 Sektor)</p>
+                <p>• bps (BPS)</p>
               </div>
             </div>
           </div>

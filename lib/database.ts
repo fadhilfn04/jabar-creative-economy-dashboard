@@ -40,7 +40,7 @@ export class DatabaseService {
       query = query.eq('year', year)
     }
     if (search) {
-      query = query.or(`company_name.ilike.%${search}%,nib.ilike.%${search}%,kbli_code.ilike.%${search}%`)
+      query = query.or(`company_name.ilike.%${search}%,nib.ilike.%${search}%,kode_kbli.ilike.%${search}%,no_izin.ilike.%${search}%`)
     }
 
     // Apply pagination
