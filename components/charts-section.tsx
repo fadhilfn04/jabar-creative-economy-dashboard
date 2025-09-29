@@ -273,7 +273,7 @@ export function ChartsSection() {
           </div>
         </div>
 
-        <div className="lg:col-span-2 minimal-card p-6">
+        {/* <div className="lg:col-span-2 minimal-card p-6">
           <h3 className="text-lg font-medium text-gray-900 mb-6">
             Tren Investasi Ekonomi Kreatif ({selectedYear})
           </h3>
@@ -306,7 +306,7 @@ export function ChartsSection() {
               />
             </LineChart>
           </ResponsiveContainer>
-        </div>
+        </div> */}
       </div>
     </div>
   );

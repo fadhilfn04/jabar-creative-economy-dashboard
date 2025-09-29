@@ -143,40 +143,34 @@ export function InvestmentAnalysisDashboard() {
     }
   };
 
-  const exportQuarterlyData = () => {
+  const exportSemesterData = () => {
     try {
       const csvContent = [
-        ["Tahun", "TW-I", "TW-II", "TW-III", "TW-IV", "Grand Total"].join(","),
-        ...pivotData.map((row) =>
-          [
-            row.year,
-            row["TW-I"],
-            row["TW-II"],
-            row["TW-III"],
-            row["TW-IV"],
-            row.total,
-          ].join(",")
-        ),
+        ["Tahun", "Semester I", "Semester II", "Grand Total"].join(","),
+        ...pivotData.map((row) => {
+          const semester1 = (row["TW-I"] || 0) + (row["TW-II"] || 0);
+          const semester2 = (row["TW-III"] || 0) + (row["TW-IV"] || 0);
+          return [row.year, semester1, semester2, row.total].join(",");
+        }),
       ].join("\n");
 
       const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
       const link = document.createElement("a");
       const url = URL.createObjectURL(blob);
       link.setAttribute("href", url);
-      link.setAttribute("download", "analisis_investasi_kuartalan.csv");
+      link.setAttribute("download", "analisis_investasi_semester.csv");
       link.style.visibility = "hidden";
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
     } catch (err) {
-      console.error("Error exporting quarterly data:", err);
+      console.error("Error exporting semester data:", err);
     }
   };
 
-  // Prepare chart data
   const chartData = pivotData.map((item) => ({
     year: item.year.toString(),
-    "TW-I": item["TW-I"] / 1000000000000, // Convert to trillions
+    "TW-I": item["TW-I"] / 1000000000000,
     "TW-II": item["TW-II"] / 1000000000000,
     "TW-III": item["TW-III"] / 1000000000000,
     "TW-IV": item["TW-IV"] / 1000000000000,
@@ -184,17 +178,17 @@ export function InvestmentAnalysisDashboard() {
 
   const yearlyChartData = yearlyData.map((item) => ({
     year: item.year.toString(),
-    investment: item.investment_amount / 1000000000000, // Convert to trillions
+    investment: item.investment_amount / 1000000000000,
   }));
 
-  // Calculate grand totals
-  const grandTotalByQuarter = {
+  const grandTotalBySemester = {
     "TW-I": pivotData.reduce((sum, item) => sum + item["TW-I"], 0),
     "TW-II": pivotData.reduce((sum, item) => sum + item["TW-II"], 0),
     "TW-III": pivotData.reduce((sum, item) => sum + item["TW-III"], 0),
     "TW-IV": pivotData.reduce((sum, item) => sum + item["TW-IV"], 0),
   };
-  const grandTotal = Object.values(grandTotalByQuarter).reduce(
+
+  const grandTotal = Object.values(grandTotalBySemester).reduce(
     (sum, amount) => sum + amount,
     0
   );
@@ -276,11 +270,11 @@ export function InvestmentAnalysisDashboard() {
             Grafik Tahunan
           </TabsTrigger>
           <TabsTrigger
-            value="quarterly-chart"
+            value="semester-chart"
             className="flex items-center gap-2"
           >
             <PieChart className="w-4 h-4" />
-            Grafik Kuartalan
+            Grafik per Semester
           </TabsTrigger>
         </TabsList>
 
@@ -343,16 +337,16 @@ export function InvestmentAnalysisDashboard() {
               </CardContent>
             </Card>
 
-            {/* Quarterly Breakdown Table */}
+            {/* Semester Breakdown Table */}
             <Card>
               <CardHeader className="flex flex-row items-center justify-between">
                 <CardTitle className="text-lg font-medium">
-                  Breakdown Kuartalan
+                  Breakdown Semester
                 </CardTitle>
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={exportQuarterlyData}
+                  onClick={exportSemesterData}
                   disabled={loading}
                 >
                   <Download className="w-4 h-4 mr-2" />
@@ -371,53 +365,46 @@ export function InvestmentAnalysisDashboard() {
                       <TableHeader>
                         <TableRow>
                           <TableHead className="font-medium">Tahun</TableHead>
-                          <TableHead className="font-medium">TW-I</TableHead>
-                          <TableHead className="font-medium">TW-II</TableHead>
-                          <TableHead className="font-medium">TW-III</TableHead>
-                          <TableHead className="font-medium">TW-IV</TableHead>
-                          <TableHead className="font-medium">
-                            Grand Total
-                          </TableHead>
+                          <TableHead className="font-medium">Semester I</TableHead>
+                          <TableHead className="font-medium">Semester II</TableHead>
+                          <TableHead className="font-medium">Grand Total</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {pivotData.map((row) => (
-                          <TableRow key={row.year}>
-                            <TableCell className="font-medium">
-                              {row.year}
-                            </TableCell>
-                            <TableCell className="text-blue-600">
-                              {formatCurrency(row["TW-I"])}
-                            </TableCell>
-                            <TableCell className="text-green-600">
-                              {formatCurrency(row["TW-II"])}
-                            </TableCell>
-                            <TableCell className="text-purple-600">
-                              {formatCurrency(row["TW-III"])}
-                            </TableCell>
-                            <TableCell className="text-orange-600">
-                              {formatCurrency(row["TW-IV"])}
-                            </TableCell>
-                            <TableCell className="font-bold text-gray-900">
-                              {formatCurrency(row.total)}
-                            </TableCell>
-                          </TableRow>
-                        ))}
+                        {pivotData.map((row) => {
+                          const semester1 = (row["TW-I"] || 0) + (row["TW-II"] || 0);
+                          const semester2 = (row["TW-III"] || 0) + (row["TW-IV"] || 0);
+
+                          return (
+                            <TableRow key={row.year}>
+                              <TableCell className="font-medium">{row.year}</TableCell>
+                              <TableCell className="text-blue-600">
+                                {formatCurrency(semester1)}
+                              </TableCell>
+                              <TableCell className="text-green-600">
+                                {formatCurrency(semester2)}
+                              </TableCell>
+                              <TableCell className="font-bold text-gray-900">
+                                {formatCurrency(row.total)}
+                              </TableCell>
+                            </TableRow>
+                          );
+                        })}
                         <TableRow className="border-t-2 border-gray-300 bg-gray-50 font-bold">
                           <TableCell className="font-bold text-gray-900">
                             Grand Total
                           </TableCell>
                           <TableCell className="font-bold text-blue-700">
-                            {formatCurrency(grandTotalByQuarter["TW-I"])}
+                            {formatCurrency(
+                              (grandTotalBySemester["TW-I"] || 0) +
+                              (grandTotalBySemester["TW-II"] || 0)
+                            )}
                           </TableCell>
                           <TableCell className="font-bold text-green-700">
-                            {formatCurrency(grandTotalByQuarter["TW-II"])}
-                          </TableCell>
-                          <TableCell className="font-bold text-purple-700">
-                            {formatCurrency(grandTotalByQuarter["TW-III"])}
-                          </TableCell>
-                          <TableCell className="font-bold text-orange-700">
-                            {formatCurrency(grandTotalByQuarter["TW-IV"])}
+                            {formatCurrency(
+                              (grandTotalBySemester["TW-III"] || 0) +
+                              (grandTotalBySemester["TW-IV"] || 0)
+                            )}
                           </TableCell>
                           <TableCell className="font-bold text-gray-900">
                             {formatCurrency(grandTotal)}
@@ -470,11 +457,11 @@ export function InvestmentAnalysisDashboard() {
           </Card>
         </TabsContent>
 
-        <TabsContent value="quarterly-chart" className="mt-6">
+        <TabsContent value="semester-chart" className="mt-6">
           <Card>
             <CardHeader>
               <CardTitle className="text-lg font-medium">
-                Investasi per Kuartal
+                Investasi per Semester
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -485,7 +472,13 @@ export function InvestmentAnalysisDashboard() {
                 </div>
               ) : (
                 <ResponsiveContainer width="100%" height={400}>
-                  <BarChart data={chartData}>
+                  <BarChart
+                    data={chartData.map((row) => ({
+                      year: row.year,
+                      Semester1: (row["TW-I"] || 0) + (row["TW-II"] || 0),
+                      Semester2: (row["TW-III"] || 0) + (row["TW-IV"] || 0),
+                    }))}
+                  >
                     <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" />
                     <XAxis dataKey="year" stroke="#6b7280" />
                     <YAxis stroke="#6b7280" />
@@ -496,10 +489,8 @@ export function InvestmentAnalysisDashboard() {
                       ]}
                       labelFormatter={(label) => `Tahun ${label}`}
                     />
-                    <Bar dataKey="TW-I" fill="#3b82f6" name="TW-I" />
-                    <Bar dataKey="TW-II" fill="#10b981" name="TW-II" />
-                    <Bar dataKey="TW-III" fill="#8b5cf6" name="TW-III" />
-                    <Bar dataKey="TW-IV" fill="#f59e0b" name="TW-IV" />
+                    <Bar dataKey="Semester1" fill="#3b82f6" name="Semester I" />
+                    <Bar dataKey="Semester2" fill="#10b981" name="Semester II" />
                   </BarChart>
                 </ResponsiveContainer>
               )}

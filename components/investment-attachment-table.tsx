@@ -34,7 +34,8 @@ export function InvestmentAttachmentTable() {
   const [subsectorGrandTotal, setSubsectorGrandTotal] = useState({ projects: 0, investmentUSD: 0, investmentIDR: 0 })
 
   const [error, setError] = useState<string | null>(null)
-  const pageSize = 10
+  const regionalPageSize = 10
+  const subsectorPageSize = 20
 
   // Fetch available years
   useEffect(() => {
@@ -62,7 +63,7 @@ export function InvestmentAttachmentTable() {
         InvestmentAttachmentService.getRegionalData({
           year: selectedYear,
           page,
-          limit: pageSize
+          limit: regionalPageSize
         }),
         InvestmentAttachmentService.getRegionalGrandTotal({
           year: selectedYear
@@ -92,7 +93,7 @@ export function InvestmentAttachmentTable() {
         InvestmentAttachmentService.getSubsectorData({
           year: selectedYear,
           page,
-          limit: pageSize
+          limit: subsectorPageSize
         }),
         InvestmentAttachmentService.getSubsectorGrandTotal({
           year: selectedYear
@@ -119,6 +120,14 @@ export function InvestmentAttachmentTable() {
       fetchSubsectorData(1)
     }
   }, [selectedYear])
+
+  const getCurrentPageSize = () => {
+    switch (activeTab) {
+      case 'regional': return regionalPageSize
+      case 'subsector': return subsectorPageSize
+      default: return 20
+    }
+  }
 
   const formatCurrencyUSD = (amount: number) => {
     return `$ ${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
@@ -458,7 +467,7 @@ export function InvestmentAttachmentTable() {
       {getCurrentData().length > 0 && (
         <div className="flex items-center justify-between p-6 border-t border-gray-100">
           <p className="text-sm text-gray-500">
-            Menampilkan {((getCurrentPage() - 1) * pageSize) + 1}-{Math.min(getCurrentPage() * pageSize, getCurrentCount())} dari {getCurrentCount().toLocaleString()} data
+            Menampilkan {((getCurrentPage() - 1) * getCurrentPageSize()) + 1}-{Math.min(getCurrentPage() * getCurrentPageSize(), getCurrentCount())} dari {getCurrentCount().toLocaleString()} data
           </p>
           <div className="flex items-center gap-2">
             <Button 
