@@ -8,37 +8,36 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 // Types for our database tables
 export interface CreativeEconomyData {
   id: number
-  company_name: string
+  nama_perusahaan: string
   nib: string
-  kbli_code: string
-  subsector: string
-  city: string
+  kode_kbli: string
+  subsektor: string
+  kabkota: string
   status: 'PMA' | 'PMDN'
-  year: number
-  period: string
-  investment_amount: number
-  workers_count: number
+  tahun: number
+  periode: string
+  tambahan_investasi_rp: number
   created_at: string
   updated_at: string
-  kbli_title: string
-  sector: string
-  sector_24: string
+  judul_kbli: string
+  sektor_utama: string
+  sektor_24: string
   is_ekraf: boolean
   is_pariwisata: boolean
-  subsector_tourism: string
-  country: string
-  no_permit: string
-  investment_amount_usd: number
-  investment_amount_idr: number
-  project: string
+  subsektor_pariwisata: string
+  negara: string
+  no_izin: string
+  tambahan_investasi_usd: number
+  tambahan_investasi_idr: number
+  proyek: string
   tki: number
   tka: number
   tk: number
   semester: string
-  sector_23: string
-  sector_17: string
-  stage: string
-  company_business: string
+  sektor_23: string
+  sektor_17: string
+  tahap: string
+  bidang_usaha: string
 }
 
 export interface SubsectorSummary {

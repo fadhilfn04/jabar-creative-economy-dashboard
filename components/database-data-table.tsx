@@ -13,10 +13,10 @@ import { toast } from "@/hooks/use-toast"
 
 interface DatabaseDataTableProps {
   filters?: {
-    subsector?: string
-    city?: string
+    subsektor?: string
+    kabkota?: string
     status?: string
-    year?: number
+    tahun?: number
     search?: string
   }
 }
@@ -88,7 +88,7 @@ export function DatabaseDataTable({ filters = {} }: DatabaseDataTableProps) {
     } else if (amount >= 1000) {
       return `Rp ${(amount / 1000).toFixed(1)} Rb`
     } else {
-      return `Rp ${amount.toLocaleString()}`
+      return `0`
     }
   }
 
@@ -101,17 +101,17 @@ export function DatabaseDataTable({ filters = {} }: DatabaseDataTableProps) {
         ['Nama Perusahaan', 'NIB', 'Kode KBLI', 'Judul KBLI', 'Subsektor', 'Kota', 'Investasi', 'Tenaga Kerja', 'Status', 'Tahun', 'Periode'].join(','),
         // Data rows
         ...data.map(row => [
-          `"${row.company_name}"`,
-          row.nib,
-          row.kbli_code,
-          `"${row.kbli_title}"`,
-          row.subsector,
-          row.city,
-          row.investment_amount,
-          row.workers_count,
+          `"${row.nama_perusahaan}"`,
+          row.no_izin,
+          row.kode_kbli,
+          `"${row.judul_kbli}"`,
+          row.subsektor,
+          row.kabkota,
+          row.tambahan_investasi_rp,
+          row.tk,
           row.status,
-          row.year,
-          row.period
+          row.tahun,
+          row.periode
         ].join(','))
       ].join('\n')
 
@@ -133,11 +133,11 @@ export function DatabaseDataTable({ filters = {} }: DatabaseDataTableProps) {
     setEditingRow(row.id)
     setEditingData({
       id: row.id,
-      company_name: row.company_name,
-      subsector: row.subsector,
-      city: row.city,
-      investment_amount: row.investment_amount,
-      workers_count: row.workers_count,
+      nama_perusahaan: row.nama_perusahaan,
+      subsektor: row.subsektor,
+      kabkota: row.kabkota,
+      tambahan_investasi_rp: row.tambahan_investasi_rp,
+      tk: row.tk,
       status: row.status
     })
   }
@@ -155,11 +155,11 @@ export function DatabaseDataTable({ filters = {} }: DatabaseDataTableProps) {
       
       // Update the record in Supabase
       const { error } = await DatabaseService.updateCreativeEconomyData(editingData.id, {
-        company_name: editingData.company_name,
-        subsector: editingData.subsector,
-        city: editingData.city,
-        investment_amount: editingData.investment_amount,
-        workers_count: editingData.workers_count,
+        nama_perusahaan: editingData.nama_perusahaan,
+        subsektor: editingData.subsektor,
+        kabkota: editingData.kabkota,
+        tambahan_investasi_rp: editingData.tambahan_investasi_rp,
+        tk: editingData.tk,
         status: editingData.status
       })
 
@@ -288,36 +288,36 @@ export function DatabaseDataTable({ filters = {} }: DatabaseDataTableProps) {
               ) : (
                 data.map((row) => (
                   <TableRow key={row.id} className="table-row-yellow">
-                    <TableCell className="text-gray-600">{row.stage}</TableCell>
-                    <TableCell className="text-gray-600">{row.year}</TableCell>
-                    <TableCell className="text-gray-600">{row.sector}</TableCell>
-                    <TableCell className="text-gray-600">{row.sector_24}</TableCell>
+                    <TableCell className="text-gray-600">{row.tahap}</TableCell>
+                    <TableCell className="text-gray-600">{row.tahun}</TableCell>
+                    <TableCell className="text-gray-600">{row.sektor_utama}</TableCell>
+                    <TableCell className="text-gray-600">{row.sektor_24}</TableCell>
                     <TableCell className="font-medium text-gray-900">
                       {editingRow === row.id ? (
                         <Input
-                          value={editingData.company_name || ''}
-                          onChange={(e) => handleInputChange('company_name', e.target.value)}
+                          value={editingData.nama_perusahaan || ''}
+                          onChange={(e) => handleInputChange('nama_perusahaan', e.target.value)}
                           className="h-8 text-sm"
                         />
                       ) : (
-                        row.company_name
+                        row.nama_perusahaan
                       )}
                     </TableCell>           
                     <TableCell className="text-gray-600">
                       {editingRow === row.id ? (
                         <Input
-                          value={editingData.city || ''}
-                          onChange={(e) => handleInputChange('city', e.target.value)}
+                          value={editingData.kabkota || ''}
+                          onChange={(e) => handleInputChange('kabkota', e.target.value)}
                           className="h-8 text-sm"
                         />
                       ) : (
-                        row.city
+                        row.kabkota
                       )}
                     </TableCell>         
-                    <TableCell className="text-gray-600">{row.company_business ? row.company_business : '-'}</TableCell>
-                    <TableCell className="font-mono text-sm text-gray-600">{row.kbli_code}</TableCell>
-                    <TableCell className="text-gray-600" title={row.kbli_title}>
-                      {row.kbli_title}
+                    <TableCell className="text-gray-600">{row.bidang_usaha ? row.bidang_usaha : '-'}</TableCell>
+                    <TableCell className="font-mono text-sm text-gray-600">{row.kode_kbli}</TableCell>
+                    <TableCell className="text-gray-600" title={row.judul_kbli}>
+                      {row.judul_kbli}
                     </TableCell>
                     <TableCell
                       className="max-w-xs truncate text-gray-600"
@@ -328,16 +328,16 @@ export function DatabaseDataTable({ filters = {} }: DatabaseDataTableProps) {
                     <TableCell>
                       {editingRow === row.id ? (
                         <Select
-                          value={editingData.subsector || ''}
-                          onValueChange={(value) => handleInputChange('subsector', value)}
+                          value={editingData.subsektor || ''}
+                          onValueChange={(value) => handleInputChange('subsektor', value)}
                         >
                           <SelectTrigger className="h-8 text-xs">
                             <SelectValue placeholder="Pilih subsektor" />
                           </SelectTrigger>
                           <SelectContent>
-                            {subsectors.map(subsector => (
-                              <SelectItem key={subsector} value={subsector} className="text-xs">
-                                {subsector}
+                            {subsectors.map(subsektor => (
+                              <SelectItem key={subsektor} value={subsektor} className="text-xs">
+                                {subsektor}
                               </SelectItem>
                             ))}
                           </SelectContent>
@@ -346,12 +346,12 @@ export function DatabaseDataTable({ filters = {} }: DatabaseDataTableProps) {
                         <Badge 
                           variant="secondary" 
                           className={`text-xs ${
-                            !row.subsector || row.subsector.trim() === '' 
+                            !row.subsektor || row.subsektor.trim() === '' 
                               ? "bg-red-100 text-red-700 border-red-200" 
                               : "bg-gray-100 text-gray-700"
                           }`}
                         >
-                          {row.subsector || 'Belum diisi'}
+                          {row.subsektor || 'Belum diisi'}
                         </Badge>
                       )}
                     </TableCell>
@@ -361,34 +361,34 @@ export function DatabaseDataTable({ filters = {} }: DatabaseDataTableProps) {
                     >
                       {row.is_pariwisata ? "Ya" : "Tidak"}
                     </TableCell>
-                    <TableCell className="text-gray-600">{row.subsector_tourism}</TableCell>
-                    <TableCell className="text-gray-600">{row.country}</TableCell>  
-                    <TableCell className="font-mono text-sm text-gray-600">{row.no_permit}</TableCell>
+                    <TableCell className="text-gray-600">{row.subsektor_pariwisata ? row.subsektor_pariwisata : '-'}</TableCell>
+                    <TableCell className="text-gray-600">{row.negara}</TableCell>  
+                    <TableCell className="font-mono text-sm text-gray-600">{row.no_izin}</TableCell>
                     <TableCell className="font-medium text-gray-900">
                       {editingRow === row.id ? (
                         <Input
                           type="number"
-                          value={editingData.investment_amount_usd || 0}
-                          onChange={(e) => handleInputChange('investment_amount_usd', parseInt(e.target.value) || 0)}
+                          value={editingData.tambahan_investasi_usd || 0}
+                          onChange={(e) => handleInputChange('tambahan_investasi_usd', parseInt(e.target.value) || 0)}
                           className="h-8 text-sm"
                         />
                       ) : (
-                        formatCurrencyUSD(row.investment_amount_usd)
+                        formatCurrencyUSD(row.tambahan_investasi_usd)
                       )}
                     </TableCell>
                     <TableCell className="font-medium text-gray-900">
                       {editingRow === row.id ? (
                         <Input
                           type="number"
-                          value={editingData.investment_amount_idr || 0}
-                          onChange={(e) => handleInputChange('investment_amount_idr', parseInt(e.target.value) || 0)}
+                          value={editingData.tambahan_investasi_idr || 0}
+                          onChange={(e) => handleInputChange('tambahan_investasi_idr', parseInt(e.target.value) || 0)}
                           className="h-8 text-sm"
                         />
                       ) : (
-                        formatCurrencyIDR(row.investment_amount_idr)
+                        formatCurrencyIDR(row.tambahan_investasi_idr)
                       )}
                     </TableCell>
-                    <TableCell className="text-gray-600">{row.project}</TableCell>
+                    <TableCell className="text-gray-600">{row.proyek}</TableCell>
                     <TableCell className="text-gray-600">{row.tki}</TableCell>
                     <TableCell className="text-gray-600">{row.tka}</TableCell>
                     <TableCell className="text-gray-600">{row.tk}</TableCell>
@@ -414,11 +414,11 @@ export function DatabaseDataTable({ filters = {} }: DatabaseDataTableProps) {
                           {row.status}
                         </Badge>
                       )}
-                    </TableCell>                    
-                    <TableCell className="text-gray-600">{row.period}</TableCell>
+                    </TableCell>
+                    <TableCell className="text-gray-600">{row.periode}</TableCell>
                     <TableCell className="text-gray-600">{row.semester}</TableCell>
-                    <TableCell className="text-gray-600">{row.sector_23 ? row.sector_23 : '-'}</TableCell>
-                    <TableCell className="text-gray-600">{row.sector_17 ? row.sector_17 : '-'}</TableCell>
+                    <TableCell className="text-gray-600">{row.sektor_23 ? row.sektor_23 : '-'}</TableCell>
+                    <TableCell className="text-gray-600">{row.sektor_17 ? row.sektor_17 : '-'}</TableCell>
                     {/* <TableCell>
                       {editingRow === row.id ? (
                         <div className="flex items-center gap-1">

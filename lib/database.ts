@@ -28,19 +28,19 @@ export class DatabaseService {
 
     // Apply filters
     if (subsector) {
-      query = query.eq('subsector', subsector)
+      query = query.eq('subsektor', subsector)
     }
     if (city) {
-      query = query.eq('city', city)
+      query = query.eq('kabkota', city)
     }
     if (status) {
       query = query.eq('status', status)
     }
     if (year) {
-      query = query.eq('year', year)
+      query = query.eq('tahun', year)
     }
     if (search) {
-      query = query.or(`company_name.ilike.%${search}%,kbli_code.ilike.%${search}%,kbli_title.ilike.%${search}%,no_permit.ilike.%${search}%`)
+      query = query.or(`nama_perusahaan.ilike.%${search}%,kode_kbli.ilike.%${search}%,judul_kbli.ilike.%${search}%,no_izin.ilike.%${search}%`)
     }
 
     // Apply pagination
@@ -154,9 +154,9 @@ export class DatabaseService {
   static async getInvestmentTrend() {
     const { data, error } = await supabase
       .from('creative_economy_data')
-      .select('investment_amount, status, year, period')
-      .order('year', { ascending: true })
-      .order('period', { ascending: true })
+      .select('tambahan_investasi_rp, status, tahun, periode')
+      .order('tahun', { ascending: true })
+      .order('periode', { ascending: true })
 
     if (error) {
       console.error('Error fetching investment trend:', error)
@@ -167,13 +167,13 @@ export class DatabaseService {
     const trendMap = new Map()
     
     data.forEach(item => {
-      const key = `${item.year}-${item.period}`
+      const key = `${item.tahun}-${item.periode}`
       if (!trendMap.has(key)) {
-        trendMap.set(key, { quarter: `Q${item.period.slice(-1)} ${item.year}`, pma: 0, pmdn: 0 })
+        trendMap.set(key, { quarter: `Q${item.periode.slice(-1)} ${item.tahun}`, pma: 0, pmdn: 0 })
       }
       
       const trend = trendMap.get(key)
-      const amount = (item.investment_amount || 0) / 1000000000000 // Convert to trillions
+      const amount = (item.tambahan_investasi_rp || 0) / 1000000000000 // Convert to trillions
       
       if (item.status === 'PMA') {
         trend.pma += amount
@@ -206,14 +206,14 @@ export class DatabaseService {
   // Get unique values for filters
   static async getFilterOptions() {
     const [subsectorsResult, citiesResult, yearsResult] = await Promise.all([
-      supabase.from('creative_economy_data').select('subsector').order('subsector'),
-      supabase.from('creative_economy_data').select('city').order('city'),
-      supabase.from('creative_economy_data').select('year').order('year', { ascending: false })
+      supabase.from('creative_economy_data').select('subsektor').order('subsektor'),
+      supabase.from('creative_economy_data').select('kabkota').order('kabkota'),
+      supabase.from('creative_economy_data').select('tahun').order('tahun', { ascending: false })
     ])
 
-    const subsectors = [...new Set(subsectorsResult.data?.map(item => item.subsector) || [])]
-    const cities = [...new Set(citiesResult.data?.map(item => item.city) || [])]
-    const years = [...new Set(yearsResult.data?.map(item => item.year) || [])]
+    const subsectors = [...new Set(subsectorsResult.data?.map(item => item.subsektor) || [])]
+    const cities = [...new Set(citiesResult.data?.map(item => item.kabkota) || [])]
+    const years = [...new Set(yearsResult.data?.map(item => item.tahun) || [])]
 
     return { subsectors, cities, years }
   }
