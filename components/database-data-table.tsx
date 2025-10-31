@@ -77,7 +77,7 @@ export function DatabaseDataTable({ filters = {} }: DatabaseDataTableProps) {
   }
 
   const formatCurrencyUSD = (amount: number) => {
-    return `$ ${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+    return `$ ${amount}`
   }
 
   const formatCurrencyIDR = (amount: number) => {
@@ -467,7 +467,7 @@ export function DatabaseDataTable({ filters = {} }: DatabaseDataTableProps) {
       {!loading && data.length > 0 && (
         <div className="flex items-center justify-between p-6 border-t border-gray-100">
           <p className="text-sm text-gray-500">
-            Menampilkan {((currentPage - 1) * pageSize) + 1}-{Math.min(currentPage * pageSize, totalCount)} dari {totalCount.toLocaleString()} data
+            Menampilkan {((currentPage - 1) * pageSize) + 1}-{Math.min(currentPage * pageSize, totalCount)} dari {totalCount} data
           </p>
           <div className="flex items-center gap-2">
             <Button 

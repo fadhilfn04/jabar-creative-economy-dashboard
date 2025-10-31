@@ -10,6 +10,7 @@ import {
   Building2,
   Database,
   FileText,
+  Import,
   Globe,
   Home,
   MapPin,
@@ -99,6 +100,12 @@ const navigationItems = [
     label: "HAKI",
     icon: FileText,
     description: "Hak Kekayaan Intelektual"
+  },
+  {
+    id: "import",
+    label: "Import Data",
+    icon: Import,
+    description: "Impor data dari Excel/CSV"
   }
 ]
 

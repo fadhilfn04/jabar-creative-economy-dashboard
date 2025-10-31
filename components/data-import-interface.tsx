@@ -6,17 +6,19 @@ import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Badge } from "@/components/ui/badge"
-import { 
-  Upload, 
-  FileSpreadsheet, 
-  CheckCircle, 
-  AlertCircle, 
+import {
+  Upload,
+  FileSpreadsheet,
+  CheckCircle,
+  AlertCircle,
   Download,
   FileText,
   Database,
   Loader2
 } from "lucide-react"
 import { useDropzone } from "react-dropzone"
+import * as XLSX from "xlsx"
+import { DatabaseService } from "@/lib/database"
 
 interface ImportStatus {
   status: 'idle' | 'uploading' | 'processing' | 'success' | 'error'
@@ -38,15 +40,15 @@ export function DataImportInterface() {
     const file = acceptedFiles[0]
     if (!file) return
 
-    // Simulate file upload and processing
     setImportStatus({
       status: 'uploading',
       progress: 0,
       message: 'Mengunggah file...'
     })
 
-    // Simulate upload progress
     let progress = 0
+    const batchSize = 100
+    
     const uploadInterval = setInterval(() => {
       progress += 10
       setImportStatus(prev => ({
@@ -57,8 +59,6 @@ export function DataImportInterface() {
 
       if (progress >= 100) {
         clearInterval(uploadInterval)
-        
-        // Simulate processing
         setTimeout(() => {
           setImportStatus({
             status: 'processing',
@@ -68,12 +68,11 @@ export function DataImportInterface() {
             totalRecords: 1000
           })
 
-          // Simulate processing progress
           let processProgress = 0
           const processInterval = setInterval(() => {
             processProgress += 5
             const recordsProcessed = Math.floor((processProgress / 100) * 1000)
-            
+
             setImportStatus(prev => ({
               ...prev,
               progress: processProgress,
@@ -116,12 +115,84 @@ export function DataImportInterface() {
     })
   }
 
+  // 🔽 Fungsi baru: download template Excel sesuai header baru
+  const handleDownloadTemplate = () => {
+    const headers = [
+      'tahap',
+      'tahun',
+      'sektor_utama',
+      'sektor_24',
+      'nama_perusahaan',
+      'kabkota',
+      'bidang_usaha',
+      'kode_kbli',
+      'judul_kbli',
+      'is_ekraf',
+      'subsektor',
+      'is_pariwisata',
+      'subsektor_pariwisata',
+      'negara',
+      'no_izin',
+      'tambahan_investasi_usd',
+      'tambahan_investasi_rp',
+      'proyek',
+      'tki',
+      'tka',
+      'tk',
+      'status',
+      'periode',
+      'semester',
+      'sektor_23',
+      'sektor_17'
+    ]
+
+    // Tambahkan satu baris contoh data dummy agar user paham formatnya
+    const exampleRow = [
+      'Tahap 1',
+      '2025',
+      'Ekonomi Kreatif',
+      'Musik dan Film',
+      'PT Contoh Nusantara',
+      'Bandung',
+      'Produksi Konten',
+      '90001',
+      'Produksi Film dan Video',
+      'true',
+      'Film',
+      'false',
+      '',
+      'Indonesia',
+      'IZN-12345',
+      '50000',
+      '750000000',
+      '3',
+      '25',
+      '2',
+      '27',
+      'PMDN',
+      '2025-Q1',
+      '1',
+      'Industri Kreatif',
+      'Pariwisata'
+    ]
+
+    const worksheetData = [headers, exampleRow]
+
+    const ws = XLSX.utils.aoa_to_sheet(worksheetData)
+    const wb = XLSX.utils.book_new()
+    XLSX.utils.book_append_sheet(wb, ws, "Template")
+
+    XLSX.writeFile(wb, "template_import_data.xlsx")
+  }
+
   return (
     <div className="space-y-6">
       {/* Header */}
       <div>
         <h2 className="text-2xl font-bold text-gray-900">Import Data</h2>
-        <p className="text-gray-600 mt-1">Unggah file Excel atau CSV untuk menambahkan data ekonomi kreatif</p>
+        <p className="text-gray-600 mt-1">
+          Unggah file Excel atau CSV untuk menambahkan data ekonomi kreatif
+        </p>
       </div>
 
       {/* Upload Area */}
@@ -142,7 +213,7 @@ export function DataImportInterface() {
             `}
           >
             <input {...getInputProps()} />
-            
+
             {importStatus.status === 'idle' ? (
               <>
                 <FileSpreadsheet className="w-12 h-12 text-gray-400 mx-auto mb-4" />
@@ -170,7 +241,7 @@ export function DataImportInterface() {
                 {importStatus.status === 'error' && (
                   <AlertCircle className="w-12 h-12 text-red-600 mx-auto" />
                 )}
-                
+
                 <div className="space-y-2">
                   <p className="font-medium text-gray-900">{importStatus.message}</p>
                   {importStatus.recordsProcessed !== undefined && importStatus.totalRecords && (
@@ -179,9 +250,9 @@ export function DataImportInterface() {
                     </p>
                   )}
                 </div>
-                
+
                 <Progress value={importStatus.progress} className="w-full max-w-md mx-auto" />
-                
+
                 {importStatus.status === 'success' && (
                   <div className="space-y-3">
                     <Alert>
@@ -224,43 +295,42 @@ export function DataImportInterface() {
                 </div>
               </div>
             </div>
-            
+
             <div className="space-y-4">
               <h4 className="font-medium text-gray-900">Kolom yang Diperlukan</h4>
               <div className="text-sm text-gray-600 space-y-1">
-                <p>• sektor (Sektor Ekonomi)</p>
-                <p>• company_name (Nama Perusahaan)</p>
-                <p>• kabupaten (Kabupaten)</p>
-                <p>• bidang_usaha (Bidang Usaha)</p>
-                <p>• nib (Nomor Induk Berusaha)</p>
-                <p>• kode_kbli (Kode KBLI)</p>
-                <p>• judul_kbli (Judul KBLI)</p>
-                <p>• is_ekraf (Apakah EKRAF: true/false)</p>
-                <p>• subsector (Subsektor EKRAF)</p>
-                <p>• is_pariwisata (Apakah Pariwisata: true/false)</p>
-                <p>• subsektor_pariwisata (Subsektor Pariwisata)</p>
-                <p>• negara (Negara Asal)</p>
-                <p>• no_izin (Nomor Izin)</p>
-                <p>• tambahan_investasi_usd (Investasi USD)</p>
-                <p>• tambahan_investasi_rp (Investasi Rupiah)</p>
-                <p>• proyek (Jumlah Proyek)</p>
-                <p>• tki (Tenaga Kerja Indonesia)</p>
-                <p>• tka (Tenaga Kerja Asing)</p>
-                <p>• tk (Total Tenaga Kerja)</p>
-                <p>• city (Kota/Kabupaten)</p>
-                <p>• status (PMA/PMDN)</p>
-                <p>• year (Tahun)</p>
-                <p>• period (Periode)</p>
-                <p>• periode_semester (Semester)</p>
-                <p>• sektor_23 (23 Sektor)</p>
-                <p>• sektor_17 (17 Sektor)</p>
-                <p>• bps (BPS)</p>
+                <p>• tahap</p>
+                <p>• tahun</p>
+                <p>• sektor_utama</p>
+                <p>• sektor_24</p>
+                <p>• nama_perusahaan</p>
+                <p>• kabkota</p>
+                <p>• bidang_usaha</p>
+                <p>• kode_kbli</p>
+                <p>• judul_kbli</p>
+                <p>• is_ekraf</p>
+                <p>• subsektor</p>
+                <p>• is_pariwisata</p>
+                <p>• subsektor_pariwisata</p>
+                <p>• negara</p>
+                <p>• no_izin</p>
+                <p>• tambahan_investasi_usd</p>
+                <p>• tambahan_investasi_rp</p>
+                <p>• proyek</p>
+                <p>• tki</p>
+                <p>• tka</p>
+                <p>• tk</p>
+                <p>• status</p>
+                <p>• periode</p>
+                <p>• semester</p>
+                <p>• sektor_23</p>
+                <p>• sektor_17</p>
               </div>
             </div>
           </div>
-          
+
           <div className="mt-6 pt-4 border-t border-gray-200">
-            <Button variant="outline" size="sm">
+            <Button variant="outline" size="sm" onClick={handleDownloadTemplate}>
               <Download className="w-4 h-4 mr-2" />
               Download Template Excel
             </Button>

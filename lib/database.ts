@@ -198,7 +198,7 @@ export class DatabaseService {
     }
 
     // Refresh materialized views after bulk insert
-    await supabase.rpc('refresh_summary_views')
+    // await supabase.rpc('refresh_summary_views')
 
     return insertedData
   }
