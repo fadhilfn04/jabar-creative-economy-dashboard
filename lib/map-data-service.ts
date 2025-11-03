@@ -15,12 +15,11 @@ export class MapDataService {
     try {
       // Fetch investment data
       let investmentQuery = supabase
-        .from('investment_attachment_ranking')
-        .select('name, investment_idr')
-        .eq('type', 1) // Regional data
+        .from('creative_economy_data')
+        .select('kabkota, tambahan_investasi_rp')
 
       if (year) {
-        investmentQuery = investmentQuery.eq('year', year)
+        investmentQuery = investmentQuery.eq('tahun', year)
       }
 
       // Fetch labor data
@@ -51,7 +50,7 @@ export class MapDataService {
       // Create maps for quick lookup
       const investmentMap = new Map<string, number>()
       investmentResult.data?.forEach(item => {
-        investmentMap.set(item.name, item.investment_idr)
+        investmentMap.set(item.kabkota, item.tambahan_investasi_rp)
       })
 
       const laborMap = new Map<string, { companies: number, workers: number }>()
@@ -67,20 +66,20 @@ export class MapDataService {
       
       // Process investment data
       investmentResult.data?.forEach(item => {
-        const regionName = this.normalizeRegionName(item.name)
+        const regionName = this.normalizeRegionName(item.kabkota)
         if (!regionDataMap.has(regionName)) {
           regionDataMap.set(regionName, {
             name: regionName,
             companies: 0,
-            investment: this.formatInvestment(item.investment_idr),
+            investment: this.formatInvestment(item.tambahan_investasi_rp),
             workers: 0,
             color: this.getRegionColor(regionName),
-            investmentAmount: item.investment_idr
+            investmentAmount: item.tambahan_investasi_rp
           })
         }
         const region = regionDataMap.get(regionName)!
-        region.investmentAmount = item.investment_idr
-        region.investment = this.formatInvestment(item.investment_idr)
+        region.investmentAmount = item.tambahan_investasi_rp
+        region.investment = this.formatInvestment(item.tambahan_investasi_rp)
       })
 
       // Process labor data

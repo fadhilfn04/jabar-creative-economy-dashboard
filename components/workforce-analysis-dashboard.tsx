@@ -161,14 +161,16 @@ export function WorkforceAnalysisDashboard() {
     }
   };
 
-  const exportSemesterData = () => {
+  const exportTriwulanData = () => {
     try {
       const csvContent = [
-        ["Tahun", "Semester I", "Semester II", "Grand Total"].join(","),
+        ["Tahun", "Triwulan I", "Triwulan II", "Triwulan III", "Triwulan IV", "Grand Total"].join(","),
         ...pivotData.map((row) => {
-          const semester1 = (row["TW-I"] || 0) + (row["TW-II"] || 0);
-          const semester2 = (row["TW-III"] || 0) + (row["TW-IV"] || 0);
-          return [row.year, semester1, semester2, row.total].join(",");
+          const tw1 = (row["TW-I"] || 0);
+          const tw2 = (row["TW-II"] || 0);
+          const tw3 = (row["TW-III"] || 0);
+          const tw4 = (row["TW-IV"] || 0);
+          return [row.year, tw1, tw2, tw3, tw4, row.total].join(",");
         }),
       ].join("\n");
 
@@ -232,13 +234,13 @@ export function WorkforceAnalysisDashboard() {
     workers: item.worker_count,
   }));
 
-  const grandTotalBySemester = {
+  const grandTotalByTriwulan = {
     "TW-I": pivotData.reduce((sum, item) => sum + item["TW-I"], 0),
     "TW-II": pivotData.reduce((sum, item) => sum + item["TW-II"], 0),
     "TW-III": pivotData.reduce((sum, item) => sum + item["TW-III"], 0),
     "TW-IV": pivotData.reduce((sum, item) => sum + item["TW-IV"], 0),
   };
-  const grandTotal = Object.values(grandTotalBySemester).reduce(
+  const grandTotal = Object.values(grandTotalByTriwulan).reduce(
     (sum, count) => sum + count,
     0
   );
@@ -401,12 +403,12 @@ export function WorkforceAnalysisDashboard() {
             <Card>
               <CardHeader className="flex flex-row items-center justify-between">
                 <CardTitle className="text-lg font-medium">
-                  Breakdown Semester
+                  Breakdown Triwulan
                 </CardTitle>
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={exportSemesterData}
+                  onClick={exportTriwulanData}
                   disabled={loading}
                 >
                   <Download className="w-4 h-4 mr-2" />
@@ -425,24 +427,34 @@ export function WorkforceAnalysisDashboard() {
                       <TableHeader>
                         <TableRow>
                           <TableHead className="font-medium">Tahun</TableHead>
-                          <TableHead className="font-medium">Semester I</TableHead>
-                          <TableHead className="font-medium">Semester II</TableHead>
+                          <TableHead className="font-medium">Triwulan I</TableHead>
+                          <TableHead className="font-medium">Triwulan II</TableHead>
+                          <TableHead className="font-medium">Triwulan III</TableHead>
+                          <TableHead className="font-medium">Triwulan IV</TableHead>
                           <TableHead className="font-medium">Grand Total</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
                         {pivotData.map((row) => {
-                          const semester1 = (row["TW-I"] || 0) + (row["TW-II"] || 0);
-                          const semester2 = (row["TW-III"] || 0) + (row["TW-IV"] || 0);
+                          const tw1 = (row["TW-I"] || 0);
+                          const tw2 = (row["TW-II"] || 0);
+                          const tw3 = (row["TW-III"] || 0);
+                          const tw4 = (row["TW-IV"] || 0);
 
                           return (
                             <TableRow key={row.year}>
                               <TableCell className="font-medium">{row.year}</TableCell>
                               <TableCell className="text-blue-600">
-                                {semester1.toLocaleString()}
+                                {tw1.toLocaleString()}
                               </TableCell>
                               <TableCell className="text-green-600">
-                                {semester2.toLocaleString()}
+                                {tw2.toLocaleString()}
+                              </TableCell>
+                              <TableCell className="text-green-600">
+                                {tw3.toLocaleString()}
+                              </TableCell>
+                              <TableCell className="text-green-600">
+                                {tw4.toLocaleString()}
                               </TableCell>
                               <TableCell className="font-bold text-gray-900">
                                 {row.total.toLocaleString()}
@@ -456,14 +468,22 @@ export function WorkforceAnalysisDashboard() {
                           </TableCell>
                           <TableCell className="font-bold text-blue-700">
                             {(
-                              (grandTotalBySemester["TW-I"] || 0) +
-                              (grandTotalBySemester["TW-II"] || 0)
+                              (grandTotalByTriwulan["TW-I"] || 0)
                             ).toLocaleString()}
                           </TableCell>
-                          <TableCell className="font-bold text-green-700">
+                          <TableCell className="font-bold text-blue-700">
                             {(
-                              (grandTotalBySemester["TW-III"] || 0) +
-                              (grandTotalBySemester["TW-IV"] || 0)
+                              (grandTotalByTriwulan["TW-II"] || 0)
+                            ).toLocaleString()}
+                          </TableCell>
+                          <TableCell className="font-bold text-blue-700">
+                            {(
+                              (grandTotalByTriwulan["TW-III"] || 0)
+                            ).toLocaleString()}
+                          </TableCell>
+                          <TableCell className="font-bold text-blue-700">
+                            {(
+                              (grandTotalByTriwulan["TW-IV"] || 0)
                             ).toLocaleString()}
                           </TableCell>
                           <TableCell className="font-bold text-gray-900">
@@ -609,7 +629,7 @@ export function WorkforceAnalysisDashboard() {
           <Card>
             <CardHeader>
               <CardTitle className="text-lg font-medium">
-                Tenaga Kerja per Semester
+                Tenaga Kerja per Triwulan
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -623,8 +643,10 @@ export function WorkforceAnalysisDashboard() {
                   <BarChart
                     data={chartData.map((row) => ({
                       year: row.year,
-                      Semester1: (row["TW-I"] || 0) + (row["TW-II"] || 0),
-                      Semester2: (row["TW-III"] || 0) + (row["TW-IV"] || 0),
+                      Tw1: (row["TW-I"] || 0),
+                      Tw2: (row["TW-II"] || 0),
+                      Tw3: (row["TW-III"] || 0),
+                      Tw4: (row["TW-IV"] || 0),
                     }))}
                   >
                     <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" />
@@ -637,8 +659,10 @@ export function WorkforceAnalysisDashboard() {
                       ]}
                       labelFormatter={(label) => `Tahun ${label}`}
                     />
-                    <Bar dataKey="Semester1" fill="#3b82f6" name="Semester I" />
-                    <Bar dataKey="Semester2" fill="#10b981" name="Semester II" />
+                    <Bar dataKey="Tw1" fill="#3b82f6" name="Triwulan I" />   {/* biru */}
+                    <Bar dataKey="Tw2" fill="#10b981" name="Triwulan II" />  {/* hijau */}
+                    <Bar dataKey="Tw3" fill="#f59e0b" name="Triwulan III" /> {/* kuning amber */}
+                    <Bar dataKey="Tw4" fill="#ef4444" name="Triwulan IV" />  {/* merah */}
                   </BarChart>
                 </ResponsiveContainer>
               )}

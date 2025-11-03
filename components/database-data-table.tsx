@@ -288,7 +288,7 @@ export function DatabaseDataTable({ filters = {} }: DatabaseDataTableProps) {
               ) : (
                 data.map((row) => (
                   <TableRow key={row.id} className="table-row-yellow">
-                    <TableCell className="text-gray-600">{row.tahap}</TableCell>
+                    <TableCell className="text-gray-600">{row.tahap ? row.tahap : '-'}</TableCell>
                     <TableCell className="text-gray-600">{row.tahun}</TableCell>
                     <TableCell className="text-gray-600">{row.sektor_utama}</TableCell>
                     <TableCell className="text-gray-600">{row.sektor_24}</TableCell>

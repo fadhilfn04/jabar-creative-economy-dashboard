@@ -143,14 +143,16 @@ export function InvestmentAnalysisDashboard() {
     }
   };
 
-  const exportSemesterData = () => {
+  const exportTriwulanData = () => {
     try {
       const csvContent = [
-        ["Tahun", "Semester I", "Semester II", "Grand Total"].join(","),
+        ["Tahun", "Triwulan I", "Triwulan II", "Triwulan III", "Triwulan IV", "Grand Total"].join(","),
         ...pivotData.map((row) => {
-          const semester1 = (row["TW-I"] || 0) + (row["TW-II"] || 0);
-          const semester2 = (row["TW-III"] || 0) + (row["TW-IV"] || 0);
-          return [row.year, semester1, semester2, row.total].join(",");
+          const tw1 = (row["TW-I"] || 0);
+          const tw2 = (row["TW-III"] || 0);
+          const tw3 = (row["TW-III"] || 0);
+          const tw4 = (row["TW-III"] || 0);
+          return [row.year, tw1, tw2, tw3, tw4, row.total].join(",");
         }),
       ].join("\n");
 
@@ -158,7 +160,7 @@ export function InvestmentAnalysisDashboard() {
       const link = document.createElement("a");
       const url = URL.createObjectURL(blob);
       link.setAttribute("href", url);
-      link.setAttribute("download", "analisis_investasi_semester.csv");
+      link.setAttribute("download", "analisis_investasi_triwulan.csv");
       link.style.visibility = "hidden";
       document.body.appendChild(link);
       link.click();
@@ -181,14 +183,14 @@ export function InvestmentAnalysisDashboard() {
     investment: item.investment_amount / 1000000000000,
   }));
 
-  const grandTotalBySemester = {
+  const grandTotalByTriwulan = {
     "TW-I": pivotData.reduce((sum, item) => sum + item["TW-I"], 0),
     "TW-II": pivotData.reduce((sum, item) => sum + item["TW-II"], 0),
     "TW-III": pivotData.reduce((sum, item) => sum + item["TW-III"], 0),
     "TW-IV": pivotData.reduce((sum, item) => sum + item["TW-IV"], 0),
   };
 
-  const grandTotal = Object.values(grandTotalBySemester).reduce(
+  const grandTotal = Object.values(grandTotalByTriwulan).reduce(
     (sum, amount) => sum + amount,
     0
   );
@@ -247,7 +249,12 @@ export function InvestmentAnalysisDashboard() {
             {loading
               ? "..."
               : pivotData.length > 0
-              ? Math.max(...pivotData.map((p) => p.year))
+              ? pivotData.reduce((maxYear, curr) =>
+                  curr.total >
+                  (pivotData.find((p) => p.year === maxYear)?.total ?? 0)
+                    ? curr.year
+                    : maxYear
+                , pivotData[0].year)
               : "-"}
           </div>
         </div>
@@ -274,7 +281,7 @@ export function InvestmentAnalysisDashboard() {
             className="flex items-center gap-2"
           >
             <PieChart className="w-4 h-4" />
-            Grafik per Semester
+            Grafik per Triwulan
           </TabsTrigger>
         </TabsList>
 
@@ -341,12 +348,12 @@ export function InvestmentAnalysisDashboard() {
             <Card>
               <CardHeader className="flex flex-row items-center justify-between">
                 <CardTitle className="text-lg font-medium">
-                  Breakdown Semester
+                  Breakdown Triwulan
                 </CardTitle>
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={exportSemesterData}
+                  onClick={exportTriwulanData}
                   disabled={loading}
                 >
                   <Download className="w-4 h-4 mr-2" />
@@ -365,24 +372,34 @@ export function InvestmentAnalysisDashboard() {
                       <TableHeader>
                         <TableRow>
                           <TableHead className="font-medium">Tahun</TableHead>
-                          <TableHead className="font-medium">Semester I</TableHead>
-                          <TableHead className="font-medium">Semester II</TableHead>
+                          <TableHead className="font-medium">Triwulan I</TableHead>
+                          <TableHead className="font-medium">Triwulan II</TableHead>
+                          <TableHead className="font-medium">Triwulan III</TableHead>
+                          <TableHead className="font-medium">Triwulan IV</TableHead>
                           <TableHead className="font-medium">Grand Total</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
                         {pivotData.map((row) => {
-                          const semester1 = (row["TW-I"] || 0) + (row["TW-II"] || 0);
-                          const semester2 = (row["TW-III"] || 0) + (row["TW-IV"] || 0);
+                          const tw1 = (row["TW-I"] || 0);
+                          const tw2 = (row["TW-II"] || 0);
+                          const tw3 = (row["TW-III"] || 0);
+                          const tw4 = (row["TW-IV"] || 0);
 
                           return (
                             <TableRow key={row.year}>
                               <TableCell className="font-medium">{row.year}</TableCell>
                               <TableCell className="text-blue-600">
-                                {formatCurrency(semester1)}
+                                {formatCurrency(tw1)}
                               </TableCell>
                               <TableCell className="text-green-600">
-                                {formatCurrency(semester2)}
+                                {formatCurrency(tw2)}
+                              </TableCell>
+                              <TableCell className="text-green-600">
+                                {formatCurrency(tw3)}
+                              </TableCell>
+                              <TableCell className="text-green-600">
+                                {formatCurrency(tw4)}
                               </TableCell>
                               <TableCell className="font-bold text-gray-900">
                                 {formatCurrency(row.total)}
@@ -396,14 +413,22 @@ export function InvestmentAnalysisDashboard() {
                           </TableCell>
                           <TableCell className="font-bold text-blue-700">
                             {formatCurrency(
-                              (grandTotalBySemester["TW-I"] || 0) +
-                              (grandTotalBySemester["TW-II"] || 0)
+                              (grandTotalByTriwulan["TW-I"] || 0)
                             )}
                           </TableCell>
                           <TableCell className="font-bold text-green-700">
                             {formatCurrency(
-                              (grandTotalBySemester["TW-III"] || 0) +
-                              (grandTotalBySemester["TW-IV"] || 0)
+                              (grandTotalByTriwulan["TW-II"] || 0)
+                            )}
+                          </TableCell>
+                          <TableCell className="font-bold text-green-700">
+                            {formatCurrency(
+                              (grandTotalByTriwulan["TW-III"] || 0)
+                            )}
+                          </TableCell>
+                          <TableCell className="font-bold text-green-700">
+                            {formatCurrency(
+                              (grandTotalByTriwulan["TW-IV"] || 0)
                             )}
                           </TableCell>
                           <TableCell className="font-bold text-gray-900">
@@ -461,7 +486,7 @@ export function InvestmentAnalysisDashboard() {
           <Card>
             <CardHeader>
               <CardTitle className="text-lg font-medium">
-                Investasi per Semester
+                Investasi per Triwulan
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -475,8 +500,10 @@ export function InvestmentAnalysisDashboard() {
                   <BarChart
                     data={chartData.map((row) => ({
                       year: row.year,
-                      Semester1: (row["TW-I"] || 0) + (row["TW-II"] || 0),
-                      Semester2: (row["TW-III"] || 0) + (row["TW-IV"] || 0),
+                      Triwulan1: (row["TW-I"] || 0),
+                      Triwulan2: (row["TW-II"] || 0),
+                      Triwulan3: (row["TW-III"] || 0),
+                      Triwulan4: (row["TW-IV"] || 0),
                     }))}
                   >
                     <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" />
@@ -489,8 +516,11 @@ export function InvestmentAnalysisDashboard() {
                       ]}
                       labelFormatter={(label) => `Tahun ${label}`}
                     />
-                    <Bar dataKey="Semester1" fill="#3b82f6" name="Semester I" />
-                    <Bar dataKey="Semester2" fill="#10b981" name="Semester II" />
+
+                    <Bar dataKey="Triwulan1" fill="#3b82f6" name="Triwulan I" />
+                    <Bar dataKey="Triwulan2" fill="#10b981" name="Triwulan II" />
+                    <Bar dataKey="Triwulan3" fill="#f59e0b" name="Triwulan III" />
+                    <Bar dataKey="Triwulan4" fill="#ef4444" name="Triwulan IV" />
                   </BarChart>
                 </ResponsiveContainer>
               )}

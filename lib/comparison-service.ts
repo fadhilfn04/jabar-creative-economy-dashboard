@@ -42,15 +42,14 @@ export class ComparisonService {
 
       // Get investment data (type=1 for regional)
       let investmentQuery = supabase
-        .from('investment_attachment_ranking')
-        .select('name, year, investment_idr')
-        .eq('type', 1)
+        .from('creative_economy_data')
+        .select('kabkota, tahun, tambahan_investasi_rp')
 
       if (regions.length > 0) {
-        investmentQuery = investmentQuery.in('name', regions)
+        investmentQuery = investmentQuery.in('kabkota', regions)
       }
       if (years.length > 0) {
-        investmentQuery = investmentQuery.in('year', years)
+        investmentQuery = investmentQuery.in('tahun', years)
       }
 
       const { data: investmentData, error: investmentError } = await investmentQuery
@@ -63,8 +62,8 @@ export class ComparisonService {
       // Create investment lookup map
       const investmentMap = new Map<string, number>()
       investmentData?.forEach(item => {
-        const key = `${item.name}-${item.year}`
-        investmentMap.set(key, item.investment_idr)
+        const key = `${item.kabkota}-${item.tahun}`
+        investmentMap.set(key, item.tambahan_investasi_rp)
       })
 
       // Combine data and calculate growth
