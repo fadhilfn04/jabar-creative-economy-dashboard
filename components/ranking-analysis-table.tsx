@@ -15,7 +15,7 @@ type TabType = 'investment' | 'workforce' | 'projects'
 
 export function RankingAnalysisTable() {
   const [activeTab, setActiveTab] = useState<TabType>('investment')
-  const [selectedYear, setSelectedYear] = useState<number>(2024)
+  const [selectedYear, setSelectedYear] = useState<number>(2025)
   const [availableYears, setAvailableYears] = useState<number[]>([])
   const [searchRegion, setSearchRegion] = useState<string>("")
   
@@ -93,7 +93,7 @@ export function RankingAnalysisTable() {
       setWorkforceLoading(true)
       setError(null)
       
-      const result = await RankingAnalysisService.getWorkforceRanking({
+      const result = await RankingAnalysisService.getInvestmentRanking({
         year: selectedYear,
         page,
         limit: pageSize
@@ -117,7 +117,7 @@ export function RankingAnalysisTable() {
       setProjectLoading(true)
       setError(null)
       
-      const result = await RankingAnalysisService.getProjectRanking({
+      const result = await RankingAnalysisService.getInvestmentRanking({
         year: selectedYear,
         page,
         limit: pageSize
@@ -564,16 +564,30 @@ export function RankingAnalysisTable() {
           <div>
             <h3 className="text-lg font-medium text-gray-900">Realisasi Ekonomi Kreatif di Jawa Barat</h3>
           </div>
-          <Button 
-            variant="outline" 
-            size="sm" 
-            className="text-gray-600 border-gray-200 bg-transparent"
-            onClick={() => exportData(getCurrentData(), `analisis_peringkat_${activeTab}_${selectedYear}.csv`)}
-            disabled={getCurrentData().length === 0}
-          >
-            <Download className="w-4 h-4 mr-2" />
-            Export
-          </Button>
+          <div className="flex items-center gap-3">
+            <Select value={selectedYear.toString()} onValueChange={(value) => setSelectedYear(parseInt(value))}>
+              <SelectTrigger className="w-[120px] border-gray-200">
+                <SelectValue placeholder="Tahun" />
+              </SelectTrigger>
+              <SelectContent>
+                {availableYears.map((year) => (
+                  <SelectItem key={year} value={year.toString()}>
+                    {year}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="text-gray-600 border-gray-200 bg-transparent"
+              onClick={() => exportData(getCurrentData(), `analisis_peringkat_${activeTab}_${selectedYear}.csv`)}
+              disabled={getCurrentData().length === 0}
+            >
+              <Download className="w-4 h-4 mr-2" />
+              Export
+            </Button>
+          </div>
         </div>
 
         <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as TabType)} className="w-full">

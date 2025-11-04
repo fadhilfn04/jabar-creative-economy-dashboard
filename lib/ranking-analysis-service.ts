@@ -93,82 +93,6 @@ export class RankingAnalysisService {
     }
   }
 
-  // Get workforce ranking data
-  static async getWorkforceRanking(options: {
-    year?: number
-    page?: number
-    limit?: number
-  } = {}) {
-    const { year, page = 1, limit = 15 } = options
-
-    let query = supabase
-      .from('ranking_analysis_data')
-      .select('*', { count: 'exact' })
-      .eq('status', 'Workforce')
-
-    if (year) {
-      query = query.eq('year', year)
-    }
-
-    const from = (page - 1) * limit
-    const to = from + limit - 1
-
-    const { data, error, count } = await query
-      .range(from, to)
-      .order('year', { ascending: false })
-      .order('rank', { ascending: true })
-
-    if (error) {
-      console.error('Error fetching workforce ranking:', error)
-      throw error
-    }
-
-    return {
-      data: data as RankingAnalysisData[],
-      count: count || 0,
-      totalPages: Math.ceil((count || 0) / limit),
-      currentPage: page
-    }
-  }
-
-  // Get project ranking data
-  static async getProjectRanking(options: {
-    year?: number
-    page?: number
-    limit?: number
-  } = {}) {
-    const { year, page = 1, limit = 15 } = options
-
-    let query = supabase
-      .from('ranking_analysis_data')
-      .select('*', { count: 'exact' })
-      .eq('status', 'Projects')
-
-    if (year) {
-      query = query.eq('year', year)
-    }
-
-    const from = (page - 1) * limit
-    const to = from + limit - 1
-
-    const { data, error, count } = await query
-      .range(from, to)
-      .order('year', { ascending: false })
-      .order('rank', { ascending: true })
-
-    if (error) {
-      console.error('Error fetching project ranking:', error)
-      throw error
-    }
-
-    return {
-      data: data as RankingAnalysisData[],
-      count: count || 0,
-      totalPages: Math.ceil((count || 0) / limit),
-      currentPage: page
-    }
-  }
-
   // Get summary metrics
   static async getSummaryMetrics(options: { year?: number } = {}) {
     const { year } = options
@@ -199,18 +123,16 @@ export class RankingAnalysisService {
     const totalInvestmentIDR = data?.reduce((sum, item) => sum + (item.investment_idr || 0), 0) || 0
     const totalWorkers = data?.reduce((sum, item) => sum + (item.worker_count || 0), 0) || 0
     
-    const investmentData = data?.filter(item => item.status === 'All') || []
-    const workforceData = data?.filter(item => item.status === 'Workforce') || []
-    const projectData = data?.filter(item => item.status === 'Projects') || []
+    const allData = data?.filter(item => item.status === 'All') || []
 
     return {
       totalProjects,
       totalInvestmentUSD,
       totalInvestmentIDR,
       totalWorkers,
-      investmentRegions: investmentData.length,
-      workforceRegions: workforceData.length,
-      projectRegions: projectData.length
+      investmentRegions: allData.length,
+      workforceRegions: allData.length,
+      projectRegions: allData.length
     }
   }
 
