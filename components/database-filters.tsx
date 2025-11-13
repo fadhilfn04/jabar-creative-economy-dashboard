@@ -25,11 +25,10 @@ export function DatabaseFilters({ onFiltersChange }: DatabaseFiltersProps) {
     search: ""
   })
 
-  // Hardcoded options
   const subsectors = [
-    "FESYEN","KRIYA","KULINER","DESAIN PRODUK","PENERBITAN","FILM","ANIMASI","VIDEO",
+    "FESYEN","KRIYA","KULINER","DESAIN PRODUK","PENERBITAN","FILM, ANIMASI, VIDEO",
     "APLIKASI","PERIKLANAN","SENI PERTUNJUKAN","TV_RADIO","DESAIN INTERIOR","GAME DEVELOPER",
-    "ARSITEKTUR","FOTOGRAFI"
+    "ARSITEKTUR","FOTOGRAFI","DESAIN KOMUNIKASI VISUAL","MUSIK","SENI RUPA"
   ]
 
   const cities = [
