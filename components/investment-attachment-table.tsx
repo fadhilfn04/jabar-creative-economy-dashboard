@@ -133,15 +133,21 @@ export function InvestmentAttachmentTable() {
     return `$ ${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
   }
 
-  const formatCurrencyIDR = (amount: number) => {
-    if (amount >= 1000000000000) {
-      return `Rp ${(amount / 1000000000000).toFixed(1)} T`
-    } else if (amount >= 1000000000) {
-      return `Rp ${(amount / 1000000000).toFixed(1)} M`
-    } else if (amount >= 1000000) {
-      return `Rp ${(amount / 1000000).toFixed(1)} Jt`
+  const formatCurrencyIDR = (amount: unknown) => {
+    const value = Number(amount)
+
+    if (Number.isNaN(value)) {
+      return 'Rp 0'
+    }
+
+    if (value >= 1_000_000_000_000) {
+      return `Rp ${(value / 1_000_000_000_000).toFixed(2)} T`
+    } else if (value >= 1_000_000_000) {
+      return `Rp ${(value / 1_000_000_000).toFixed(2)} M`
+    } else if (value >= 1_000_000) {
+      return `Rp ${(value / 1_000_000).toFixed(2)} Jt`
     } else {
-      return `Rp ${amount.toLocaleString()}`
+      return `Rp ${value.toLocaleString('id-ID')}`
     }
   }
 

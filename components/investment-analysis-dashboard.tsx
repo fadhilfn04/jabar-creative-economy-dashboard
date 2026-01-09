@@ -110,17 +110,23 @@ export function InvestmentAnalysisDashboard() {
     fetchData();
   }, []);
 
-  const formatCurrency = (amount: number) => {
-    if (amount >= 1000000000000) {
-      return `Rp ${(amount / 1000000000000).toFixed(1)} T`;
-    } else if (amount >= 1000000000) {
-      return `Rp ${(amount / 1000000000).toFixed(1)} M`;
-    } else if (amount >= 1000000) {
-      return `Rp ${(amount / 1000000).toFixed(1)} Jt`;
-    } else {
-      return `Rp ${amount.toLocaleString()}`;
+  const formatCurrency = (amount: unknown) => {
+    const value = Number(amount)
+
+    if (Number.isNaN(value)) {
+      return 'Rp 0'
     }
-  };
+
+    if (value >= 1_000_000_000_000) {
+      return `Rp ${(value / 1_000_000_000_000).toFixed(2)} T`
+    } else if (value >= 1_000_000_000) {
+      return `Rp ${(value / 1_000_000_000).toFixed(2)} M`
+    } else if (value >= 1_000_000) {
+      return `Rp ${(value / 1_000_000).toFixed(2)} Jt`
+    } else {
+      return `Rp ${value.toLocaleString('id-ID')}`
+    }
+  }
 
   const exportYearlyData = () => {
     try {

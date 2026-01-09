@@ -1,76 +1,88 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Progress } from "@/components/ui/progress"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { cn } from "@/lib/utils"
-import { 
-  Building2, 
-  Users, 
-  DollarSign, 
+import { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { cn } from "@/lib/utils";
+import {
+  Building2,
+  Users,
+  DollarSign,
   BarChart3,
   ArrowUpRight,
   ArrowDownRight,
-  Loader2
-} from "lucide-react"
-import { DatabaseService } from "@/lib/database"
+  Loader2,
+} from "lucide-react";
+import { DatabaseService } from "@/lib/database";
 
 interface MetricCard {
-  title: string
-  value: string
-  change: number
-  changeLabel: string
-  icon: React.ElementType
-  color: string
-  bgColor: string
-  progress?: number
-  target?: string
+  title: string;
+  value: string;
+  change: number;
+  changeLabel: string;
+  icon: React.ElementType;
+  color: string;
+  bgColor: string;
+  progress?: number;
+  target?: string;
 }
 
 export function EnhancedMetricsCards() {
-  const currentYear = new Date().getFullYear()
-  const [year, setYear] = useState<number>(2025) // default ke 2025
+  const currentYear = new Date().getFullYear();
+  const [year, setYear] = useState<number>(2025); // default ke 2025
   const [metrics, setMetrics] = useState({
     totalCompanies: 0,
     totalInvestment: 0,
     totalWorkers: 0,
-    growthRate: 0
-  })
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+    growthRate: 0,
+  });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchMetrics = async () => {
       try {
-        setLoading(true)
-        setError(null)
-        const data = await DatabaseService.getDashboardMetrics(year)
-        setMetrics(data)
+        setLoading(true);
+        setError(null);
+        const data = await DatabaseService.getDashboardMetrics(year);
+        setMetrics(data);
       } catch (err) {
-        console.error('Error fetching metrics:', err)
-        setError('Failed to load metrics')
+        console.error("Error fetching metrics:", err);
+        setError("Failed to load metrics");
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
+    };
+
+    fetchMetrics();
+  }, [year]); // kalau tahun berubah, reload data
+
+  const formatCurrency = (amount: unknown) => {
+    const value = Number(amount);
+
+    if (Number.isNaN(value)) {
+      return "Rp 0";
     }
 
-    fetchMetrics()
-  }, [year]) // kalau tahun berubah, reload data
-
-  const formatCurrency = (amount: number) => {
-    if (amount >= 1000000000000) {
-      return `Rp ${(amount / 1000000000000).toFixed(1)} T`
-    } else if (amount >= 1000000000) {
-      return `Rp ${(amount / 1000000000).toFixed(1)} M`
-    } else if (amount >= 1000000) {
-      return `Rp ${(amount / 1000000).toFixed(1)} Jt`
+    if (value >= 1_000_000_000_000) {
+      return `Rp ${(value / 1_000_000_000_000).toFixed(2)} T`;
+    } else if (value >= 1_000_000_000) {
+      return `Rp ${(value / 1_000_000_000).toFixed(2)} M`;
+    } else if (value >= 1_000_000) {
+      return `Rp ${(value / 1_000_000).toFixed(2)} Jt`;
     } else {
-      return `Rp ${amount.toLocaleString()}`
+      return `Rp ${value.toLocaleString("id-ID")}`;
     }
-  }
+  };
 
   const metricsData: MetricCard[] = [
     {
@@ -82,7 +94,7 @@ export function EnhancedMetricsCards() {
       color: "text-blue-700",
       bgColor: "bg-blue-50",
       progress: 75,
-      target: "Target: 3,000"
+      target: "Target: 3,000",
     },
     {
       title: "Total Investasi",
@@ -93,7 +105,7 @@ export function EnhancedMetricsCards() {
       color: "text-green-700",
       bgColor: "bg-green-50",
       progress: 82,
-      target: "Target: Rp 50T"
+      target: "Target: Rp 50T",
     },
     {
       title: "Total Tenaga Kerja",
@@ -104,7 +116,7 @@ export function EnhancedMetricsCards() {
       color: "text-purple-700",
       bgColor: "bg-purple-50",
       progress: 68,
-      target: "Target: 200,000"
+      target: "Target: 200,000",
     },
     {
       title: "Tingkat Pertumbuhan",
@@ -115,15 +127,18 @@ export function EnhancedMetricsCards() {
       color: "text-orange-700",
       bgColor: "bg-orange-50",
       progress: 85,
-      target: "Target: 20%"
-    }
-  ]
+      target: "Target: 20%",
+    },
+  ];
 
   return (
     <div className="space-y-4">
       {/* Filter tahun */}
       <div className="flex justify-end">
-        <Select value={year.toString()} onValueChange={(val) => setYear(Number(val))}>
+        <Select
+          value={year.toString()}
+          onValueChange={(val) => setYear(Number(val))}
+        >
           <SelectTrigger className="w-[120px]">
             <SelectValue placeholder="Pilih Tahun" />
           </SelectTrigger>
@@ -140,9 +155,12 @@ export function EnhancedMetricsCards() {
       {/* Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {metricsData.map((metric, index) => (
-          <Card key={index} className={cn(
-            "border border-amber-200 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 bg-gradient-to-br from-amber-50 to-orange-50"
-          )}>
+          <Card
+            key={index}
+            className={cn(
+              "border border-amber-200 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 bg-gradient-to-br from-amber-50 to-orange-50"
+            )}
+          >
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <div className="flex flex-col">
                 <CardTitle className="text-sm font-medium text-amber-700">
@@ -170,15 +188,18 @@ export function EnhancedMetricsCards() {
                   ) : (
                     <ArrowDownRight className="h-4 w-4 text-red-600" />
                   )}
-                  <span className={cn(
-                    "text-sm font-medium",
-                    metric.change >= 0 ? "text-green-600" : "text-red-600"
-                  )}>
-                    {metric.change >= 0 ? '+' : ''}{metric.change}%
+                  <span
+                    className={cn(
+                      "text-sm font-medium",
+                      metric.change >= 0 ? "text-green-600" : "text-red-600"
+                    )}
+                  >
+                    {metric.change >= 0 ? "+" : ""}
+                    {metric.change}%
                   </span>
                 </div>
               </div>
-              
+
               {/* {metric.progress && (
                 <div className="space-y-2">
                   <div className="flex justify-between text-xs">
@@ -193,5 +214,5 @@ export function EnhancedMetricsCards() {
         ))}
       </div>
     </div>
-  )
+  );
 }

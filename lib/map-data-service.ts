@@ -142,15 +142,21 @@ export class MapDataService {
   }
 
   // Format investment amount for display
-  private static formatInvestment(amount: number): string {
-    if (amount >= 1000000000000) {
-      return `${(amount / 1000000000000).toFixed(1)} T`
-    } else if (amount >= 1000000000) {
-      return `${(amount / 1000000000).toFixed(1)} M`
-    } else if (amount >= 1000000) {
-      return `${(amount / 1000000).toFixed(1)} Jt`
+  private static formatInvestment(amount: unknown): string {
+    const value = Number(amount)
+
+    if (Number.isNaN(value)) {
+      return '0'
+    }
+
+    if (value >= 1_000_000_000_000) {
+      return `${(value / 1_000_000_000_000).toFixed(1)} T`
+    } else if (value >= 1_000_000_000) {
+      return `${(value / 1_000_000_000).toFixed(1)} M`
+    } else if (value >= 1_000_000) {
+      return `${(value / 1_000_000).toFixed(1)} Jt`
     } else {
-      return `${amount.toLocaleString()}`
+      return value.toLocaleString('id-ID')
     }
   }
 
