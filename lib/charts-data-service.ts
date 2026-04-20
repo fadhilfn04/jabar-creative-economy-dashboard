@@ -25,7 +25,7 @@ export class ChartsDataService {
     try {
       let query = supabase
         .from('labor_ranking')
-        .select('name, project_count, labor_count')
+        .select('name, project_count, labor_count, investment')
         .eq('type', 2) // Subsector data
         .order('project_count', { ascending: false })
 
@@ -40,35 +40,12 @@ export class ChartsDataService {
         throw error
       }
 
-      // Also get investment data for subsectors
-      let investmentQuery = supabase
-        .from('investment_realization_ranking')
-        .select('subsector, investment_amount')
-        .eq('type', 2) // Subsector data
-
-      if (year) {
-        investmentQuery = investmentQuery.eq('year', year)
-      }
-
-      const { data: investmentData, error: investmentError } = await investmentQuery
-
-      if (investmentError) {
-        console.error('Error fetching subsector investment data:', investmentError)
-        // Continue without investment data if it fails
-      }
-
-      // Create investment map for quick lookup
-      const investmentMap = new Map<string, number>()
-      investmentData?.forEach(item => {
-        investmentMap.set(item.subsector, item.investment_amount)
-      })
-
-      // Combine data
+      // Transform data with investment from the same table
       const chartData: SubsectorChartData[] = data?.map(item => ({
         name: item.name,
         value: item.project_count,
-        investment: (investmentMap.get(item.name) || 0) / 1000000000000, // Convert to trillions
-        investmentAmount: investmentMap.get(item.name) || 0
+        investment: (item.investment || 0) / 1000000000000, // Convert to trillions
+        investmentAmount: item.investment || 0
       })) || []
 
       return chartData.slice(0, 10) // Limit to top 10 for better chart readability

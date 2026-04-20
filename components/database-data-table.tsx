@@ -380,12 +380,12 @@ export function DatabaseDataTable({ filters = {} }: DatabaseDataTableProps) {
                       {editingRow === row.id ? (
                         <Input
                           type="number"
-                          value={editingData.tambahan_investasi_idr || 0}
-                          onChange={(e) => handleInputChange('tambahan_investasi_idr', parseInt(e.target.value) || 0)}
+                          value={editingData.tambahan_investasi_rp || 0}
+                          onChange={(e) => handleInputChange('tambahan_investasi_rp', parseInt(e.target.value) || 0)}
                           className="h-8 text-sm"
                         />
                       ) : (
-                        formatCurrencyIDR(row.tambahan_investasi_idr)
+                        formatCurrencyIDR(row.tambahan_investasi_rp)
                       )}
                     </TableCell>
                     <TableCell className="text-gray-600">{row.proyek}</TableCell>

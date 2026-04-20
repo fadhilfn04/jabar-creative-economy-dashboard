@@ -28,7 +28,6 @@ export interface CreativeEconomyData {
   negara: string
   no_izin: string
   tambahan_investasi_usd: number
-  tambahan_investasi_idr: number
   proyek: string
   tki: number
   tka: number

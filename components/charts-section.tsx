@@ -22,7 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Loader2 } from "lucide-react";
+import { Calendar, Loader2 } from "lucide-react";
 import { ChartsDataService } from "@/lib/charts-data-service";
 import type {
   SubsectorChartData,
@@ -148,21 +148,28 @@ export function ChartsSection() {
         <h2 className="text-xl font-bold text-gray-900">
           Analisis Data Ekonomi Kreatif
         </h2>
-        <Select
-          value={selectedYear.toString()}
-          onValueChange={(value) => setSelectedYear(parseInt(value))}
-        >
-          <SelectTrigger className="w-[120px] border-gray-200">
-            <SelectValue placeholder="Tahun" />
-          </SelectTrigger>
-          <SelectContent>
-            {availableYears.map((year) => (
-              <SelectItem key={year} value={year.toString()}>
-                {year}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+
+        <div className="flex justify-end">
+          <div className="flex items-center gap-3 bg-white rounded-lg shadow-md px-4 py-2 border-2 border-amber-200 hover:border-amber-300 transition-all">
+            <Calendar className="h-5 w-5 text-amber-600" />
+            <span className="text-sm font-medium text-gray-700">Tahun:</span>
+            <Select
+              value={selectedYear.toString()}
+              onValueChange={(val) => setSelectedYear(Number(val))}
+            >
+              <SelectTrigger className="w-[120px] border-amber-200 focus:border-amber-400 focus:ring-amber-400">
+                <SelectValue placeholder="Pilih Tahun" />
+              </SelectTrigger>
+              <SelectContent>
+                {availableYears.map((y) => (
+                  <SelectItem key={y} value={y.toString()}>
+                    {y}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">

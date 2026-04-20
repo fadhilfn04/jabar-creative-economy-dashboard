@@ -21,8 +21,10 @@ import {
   ArrowUpRight,
   ArrowDownRight,
   Loader2,
+  Calendar,
 } from "lucide-react";
 import { DatabaseService } from "@/lib/database";
+import { ChartsDataService } from "@/lib/charts-data-service";
 
 interface MetricCard {
   title: string;
@@ -38,7 +40,8 @@ interface MetricCard {
 
 export function EnhancedMetricsCards() {
   const currentYear = new Date().getFullYear();
-  const [year, setYear] = useState<number>(2025); // default ke 2025
+  const [year, setYear] = useState<number>(currentYear);
+  const [availableYears, setAvailableYears] = useState<number[]>([]);
   const [metrics, setMetrics] = useState({
     totalCompanies: 0,
     totalInvestment: 0,
@@ -47,6 +50,22 @@ export function EnhancedMetricsCards() {
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // Fetch available years on mount
+  useEffect(() => {
+    const fetchYears = async () => {
+      try {
+        const years = await ChartsDataService.getAvailableYears();
+        setAvailableYears(years);
+        if (years.length > 0) {
+          setYear(years[0]);
+        }
+      } catch (err) {
+        console.error("Error fetching years:", err);
+      }
+    };
+    fetchYears();
+  }, []);
 
   useEffect(() => {
     const fetchMetrics = async () => {
@@ -135,21 +154,25 @@ export function EnhancedMetricsCards() {
     <div className="space-y-4">
       {/* Filter tahun */}
       <div className="flex justify-end">
-        <Select
-          value={year.toString()}
-          onValueChange={(val) => setYear(Number(val))}
-        >
-          <SelectTrigger className="w-[120px]">
-            <SelectValue placeholder="Pilih Tahun" />
-          </SelectTrigger>
-          <SelectContent>
-            {[currentYear, 2024, 2023, 2022, 2021, 2020].map((y) => (
-              <SelectItem key={y} value={y.toString()}>
-                {y}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <div className="flex items-center gap-3 bg-white rounded-lg shadow-md px-4 py-2 border-2 border-amber-200 hover:border-amber-300 transition-all">
+          <Calendar className="h-5 w-5 text-amber-600" />
+          <span className="text-sm font-medium text-gray-700">Tahun:</span>
+          <Select
+            value={year.toString()}
+            onValueChange={(val) => setYear(Number(val))}
+          >
+            <SelectTrigger className="w-[120px] border-amber-200 focus:border-amber-400 focus:ring-amber-400">
+              <SelectValue placeholder="Pilih Tahun" />
+            </SelectTrigger>
+            <SelectContent>
+              {availableYears.map((y) => (
+                <SelectItem key={y} value={y.toString()}>
+                  {y}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
       </div>
 
       {/* Cards */}
