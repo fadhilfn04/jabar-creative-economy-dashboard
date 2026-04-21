@@ -1,12 +1,12 @@
 "use client"
 
 import { useState } from "react"
+import { signIn } from "next-auth/react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Loader2, Eye, EyeOff, CheckCircle, UserPlus, Sparkles } from "lucide-react"
-import { useAuth } from "@/hooks/use-auth"
 
 interface RegisterFormProps {
   onToggleMode: () => void
@@ -23,8 +23,6 @@ export function RegisterForm({ onToggleMode }: RegisterFormProps) {
   const [success, setSuccess] = useState(false)
   const [loading, setLoading] = useState(false)
   
-  const { signUp } = useAuth()
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError("")
@@ -45,10 +43,32 @@ export function RegisterForm({ onToggleMode }: RegisterFormProps) {
     }
 
     try {
-      await signUp(email, password, name)
+      // Register user
+      const response = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password, name }),
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Gagal membuat akun')
+      }
+
+      // Auto sign in after successful registration
+      const result = await signIn('credentials', {
+        email,
+        password,
+        redirect: false
+      })
+
+      if (result?.error) {
+        throw new Error(result.error)
+      }
+
       setSuccess(true)
     } catch (err: any) {
-      setError(err.message || "Failed to create account")
+      setError(err.message || "Gagal membuat akun. Silakan coba lagi.")
     } finally {
       setLoading(false)
     }

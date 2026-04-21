@@ -1,7 +1,7 @@
 "use client"
 
-import { useState } from "react"
-import { useAuth } from "@/hooks/use-auth"
+import { useState, useEffect } from "react"
+import { useSession } from "next-auth/react"
 import { AuthPage } from "./auth-page"
 import { Loader2 } from "lucide-react"
 
@@ -10,11 +10,16 @@ interface AuthGuardProps {
 }
 
 export function AuthGuard({ children }: AuthGuardProps) {
-  const { user, loading } = useAuth()
-  const [showAuthModal, setShowAuthModal] = useState(false)
+  const { data: session, status } = useSession()
+  const [mounted, setMounted] = useState(false)
 
-  // Show loading spinner while checking authentication
-  if (loading) {
+  // Ensure component is mounted before showing auth state
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  // Show loading spinner while checking authentication or mounting
+  if (!mounted || status === "loading") {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
@@ -26,7 +31,7 @@ export function AuthGuard({ children }: AuthGuardProps) {
   }
 
   // Show auth modal if user is not authenticated
-  if (!user) {
+  if (!session) {
     return <AuthPage />
   }
 

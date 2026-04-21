@@ -1,7 +1,14 @@
 "use client"
 
-import { useState, useEffect, createContext, useContext } from 'react'
-import { AuthService, type AuthUser } from '@/lib/auth'
+import { signIn, signOut, useSession } from 'next-auth/react'
+import { authHelpers } from './use-postgres-auth'
+
+export interface AuthUser {
+  id: string
+  email: string
+  name?: string
+  avatar_url?: string
+}
 
 interface AuthContextType {
   user: AuthUser | null
@@ -12,93 +19,60 @@ interface AuthContextType {
   updateProfile: (updates: { name?: string; avatar_url?: string }) => Promise<void>
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined)
+export function useAuth(): AuthContextType {
+  const { data: session, status } = useSession()
 
-export function useAuth() {
-  const context = useContext(AuthContext)
-  if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider')
-  }
-  return context
-}
+  const user: AuthUser | null = session?.user ? {
+    id: session.user.id || '',
+    email: session.user.email || '',
+    name: session.user.name || session.user.email?.split('@')[0] || '',
+    avatar_url: session.user.image || undefined
+  } : null
 
-export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<AuthUser | null>(null)
-  const [loading, setLoading] = useState(true)
+  const loading = status === 'loading'
 
-  useEffect(() => {
-    // Get initial session
-    const getInitialSession = async () => {
-      try {
-        const currentUser = await AuthService.getCurrentUser()
-        setUser(currentUser)
-      } catch (error) {
-        console.error('Error getting initial session:', error)
-      } finally {
-        setLoading(false)
+  const handleSignIn = async (email: string, password: string) => {
+    try {
+      const result = await signIn('credentials', {
+        email,
+        password,
+        redirect: false
+      })
+
+      if (result?.error) {
+        throw new Error(result.error)
       }
-    }
-
-    getInitialSession()
-
-    // Listen for auth changes
-    const { data: { subscription } } = AuthService.onAuthStateChange((user) => {
-      setUser(user)
-      setLoading(false)
-    })
-
-    return () => subscription.unsubscribe()
-  }, [])
-
-  const signIn = async (email: string, password: string) => {
-    setLoading(true)
-    try {
-      await AuthService.signIn(email, password)
     } catch (error) {
-      setLoading(false)
       throw error
     }
   }
 
-  const signUp = async (email: string, password: string, name?: string) => {
-    setLoading(true)
+  const handleSignUp = async (email: string, password: string, name?: string) => {
     try {
-      await AuthService.signUp(email, password, name)
+      await authHelpers.signUp(email, password, name)
+      // After successful registration, sign in
+      await handleSignIn(email, password)
     } catch (error) {
-      setLoading(false)
       throw error
     }
   }
 
-  const signOut = async () => {
-    setLoading(true)
-    try {
-      await AuthService.signOut()
-    } catch (error) {
-      setLoading(false)
-      throw error
-    }
+  const handleSignOut = async () => {
+    await signOut({ redirect: false })
   }
 
   const updateProfile = async (updates: { name?: string; avatar_url?: string }) => {
-    try {
-      await AuthService.updateProfile(updates)
-      // Refresh user data
-      const updatedUser = await AuthService.getCurrentUser()
-      setUser(updatedUser)
-    } catch (error) {
-      throw error
-    }
+    // For now, we'll just update the session data
+    // In a full implementation, this would call an API to update the database
+    throw new Error('Profile updates not implemented yet')
   }
 
-  const value = {
+  return {
     user,
     loading,
-    signIn,
-    signUp,
-    signOut,
+    signIn: handleSignIn,
+    signUp: handleSignUp,
+    signOut: handleSignOut,
     updateProfile
   }
-
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }

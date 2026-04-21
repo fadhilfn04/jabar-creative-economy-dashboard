@@ -1,12 +1,12 @@
 "use client"
 
 import { useState } from "react"
+import { signIn } from "next-auth/react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Loader2, Eye, EyeOff, ArrowRight, Shield } from "lucide-react"
-import { useAuth } from "@/hooks/use-auth"
 
 interface LoginFormProps {
   onToggleMode: () => void
@@ -19,17 +19,23 @@ export function LoginForm({ onToggleMode }: LoginFormProps) {
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
   
-  const { signIn } = useAuth()
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError("")
     setLoading(true)
 
     try {
-      await signIn(email, password)
+      const result = await signIn('credentials', {
+        email,
+        password,
+        redirect: false
+      })
+
+      if (result?.error) {
+        throw new Error(result.error)
+      }
     } catch (err: any) {
-      setError(err.message || "Failed to sign in")
+      setError(err.message || "Gagal masuk. Silakan periksa email dan password Anda.")
     } finally {
       setLoading(false)
     }
