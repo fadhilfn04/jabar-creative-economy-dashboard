@@ -58,7 +58,7 @@
     "leaflet": "^1.9.4",
     "leaflet.fullscreen": "^4.0.0",
     "lucide-react": "^0.454.0",
-    "next": "15.2.4",
+    "next": "^15.5.13",
     "next-auth": "^4.24.14",
     "next-themes": "^0.4.6",
     "pg": "^8.20.0",
@@ -75,9 +75,7 @@
     "tailwindcss-animate": "^1.0.7",
     "vaul": "^0.9.9",
     "xlsx": "^0.18.5",
-    "zod": "3.25.67"
-  },
-  "devDependencies": {
+    "zod": "3.25.67",
     "@tailwindcss/postcss": "^4.1.9",
     "@types/leaflet": "^1.9.20",
     "@types/node": "^22",
